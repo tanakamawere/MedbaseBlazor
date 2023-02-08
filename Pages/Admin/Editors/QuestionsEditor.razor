@@ -1,0 +1,260 @@
+﻿@page "/admin/questions/edit/{id:int}"
+@page "/admin/questions/editfromtopic/{topicId:int}"
+@page "/admin/question/add"
+@inject IApiRepository repository
+@using MedbaseBlazor.Models
+@using MedbaseBlazor.Pages.Admin.Utilities
+@using Markdig
+
+
+<button @onclick="() => ClearModel()" class="btn btn-primary m-5">Clear Form</button>
+@if (Question is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="Question" OnSubmit="SaveChanges">
+        <DataAnnotationsValidator />
+        <div class="col-form-label">
+            <label>Topic</label>
+            <InputSelect class="form-control" @bind-Value="Question.TopicRef">
+                @foreach (Topic item in Topics)
+                {
+                    <option value="@item.TopicRef">@item.Name</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-form-label">
+            <label>Question Main</label>
+            <InputText class="form-control" @bind-Value="Question.QuestionMain" />
+        </div>
+        <hr />
+
+        <!--Child A-->
+        <div class="col-form-label">
+            <label>ChildA</label>
+            <InputText class="form-control" @bind-Value="Question.ChildA" />
+        </div>
+        <div class="col-form-label">
+            <label>AnswerA</label>
+            <InputSelect class="form-control" @bind-Value="Question.AnswerA">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </InputSelect>
+        </div>
+        <div class="col-form-label">
+            <div class="row">
+                <div class="col-6">
+                    <div class="text-center text-xl-start">
+                        <div class="col-form-label">
+                            <label>Explanation A</label>
+                            <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationA" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="my-5 text-center text-xl-start form-group">
+                        <label for="explanationAPreview">Explanation A Preview</label>
+                        <div id="explanationAPreview" style="height: 100%;" class="form-control">
+                            @((MarkupString)Markdown.ToHtml(Question.ExplanationA == null ? " " : Question.ExplanationA))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <!--Child B-->
+        <div class="col-form-label">
+            <label>ChildB</label>
+            <InputText class="form-control" @bind-Value="Question.ChildB" />
+        </div>
+        <div class="col-form-label">
+            <label>AnswerB</label>
+            <InputSelect class="form-control" @bind-Value="Question.AnswerB">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </InputSelect>
+        </div>
+        <div class="col-form-label">
+            <div class="col-6">
+                <div class="text-center text-xl-start">
+                    <div class="col-form-label">
+                        <label>Explanation B</label>
+                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationB" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <div class="my-5 text-center text-xl-start form-group">
+                    <label for="bodyPreview">Explanation B Preview</label>
+                    <div id="bodyPreview" style="height: 100%;" class="form-control">
+                        @((MarkupString)Markdown.ToHtml(Question.ExplanationB == null ? " " : Question.ExplanationB))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+        <!--Child C-->
+        <div class="col-form-label">
+            <label>ChildC</label>
+            <InputText class="form-control" @bind-Value="Question.ChildC" />
+        </div>
+        <div class="col-form-label">
+            <label>AnswerC</label>
+            <InputSelect class="form-control" @bind-Value="Question.AnswerC">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </InputSelect>
+        </div>
+        <div class="col-form-label">
+            <div class="col-6">
+                <div class="text-center text-xl-start">
+                    <div class="col-form-label">
+                        <label>Explanation C</label>
+                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationC" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <div class="my-5 text-center text-xl-start form-group">
+                    <label for="bodyPreview">Explanation C Preview</label>
+                    <div id="bodyPreview" style="height: 100%;" class="form-control">
+                        @((MarkupString)Markdown.ToHtml(Question.ExplanationC == null ? " " : Question.ExplanationC))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr /> <!--Child D-->
+        <div class="col-form-label">
+            <label>ChildD</label>
+            <InputText class="form-control" @bind-Value="Question.ChildD" />
+        </div>
+        <div class="col-form-label">
+            <label>AnswerD</label>
+            <InputSelect class="form-control" @bind-Value="Question.AnswerD">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </InputSelect>
+        </div>
+        <div class="col-form-label">
+            <div class="col-6">
+                <div class="text-center text-xl-start">
+                    <div class="col-form-label">
+                        <label>Explanation D</label>
+                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationD" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <div class="my-5 text-center text-xl-start form-group">
+                    <label for="bodyPreview">Explanation D Preview</label>
+                    <div id="bodyPreview" style="height: 100%;" class="form-control">
+                        @((MarkupString)Markdown.ToHtml(Question.ExplanationD == null ? " " : Question.ExplanationD))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <!--Child E-->
+        <div class="col-form-label">
+            <label>ChildE</label>
+            <InputText class="form-control" @bind-Value="Question.ChildE" />
+        </div>
+        <div class="col-form-label">
+            <label>AnswerE</label>
+            <InputSelect class="form-control" @bind-Value="Question.AnswerE">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </InputSelect>
+        </div>
+        <div class="col-form-label">
+            <div class="col-6">
+                <div class="text-center text-xl-start">
+                    <div class="col-form-label">
+                        <label>Explanation E</label>
+                        <MarkdownTextInput class="form-control" @bind-Value="@Question.ExplanationE" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <div class="my-5 text-center text-xl-start form-group">
+                    <label for="bodyPreview">Explanation E Preview</label>
+                    <div id="bodyPreview" style="height: 100%;" class="form-control">
+                        @((MarkupString)Markdown.ToHtml(Question.ExplanationE == null ? " " : Question.ExplanationE))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Done</button>
+    </EditForm>
+}
+
+@code {
+
+    public Question Question{ get; set; } = new();
+    [Parameter]
+    public int id { get; set; } = 0;
+    [Parameter]
+    public int topicId { get; set; } = 0;
+
+    private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Question = await repository.GetQuestion(id);
+        Topics = await repository.GetAllTopics();
+    }
+
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (id != 0)
+        {
+            Question = await repository.GetQuestion(id) ?? new();
+        }
+
+        if (topicId != 0)
+        {
+            this.Question = new();
+            Question.TopicRef = topicId;
+        }
+    }
+
+    private void SaveChanges()
+    {
+        if (id == 0)
+        {
+            repository.PostQuestion(Question);
+        }
+        else
+        {
+            repository.UpdateQuestion(id, Question);
+        }
+        NavManager.NavigateTo($"/admin/questions/editfromtopic/{topicId}");
+    }
+
+    private void ClearModel()
+    {
+        Question.QuestionMain = string.Empty;
+        Question.ChildA = string.Empty;
+        Question.ChildB = string.Empty;
+        Question.ChildC = string.Empty;
+        Question.ChildD = string.Empty;
+        Question.ChildE = string.Empty;
+        Question.ExplanationA = string.Empty;
+        Question.ExplanationB = string.Empty;
+        Question.ExplanationC = string.Empty;
+        Question.ExplanationD = string.Empty;
+        Question.ExplanationE = string.Empty;
+    }
+}
+
+           

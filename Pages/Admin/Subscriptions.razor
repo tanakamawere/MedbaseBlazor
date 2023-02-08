@@ -1,0 +1,47 @@
+﻿@page "/admin/subscriptions"
+@inject IApiRepository repository
+
+@if (!subscriptionsList.Any())
+{
+    <div><em><strong>Loading...</strong></em></div>
+}
+else
+{
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Subscription item in subscriptionsList)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Email</td>
+                    <td>@item.StartDate</td>
+                    <td>@item.EndDate</td>
+                    <td>@item.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private IEnumerable<Subscription> subscriptionsList { get; set; } = Enumerable.Empty<Subscription>();
+
+    protected async override Task OnInitializedAsync() => await UpdatePage();
+
+    private async Task UpdatePage()
+    {
+        subscriptionsList = await repository.GetSubscriptions();
+    }
+}

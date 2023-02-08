@@ -1,0 +1,28 @@
+﻿@inject IApiRepository repository
+
+
+<div class="row">
+    <DataCard Title="Number of Subs Today"
+              Background="primary"
+              Data="@numberOfSubs.ToString()" />
+    <DataCard Title="Total Amount Today"
+              Background="success"
+              Data="@totalAmount.ToString()" />
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<Subscription> Subscriptions { get; set; } = Enumerable.Empty<Subscription>();
+
+    int numberOfSubs = 5;
+    double totalAmount = 0;
+
+    protected override void OnParametersSet()
+    {
+        numberOfSubs = Subscriptions.Where(x => x.StartDate.Date == DateTime.Now.Date).Count();
+        foreach (Subscription item in Subscriptions.Where(x => x.StartDate.Date == DateTime.Now.Date))
+        {
+            totalAmount += item.Amount;
+        }
+    }
+}

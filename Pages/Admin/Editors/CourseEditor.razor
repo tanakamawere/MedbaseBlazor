@@ -1,0 +1,62 @@
+﻿@page "/admin/courses/edit/{id:int}"
+@page "/admin/courses/add"
+@inject IApiRepository repository
+
+<style>
+    div.validation-message { color: rgb(220, 53, 69); font-weight: 500 }
+</style>
+
+<EditForm Model="Course" OnValidSubmit="SaveChanges">
+    <div class="col-form-label">
+        <label>Course Reference</label>
+        <ValidationMessage For="@(() => Course.CourseRef)"/>
+        <InputText class="form-control" @bind-Value="Course.CourseRef" />
+    </div>
+    <div class="col-form-label">
+        <label>Title</label>
+        <ValidationMessage For="@(() => Course.Title)" />
+        <InputText class="form-control" @bind-Value="Course.Title" />
+    </div>
+    <div class="col-form-label">
+        <label>Description</label>
+        <ValidationMessage For="@(() => Course.Description)" />
+        <InputText class="form-control" @bind-Value="Course.Description" />
+    </div>
+    <div class="col-form-label">
+        <label>Image URL</label>
+        <ValidationMessage For="@(() => Course.ImageURL)" />
+        <InputText class="form-control" @bind-Value="Course.ImageURL" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code{
+    public Course Course { get; set; } = new();
+
+    [Parameter]
+    public int id { get; set; } = 0;
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (id != 0)
+        {
+            Course = await repository.GetCourse(id) ?? new();
+        }
+    }
+
+
+    private void SaveChanges()
+    {
+        if (id == 0)
+        {
+            repository.PostCourse(Course);
+        }
+        else
+        {
+            repository.UpdateCourse(id, Course);
+        }
+        NavManager.NavigateTo("/admin/courses");
+    }
+}

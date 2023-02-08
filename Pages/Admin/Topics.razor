@@ -1,0 +1,72 @@
+﻿@page "/admin/topics"
+@inject IApiRepository repository
+
+<PageTitle>Topics</PageTitle>
+
+<a class="btn btn-primary m-2" style="max-width:200px" href="@GetAddTopicUrl()">Add</a>
+@if (!allTopics.Any())
+{
+    <div><em><strong>Loading...</strong></em></div>
+}
+else
+{
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Course Reference</th>
+                <th>Topic Reference</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Topic item in allTopics)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.CourseRef</td>
+                    <td>@item.TopicRef</td>
+                    <td>@item.Name</td>
+                    <td>
+                        <NavLink class="btn btn-primary btn-sm" href="@GetQuestionsUrl(item.TopicRef)">
+                            Questions
+                        </NavLink>
+                        <NavLink class="btn btn-info btn-sm" href="@GetEditTopicUrl(item.TopicRef)">
+                            Edit
+                        </NavLink>
+                        <NavLink class="btn btn-dark btn-sm" href="@GetAddQuestionUrl(item.TopicRef)">
+                            Add Question
+                        </NavLink>@*
+                <button class="btn btn-danger" @onclick="() => DeleteTopic(item.Id)">Delete</button>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    public IEnumerable<Topic> allTopics { get; set; } = Enumerable.Empty<Topic>();
+
+    protected override async Task OnInitializedAsync() => await UpdatePage();
+
+    private async Task UpdatePage()
+    {
+        allTopics = await repository.GetAllTopics();
+    }
+    [Inject]
+    public NavigationManager navigationManager { get; set; }
+
+    public string GetQuestionsUrl(int id) => $"/admin/questions/{id}";
+    public string GetAddTopicUrl() => "/admin/topics/add";
+    public string GetEditTopicUrl(int id) => $"/admin/topics/edit/{id}";
+    public string GetAddQuestionUrl(int id) => $"/admin/questions/editfromtopic/{id}";
+
+    private void DeleteTopic(long id)
+    {
+        repository.DeleteTopic((int)id);
+        navigationManager.NavigateTo("/admin/topics");
+    }
+}
