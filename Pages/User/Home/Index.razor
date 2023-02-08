@@ -1,0 +1,94 @@
+﻿@page "/"
+@using MedbaseBlazor.Models;
+@using MedbaseBlazor.Repositories;
+@inject IApiRepository repository
+
+<!-- Header-->
+<header class="bg-white py-5">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h1 class="display-5 fw-bolder text-dark mb-2">medbase</h1>
+                    <p class="lead fw-normal text-dark-50 mb-4">Over 1,200 MCQs (with answers) on Anatomy, Physiology & Pathology</p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/courses">Get Started</a>
+                        <a class="btn btn-outline-dark btn-lg px-4" href="/about">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="img/home_illustration.svg" alt="..." /></div>
+        </div>
+    </div>
+</header>
+
+<div class="b-example-divider"></div>
+
+<div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+            <h1 class="display-4 fw-bold lh-1">Medbase Mobile Application</h1>
+            <p class="lead">
+                Get your MCQs offline, create quizzes & much more. Everything is better in the app.
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                <a href="#"><img src="img/google_play_badge.png" alt="" style="max-width:300px" /></a>
+            </div>
+        </div>
+        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+            <img class="rounded-lg-3" src="img/deviceframes.png" alt="" height="450">
+        </div>
+    </div>
+</div>
+<section class="container">
+    <div class="row gx-5 mt-5 justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="text-center">
+                <h2 class="fw-bolder">From our blog</h2>
+                <p class="lead fw-normal text-muted mb-5">
+                    A few bits & bobs on medical school and the likes
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row gx-5">
+        @foreach (Article item in Articles)
+        {
+            <div class="col-lg-4 mb-5">
+                <div class="card h-100 shadow border-0">
+                    <img class="card-img-top" src="@item.ImageURL" alt="..." />
+                    <div class="card-body p-4">
+                        <a class="text-decoration-none link-dark stretched-link" asp-action="ArticleView" asp-route-id="@item.Id">
+                            <h5 class="card-title mb-3">
+                                @item.Title
+                            </h5>
+                        </a>
+                        <p class="card-text mb-0">
+                            @item.Summary
+                        </p>
+                    </div>
+                    <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
+                        <div class="d-flex align-items-end justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="small">
+                                    <div class="fw-bold">@item.Writer</div>
+                                    <div class="text-muted">
+                                        @item.DatePosted.ToString("dddd, dd MMMM yyyy")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code{
+    private IEnumerable<Article> Articles { get; set; } = Enumerable.Empty<Article>();
+
+    protected override Task OnInitializedAsync() => GetArticlesAsync();
+
+    private async Task GetArticlesAsync() => Articles = await repository.GetArticlesNumbered(3);
+}

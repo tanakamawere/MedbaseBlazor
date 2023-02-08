@@ -1,0 +1,49 @@
+﻿@page "/admin/questions/details/{id:int}"
+@inject IApiRepository repository
+
+<table class="table table-bordered table-striped table-sm">
+    <tbody>
+        <tr>
+            <th>ID</th>
+            <td>@question.Id</td>
+        </tr>
+        <tr>
+            <th>Question</th>
+            <td>@question.QuestionMain</td>
+        </tr>
+        <tr>
+            <th>ChildA</th><td>@question.ChildA</td>
+        </tr>
+        <tr>
+            <th>ChildB</th><td>@question.ChildB</td>
+        </tr>
+        <tr>
+            <th>ChildC</th><td>@question.ChildC</td>
+        </tr>
+        <tr>
+            <th>ChildD</th><td>@question.ChildD</td>
+        </tr>
+        <tr>
+            <th>ChildE</th><td>@question.ChildE</td></tr>
+        <tr>
+            <th>AnswerA</th><td>@question.AnswerA</td></tr>
+        <tr><th>AnswerB</th><td>@question.AnswerB</td></tr>
+        <tr><th>AnswerC</th><td>@question.AnswerC</td></tr>
+        <tr><th>AnswerD</th><td>@question.AnswerD</td></tr>
+        <tr><th>AnswerE</th><td>@question.AnswerE</td></tr>
+        <tr><th>ExplanationA</th><td>@question.ExplanationA</td></tr>
+        <tr><th>ExplanationB</th><td>@question.ExplanationB</td></tr>
+        <tr><th>ExplanationC</th><td>@question.ExplanationC</td></tr>
+        <tr><th>ExplanationD</th><td>@question.ExplanationD</td></tr>
+        <tr><th>ExplanationE</th><td>@question.ExplanationE</td></tr>
+    </tbody>
+</table>
+@code {
+    [Parameter]
+    public int id { get; set; }
+    public Question question { get; set; } = new();
+    protected async override Task OnParametersSetAsync()
+    {
+        question = await repository.GetQuestion(id);
+    }
+}

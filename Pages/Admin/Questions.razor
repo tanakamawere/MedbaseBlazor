@@ -1,0 +1,71 @@
+﻿@page "/admin/questions/{topicId:int}"
+@page "/admin/questions"
+@inject IApiRepository repository
+
+<PageTitle>Questions</PageTitle>
+@if (!questionsList.Any())
+{
+    <div><em><strong>Loading...</strong></em></div>
+}
+else
+{
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Question</th>
+                <th>ChildA</th>
+                <th>ChildB</th>
+                <th>ChildC</th>
+                <th>ChildD</th>
+                <th>ChildE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Question item in questionsList)
+            {
+
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.QuestionMain</td>
+                    <td>@item.ChildA</td>
+                    <td>@item.ChildB</td>
+                    <td>@item.ChildC</td>
+                    <td>@item.ChildD</td>
+                    <td>@item.ChildE</td>
+                    <td>
+                        <NavLink class="btn btn-primary btn-sm" href="@GetQuestionDetailsUrl(item.Id)">
+                            Details
+                        </NavLink>
+                        <NavLink class="btn btn-info btn-sm" href="@GetQuestionEditUrl(item.Id)">
+                            Edit
+                        </NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    public IEnumerable<Question> questionsList { get; set; } = Enumerable.Empty<Question>();
+
+    [Parameter]
+    public int topicId { get; set; }
+
+
+    public string GetQuestionDetailsUrl(int id) => $"/admin/questions/details/{id}";
+    public string GetQuestionEditUrl(int id) => $"/admin/questions/edit/{id}";
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (topicId.Equals(0))
+        {
+            questionsList = await repository.GetAllQuestions();
+        }
+        else
+        {            
+            questionsList = await repository.GetQuestionsSimple((long)topicId);
+        }
+    }
+}

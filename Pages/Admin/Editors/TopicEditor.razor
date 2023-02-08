@@ -1,0 +1,68 @@
+﻿@page "/admin/topics/edit/{id:int}"
+@page "/admin/topics/add"
+@inject IApiRepository repository
+
+
+<EditForm Model="Topic" OnValidSubmit="SaveChanges">
+    <DataAnnotationsValidator />
+    <div class="col-form-label">
+        <label>Course Reference</label>
+        <ValidationMessage For="@(() => Topic.CourseRef)" />
+        <InputSelect class="form-control" @bind-Value="Topic.CourseRef">
+            @foreach (Course item in Courses)
+            {
+                <option value="@item.CourseRef">@item.CourseRef</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="col-form-label">
+        <label>Topic Reference</label>
+        <ValidationMessage For="@(() => Topic.TopicRef)" />
+        <InputNumber class="form-control" @bind-Value="Topic.TopicRef"/>
+    </div>
+    <div class="col-form-label">
+        <label>Name</label>
+        <ValidationMessage For="@(() => Topic.Name)" />
+        <InputText class="form-control" @bind-Value="Topic.Name" />
+    </div>
+    <button class="btn btn-primary" type="submit">Done</button>
+</EditForm>
+
+
+@code {
+    public Topic Topic { get; set; } = new();
+    [Parameter]
+    public int id { get; set; } = 0;
+    private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
+    private IEnumerable<Topic> Topics { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Courses = await repository.GetCourses();
+        Topics = await repository.GetAllTopics();
+        Topic.TopicRef = Topics.Last().TopicRef + 1;
+    }
+        
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (id != 0)
+        {
+            Topic = await repository.GetTopic(id) ?? new();
+        }
+    }
+    private void SaveChanges()
+    {
+        if (id == 0)
+        {
+            repository.PostTopic(Topic);
+        }
+        else
+        {
+            repository.UpdateTopic(id, Topic);
+        }
+        NavManager.NavigateTo("/admin/topics");
+    }
+}

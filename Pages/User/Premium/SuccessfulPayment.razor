@@ -1,0 +1,57 @@
+﻿@page "/successfulpayment/{email}"
+@inject IApiRepository repository
+
+<PageTitle>SuccessfulPayment</PageTitle>
+
+<div class="container px-5 mt-5">
+    <div class="row gx-5 align-items-center justify-content-center">
+        <div class="col-lg-9 col-xl-8 col-xxl-7">
+            <div class="text-center text-xl-start">
+                <h1 class="display-5 fw-bolder text-dark mb-2">Payment Successful</h1>
+                <p>
+                    Thank you for getting Medbase Premium. <br />
+                    It helps us maintain the service and give you more features
+                </p>
+
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>ID</th><td>@subscription.Id</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th><td>@subscription.Phone</td>
+                        </tr>
+                        <tr>
+                            <th>Email Address</th>
+                            <td>@subscription.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Subscription Ending</th>
+                            <td>@subscription.EndDate</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <p class="text-muted mb-0">
+                If you ran into any issues, please contact us
+                <a href="https://wa.me/263718086035">
+                    on WhatsApp
+                </a>
+            </p>
+            <a class="btn btn-primary" href="/">Back to home</a>
+        </div>
+        <div class="col-xl-4 col-xxl-5 text-center">
+            <div class="my-5 text-center text-xl-start">
+                <img class="img-fluid rounded-3 my-5" src="img/success.svg" alt="..." />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    Subscription subscription = new();
+    [Parameter]
+    public string email { get; set; } = string.Empty;
+
+    protected override async Task OnParametersSetAsync() => subscription = await repository.GetSubscription(email);
+}

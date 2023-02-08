@@ -1,0 +1,81 @@
+﻿@page "/submitsub/{amount:double}"
+@using MedbaseBlazor.Services
+@inject IApiRepository repository
+
+<PageTitle>Submit Subscription</PageTitle>
+
+<div class="container px-5 mt-5">
+    <div class="row gx-5 align-items-center justify-content-center">
+        <div class="col-lg-9 col-xl-8 col-xxl-7">
+            <div class="text-center text-xl-start">
+                <div class="text-center text-xl-start">
+                    <h1 class="display-5 fw-bolder text-dark mb-2">You are almost done...</h1>
+                    <p>Just confirm your payment and you will be on your way</p>
+                </div>
+                <EditForm OnSubmit="SubmitSub" Model="subscription">
+                    <div class="input-group">
+                        <span class="input-group-text">RTGS$</span>
+                        <InputNumber class="form-control" readonly @bind-Value="subscription.Amount" />
+                    </div>
+                    <div class="col-form-label">
+                        <label asp-for="Email">Email</label>
+                        <InputText class="form-control" @bind-Value="subscription.Email" />
+                    </div>
+                    <div class="col-form-label">
+                        <label asp-for="Phone">Phone</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon3">+263</span>
+                            <InputText class="form-control" @bind-Value="subscription.Phone" />
+                        </div>
+                        <div class="form-text">Example: 712234567</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+            </div>
+        </div>
+        <div class="col-xl-4 col-xxl-5 text-center">
+            <div class="my-5 text-center text-xl-start">
+                <img class="img-fluid rounded-3 my-5" src="img/how_to.svg" alt="..." />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    Subscription subscription = new();
+
+    [Parameter]
+    public double amount { get; set; } = 0;
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    protected override void OnInitialized()
+    {
+        subscription.Amount = amount;
+    }
+
+    private async Task SubmitSub()
+    {
+        if (amount.Equals(Constants.WeeklyAmount()))
+        {
+            subscription.EndDate = DateTime.Now.AddDays(7);
+        }
+        else if (amount.Equals(Constants.MonthlyAmount()))
+        {
+            subscription.EndDate = DateTime.Now.AddDays(30);
+        }
+
+        Subscription existingSub = await repository.GetSubscription(subscription.Email);
+        if (existingSub.Email != null)
+        {
+            repository.UpdateSubscription(existingSub.Id, subscription);
+        }
+        else
+        {
+            repository.PostSubscription(subscription);
+        }
+        NavigationManager.NavigateTo($"/successfulpayment/{subscription.Email}");
+    }
+}
