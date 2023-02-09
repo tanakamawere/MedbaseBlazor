@@ -21,8 +21,8 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5249/");
-    //client.BaseAddress = new Uri("http://medbaseapi.azurewebsites.net/");
+    //client.BaseAddress = new Uri("http://localhost:5249/");
+    client.BaseAddress = new Uri("http://medbaseapi.azurewebsites.net/");
 });
 builder.Services.AddAuthorization(options =>
 {

@@ -1,32 +1,50 @@
 ﻿@page "/quiz/{topicId:int}/{number:int}/{negativeMarking}"
 @using System.Diagnostics;
 @inject IApiRepository repository
+@using Markdig
 
 <input type="text" @onkeydown="HandleKeyDown"  @ref="answerKeyboardInput" style="visibility:hidden"/>
 
 <div style="display:@(quizDone == false ? "block" : "none")">
-    <h2>@QuestionSelected.Question</h2>
-    <div style="visibility:@answerVisibility">
-        <p>@answerResult</p>
-        <p>@QuestionSelected.Answer</p>
-        <p>@QuestionSelected.Explanation</p>
-    </div>
-    <div>
-        <div class="row btn-group-sm" style="display:@(quizDone == false ? "block" : "none")">
-            <button class="btn btn-success btn-sm m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerTrue)">
-                True
-            </button>
-            <button class="btn btn-info btn-sm m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerLeft)">
-                I don't know
-            </button>
-            <button class="btn btn-primary btn-sm m-1"  style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerFalse)">
-                False
+    @if (!Quizzes.Any())
+    {
+        <div class="text-center">
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="visible">Loading your quiz, please wait a bit...</span>
+        </div>
+    }
+    else
+    {
+        <div class="container-fluid justify-content-center text-center">
+            <div class="align-top">
+                <h4>@QuestionSelected.Question</h4>
+            </div>
+            <hr />
+            <div class="text-center align-content-center" style="visibility:@answerVisibility">
+                <h5>Your answer was @answerResult</h5>
+                <h5>Answer is @QuestionSelected.Answer</h5>
+                <br />
+                Explanation: @((MarkupString)Markdown.ToHtml(@QuestionSelected.Explanation))
+            </div>
+
+            <div class="btn-group align-bottom align-text-bottom fixed-bottom" role="group" aria-label="Basic example" style="display:@(quizDone == false ? "block" : "none"); margin-bottom:8rem">
+                <button type="button" class="btn btn-outline-success m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerTrue)">
+                    True
+                </button>
+                <button type="button" class="btn btn-outline-info m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerLeft)">
+                    I don't know
+                </button>
+                <button type="button" class="btn btn-outline-primary m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerFalse)">
+                    False
+                </button>
+            </div>
+            <button class="btn btn-primary align-bottom fixed-bottom" style="visibility:@answerVisibility; margin-bottom:8rem" @onclick="NextQuestion">
+                Next
             </button>
         </div>
-        <button class="btn btn-primary" style="visibility:@answerVisibility" @onclick="NextQuestion">
-            Next
-        </button>
-    </div>
+    }
 </div>
 
 <QuizDone 
