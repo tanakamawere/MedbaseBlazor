@@ -24,7 +24,6 @@
                         isSignedIn = true;
                         email = context.User.Claims.Where(x => x.Type == "emails").Select(x => x.Value).First().ToString();
                         GetSubscription();
-
                     }
                         <a class="text-white btn btn-outline-light" @onclick="ToggleUserMenu">
                             <span class="oi oi-expand-down" aria-hidden="true"></span>
