@@ -9,7 +9,7 @@
 <div class="container px-5 mt-5">
     <div class="row gx-5 align-items-center justify-content-center">
         <div class="text-center text-xl-start">
-            <h1 class="display-5 fw-bolder text-dark mb-2">Choose Topic</h1>
+            <h1 class="display-5 fw-bolder text-dark mb-2">Choose Topic😗</h1>
         </div>
         <div class="row gx-5">
             @if (!TopicsList.Any())
@@ -19,7 +19,7 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <span class="visible">Loading, please wait a bit...</span>
+                <span class="visible">Loading, please wait a bit...🔃</span>
             }
             else
             {
@@ -32,24 +32,26 @@
                                         @item.Name
                                     </h5>
                                     <div class="btn-group justify-content-center">
-                                        <a class="btn btn-primary" href="@($"questions/{item.TopicRef}")">View All</a>
+                                        <a class="btn btn-primary" href="@($"questions/{item.TopicRef}")">View😆</a>
                                         <button class="btn btn-outline-dark" @onclick="() => CustomiseQuiz(item.TopicRef)">
-                                            Quiz
+                                            Quiz🤔
                                         </button>
                                     </div>
                                     <div class="container-fluid text-center border-0 shadow card-footer mt-2" style="display:@(showCustomisation.Equals(true) && topicToCustomise == item.TopicRef ? "block" : "none")">
-                                        <h6 class="fw-bold">Customise Quiz</h6>
+                                        <h6 class="fw-bold">Customise Quiz🛠️z</h6>
 
-                                        <div class="row">
-                                            <p class="col-auto">Negative Marking</p>
-                                            <InputCheckbox class="col-auto" @bind-Value="negativeMarking"></InputCheckbox>
+
+                                        <div class="container text-center m-1">
+                                                <button class="btn @(negativeMarking.Equals(true) ? "btn-primary" : "btn-outline-primary")" @onclick="ToggleNegativeMarking">
+                                                    @(negativeMarking.Equals(true) ? "Negative Marking On" : "Negative Marking Off")
+                                                </button>
                                         </div>
                                         <div class="row text-center align-content-center justify-content-center">
                                             <p class="col-auto">Number Of Questions</p>
                                             <input class="col-auto" type="number" max="10" min="1" @bind="numberOfQuestions" />
                                         </div>
                                         <a class="btn btn-primary" href="@($"/quiz/{item.TopicRef}/{numberOfQuestions}/{negativeMarking}")">
-                                            Start!
+                                            Start!😛
                                         </a>
                                     </div>
                                 </div>
@@ -74,6 +76,10 @@
 
     protected async override Task OnParametersSetAsync() => TopicsList = await repository.GetTopics(courseRef);
 
+    private void ToggleNegativeMarking()
+    {
+        negativeMarking = !negativeMarking;
+    }
     private void CustomiseQuiz(int reference)
     {
         topicToCustomise = reference;
