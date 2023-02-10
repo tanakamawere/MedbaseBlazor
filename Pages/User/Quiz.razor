@@ -92,31 +92,31 @@
                 {
                     Question = $"{item.Id}a. {item.QuestionMain}, {item.ChildA}",
                     Answer = item.AnswerA,
-                    Explanation = item.ExplanationA
+                    Explanation = string.IsNullOrEmpty(item.ExplanationA) ? "n/a" : item.ExplanationA
                 };
             QuizQuestion cardB = new()
                 {
                     Question = $"{item.Id}b. {item.QuestionMain}, {item.ChildB}",
                     Answer = item.AnswerB,
-                    Explanation = item.ExplanationB
+                    Explanation = string.IsNullOrEmpty(item.ExplanationB) ? "n/a" : item.ExplanationB
                 };
             QuizQuestion cardC = new()
                 {
                     Question = $"{item.Id}c. {item.QuestionMain}, {item.ChildC}",
                     Answer = item.AnswerC,
-                    Explanation = item.ExplanationC
+                    Explanation = string.IsNullOrEmpty(item.ExplanationC) ? "n/a" : item.ExplanationC
                 };
             QuizQuestion cardD = new()
                 {
                     Question = $"{item.Id}d. {item.QuestionMain}, {item.ChildD}",
                     Answer = item.AnswerD,
-                    Explanation = item.ExplanationD
+                    Explanation = string.IsNullOrEmpty(item.ExplanationD) ? "n/a" : item.ExplanationD
                 };
             QuizQuestion cardE = new()
                 {
                     Question = $"{item.Id}e. {item.QuestionMain}, {item.ChildE}",
                     Answer = item.AnswerE,
-                    Explanation = item.ExplanationE
+                    Explanation = string.IsNullOrEmpty(item.ExplanationE) ? "n/a" : item.ExplanationE
                 };
 
             Quizzes.Add(card);
