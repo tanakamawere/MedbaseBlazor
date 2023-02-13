@@ -5,7 +5,7 @@
 @using System.Diagnostics;
 @inject IApiRepository repository
 
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="top-row ps-3 navbar navbar-dark position-sticky sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Medbase</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -61,14 +61,19 @@
                 <span class="oi oi-book" aria-hidden="true"></span> Articles
             </NavLink>
         </div>
+        <div class="nav-item px-3" style="visibility:@(subActive > 0 ? "hidden" : "visible")">
+            <NavLink class="nav-link" href="premium">
+                <span class="oi oi-grid-two-up" aria-hidden="true"></span> Premium
+            </NavLink>
+        </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="about">
                 <span class="oi oi-question-mark" aria-hidden="true"></span> About
             </NavLink>
         </div>
-        <div class="nav-item px-3" style="visibility:@(subActive > 0 ? "hidden" : "visible")">
-            <NavLink class="nav-link" href="premium">
-                <span class="oi oi-grid-two-up" aria-hidden="true"></span> Premium
+        <div class="nav-item px-3 d-none" style="visibility:@(subActive > 0 ? "hidden" : "visible")">
+            <NavLink class="nav-link" href="admin">
+                <span class="oi oi-dashboard" aria-hidden="true"></span> Go To Admin
             </NavLink>
         </div>
     </nav>
@@ -121,4 +126,3 @@
             }
         }   
     }
-}

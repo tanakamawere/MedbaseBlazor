@@ -1,8 +1,17 @@
 ﻿@page "/admin/questions/{topicId:int}"
 @page "/admin/questions"
+@layout AdminLayout
 @inject IApiRepository repository
+@using MedbaseBlazor.Services
 
 <PageTitle>Questions</PageTitle>
+
+
+<div class="input-group m-4" style="max-width:30rem;">
+        <InputNumber @bind-Value="searchEntry" DisplayName="searchInput" placeholder="Search by Id..." class="form-control"/>
+        <button class="btn btn-primary" @onclick="() => SearchForInput()"><i class="oi oi-magnifying-glass"></i></button>
+    </div>
+
 @if (!questionsList.Any())
 {
     <div><em><strong>Loading...</strong></em></div>
@@ -49,6 +58,7 @@ else
 
 @code {
     public IEnumerable<Question> questionsList { get; set; } = Enumerable.Empty<Question>();
+    private int? searchEntry;
 
     [Parameter]
     public int topicId { get; set; }
@@ -57,15 +67,22 @@ else
     public string GetQuestionDetailsUrl(int id) => $"/admin/questions/details/{id}";
     public string GetQuestionEditUrl(int id) => $"/admin/questions/edit/{id}";
 
-    protected async override Task OnParametersSetAsync()
+    protected async override Task OnParametersSetAsync() => await GetAllQuestions(topicId);
+
+    private async Task SearchForInput()
     {
-        if (topicId.Equals(0))
-        {
-            questionsList = await repository.GetAllQuestions();
-        }
+        if (searchEntry == null || searchEntry == 0)
+            await GetAllQuestions(topicId);
         else
-        {            
-            questionsList = await repository.GetQuestionsSimple((long)topicId);
+        {
+            questionsList = questionsList.Where(x => x.Id == searchEntry).ToList();
         }
+    }
+    private async Task GetAllQuestions(int topic)
+    {
+        if (topic.Equals(0))
+            questionsList = await repository.GetAllQuestions();
+        else
+            questionsList = await repository.GetQuestionsSimple((long)topicId);
     }
 }

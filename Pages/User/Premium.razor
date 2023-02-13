@@ -1,4 +1,5 @@
 ﻿@page "/premium"
+@using MedbaseBlazor.Services;
 
 <PageTitle>Premium</PageTitle>
 
@@ -50,7 +51,7 @@
                         <h4 class="my-0 fw-normal">Weekly</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">RTGS$1000<small class="text-muted fw-light">/week</small></h1>
+                        <h1 class="card-title pricing-card-title">RTGS$@(Constants.WeeklyAmount())<small class="text-muted fw-light">/week</small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
                             <li>No Ads, at all</li>
                             <li>Download questions</li>
@@ -67,7 +68,7 @@
                         <h4 class="my-0 fw-normal">Monthly</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">RTGS$3000<small class="text-muted fw-light">/mo</small></h1>
+                        <h1 class="card-title pricing-card-title">RTGS$@(Constants.MonthlyAmount())<small class="text-muted fw-light">/mo</small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
                             <li>Everything in weekly</li>
                             <li>Better value</li>

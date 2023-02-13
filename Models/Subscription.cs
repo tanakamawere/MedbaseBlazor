@@ -1,4 +1,6 @@
-﻿namespace MedbaseBlazor.Models
+﻿using System;
+
+namespace MedbaseBlazor.Models
 {
     public class Subscription
     {
