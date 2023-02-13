@@ -1,4 +1,5 @@
 ﻿@page "/admin/subscriptions"
+@layout AdminLayout
 @inject IApiRepository repository
 
 @if (!subscriptionsList.Any())
@@ -28,6 +29,11 @@ else
                     <td>@item.StartDate</td>
                     <td>@item.EndDate</td>
                     <td>@item.Amount</td>
+                    <td>
+                        <NavLink class="btn btn-info btn-sm" href="@GetSubscriptionEditUrl(item.Email)">
+                            Edit
+                        </NavLink>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -39,6 +45,7 @@ else
     private IEnumerable<Subscription> subscriptionsList { get; set; } = Enumerable.Empty<Subscription>();
 
     protected async override Task OnInitializedAsync() => await UpdatePage();
+    public string GetSubscriptionEditUrl(string id) => $"/admin/subscriptions/edit/{id}";
 
     private async Task UpdatePage()
     {

@@ -23,8 +23,8 @@
             </div>
             <hr />
             <div class="text-center align-content-center" style="visibility:@answerVisibility">
-                <h5>Your answer was @answerResult</h5>
-                <h5>Answer is @QuestionSelected.Answer</h5>
+                <h5>You're @answerResult</h5>
+                <h5>The answer is @QuestionSelected.Answer</h5>
                 <br />
                 Explanation: @((MarkupString)Markdown.ToHtml(@QuestionSelected.Explanation))
             </div>
@@ -40,7 +40,7 @@
                     False
                 </button>
             </div>
-            <button class="btn btn-primary align-bottom fixed-bottom" style="visibility:@answerVisibility; margin-bottom:8rem" @onclick="NextQuestion">
+            <button class="btn btn-primary align-bottom fixed-bottom m-5" style="visibility:@answerVisibility; margin-bottom:8rem;" @onclick="NextQuestion">
                 Next
             </button>
         </div>
@@ -183,12 +183,12 @@
         {
             if (bool.Parse(answer).CompareTo(QuestionSelected.Answer) == 0)
             {
-                answerResult = "Correct";
+                answerResult = "correct";
                 correctCount++;
             }
             else
             {
-                answerResult = "Wrong";
+                answerResult = "wrong";
                 wrongCount++;
             }
         }
