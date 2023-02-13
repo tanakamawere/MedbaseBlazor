@@ -21,7 +21,9 @@
             <div class="align-top">
                 <h4>@QuestionSelected.Question</h4>
             </div>
-            <hr />
+            <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="@count" aria-valuemin="0" aria-valuemax="@totalQuizzes">
+                <div class="progress-bar" style="width: @((double)count/(double)totalQuizzes * 100)%">@count / @totalQuizzes questions done</div>
+            </div>
             <div class="text-center align-content-center" style="visibility:@answerVisibility">
                 <h5>You're @answerResult</h5>
                 <h5>The answer is @QuestionSelected.Answer</h5>
