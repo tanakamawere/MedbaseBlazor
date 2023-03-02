@@ -1,22 +1,18 @@
 using MedbaseBlazor.Repositories;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
-using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
-builder.Services.AddControllersWithViews()
-    .AddMicrosoftIdentityUI();
+//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddControllersWithViews()
+//    .AddMicrosoftIdentityUI();
 //Dependencies
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5249/");
-    //client.BaseAddress = new Uri("http://medbaseapi.azurewebsites.net/");
+    //client.BaseAddress = new Uri("http://localhost:5249/");
+    client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
 });
 builder.Services.AddAuthorization(options =>
 {
@@ -25,8 +21,8 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor()
-    .AddMicrosoftIdentityConsentHandler();
+builder.Services.AddServerSideBlazor();
+    //.AddMicrosoftIdentityConsentHandler();
 
 var app = builder.Build();
 
@@ -37,7 +33,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-IdentityModelEventSource.ShowPII = true;
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
