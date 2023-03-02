@@ -1,7 +1,5 @@
 ﻿@using System.Security.Principal
-@using Microsoft.AspNetCore.Authentication.OpenIdConnect
 @using Microsoft.Extensions.Options
-@using Microsoft.Identity.Web
 @using System.Diagnostics;
 @inject IApiRepository repository
 
@@ -16,7 +14,7 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3 border-3">
+        @*<div class="nav-item px-3 border-3">
                 <AuthorizeView>
                     <Authorized>
                         @if (context.User.Identity.IsAuthenticated)
@@ -45,7 +43,7 @@
                     </NotAuthorized>
                 </AuthorizeView>
         </div>
-        <hr />
+        <hr />*@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
@@ -59,11 +57,6 @@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="articles">
                 <span class="oi oi-book" aria-hidden="true"></span> Articles
-            </NavLink>
-        </div>
-        <div class="nav-item px-3" style="visibility:@(subActive > 0 ? "hidden" : "visible")">
-            <NavLink class="nav-link" href="premium">
-                <span class="oi oi-grid-two-up" aria-hidden="true"></span> Premium
             </NavLink>
         </div>
         <div class="nav-item px-3">
