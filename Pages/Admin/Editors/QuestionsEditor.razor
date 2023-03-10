@@ -42,11 +42,11 @@ else
 
         <!--Child A-->
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-sm-5 col-md-5">
                 <label>ChildA</label>
                 <InputText class="form-control" @bind-Value="Question.ChildA" />
             </div>
-            <div class="col-1">
+            <div class="col-1 col-sm-2 col-md-2">
                 <div class="col-form-label">
                     <label>AnswerA</label>
                     <InputSelect class="form-control" @bind-Value="Question.AnswerA">
@@ -55,7 +55,7 @@ else
                     </InputSelect>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-5 col-sm-5 col-md-5">
                 <div class="text-center text-xl-start">
                     <div class="col-form-label">
                         <label>Explanation A (As Markdown)</label>
@@ -68,11 +68,11 @@ else
         <hr />
         <!--Child B-->
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-sm-5 col-md-5">
                 <label>ChildB</label>
                 <InputText class="form-control" @bind-Value="Question.ChildB" />
             </div>
-            <div class="col-1">
+            <div class="col-1 col-sm-2 col-md-2">
                 <div class="col-form-label">
                     <label>AnswerB</label>
                     <InputSelect class="form-control" @bind-Value="Question.AnswerB">
@@ -81,7 +81,7 @@ else
                     </InputSelect>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-5 col-sm-5 col-md-5">
                 <div class="text-center text-xl-start">
                     <div class="col-form-label">
                         <label>Explanation B (As Markdown)</label>
@@ -94,11 +94,11 @@ else
         <hr/>
         <!--Child C-->
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-sm-5 col-md-5">
                 <label>ChildC</label>
                 <InputText class="form-control" @bind-Value="Question.ChildC" />
             </div>
-            <div class="col-1">
+            <div class="col-1 col-sm-2 col-md-2">
                 <div class="col-form-label">
                     <label>AnswerC</label>
                     <InputSelect class="form-control" @bind-Value="Question.AnswerC">
@@ -107,7 +107,7 @@ else
                     </InputSelect>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-5 col-sm-5 col-md-5">
                 <div class="text-center text-xl-start">
                     <div class="col-form-label">
                         <label>Explanation C (As Markdown)</label>
@@ -120,11 +120,11 @@ else
         <hr />
         <!--Child D-->
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-sm-5 col-md-5">
                 <label>ChildD</label>
                 <InputText class="form-control" @bind-Value="Question.ChildD" />
             </div>
-            <div class="col-1">
+            <div class="col-1 col-sm-2 col-md-2">
                 <div class="col-form-label">
                     <label>AnswerD</label>
                     <InputSelect class="form-control" @bind-Value="Question.AnswerD">
@@ -133,7 +133,7 @@ else
                     </InputSelect>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-5 col-sm-5 col-md-5">
                 <div class="text-center text-xl-start">
                     <div class="col-form-label">
                         <label>Explanation D (As Markdown)</label>
@@ -146,11 +146,11 @@ else
         <hr />
         <!--Child E-->
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-sm-5 col-md-5">
                 <label>ChildE</label>
                 <InputText class="form-control" @bind-Value="Question.ChildE" />
             </div>
-            <div class="col-1">
+            <div class="col-1 col-sm-2 col-md-2">
                 <div class="col-form-label">
                     <label>AnswerE</label>
                     <InputSelect class="form-control" @bind-Value="Question.AnswerE">
@@ -159,7 +159,7 @@ else
                     </InputSelect>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-5 col-sm-5 col-md-5">
                 <div class="text-center text-xl-start">
                     <div class="col-form-label">
                         <label>Explanation E (As Markdown)</label>
@@ -180,6 +180,7 @@ else
     public int id { get; set; } = 0;
     [Parameter]
     public int topicId { get; set; } = 0;
+    bool myBool;
 
     private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
 
@@ -216,7 +217,7 @@ else
         {
             repository.UpdateQuestion(id, Question);
         }
-        NavManager.NavigateTo($"/admin/questions/editfromtopic/{topicId}");
+        NavManager.NavigateTo($"/admin/questions");
     }
 
     private void ClearModel()

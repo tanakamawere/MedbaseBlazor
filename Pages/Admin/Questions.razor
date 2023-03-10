@@ -7,10 +7,20 @@
 <PageTitle>Questions</PageTitle>
 
 
-<div class="input-group m-4" style="max-width:30rem;">
-        <InputNumber @bind-Value="searchEntry" DisplayName="searchInput" placeholder="Search by Id..." class="form-control"/>
-        <button class="btn btn-primary" @onclick="() => SearchForInput()"><i class="oi oi-magnifying-glass"></i></button>
+
+<div class="container text-center" style="max-width:30rem;">
+    <div class="row">
+        <div class="col-4">
+            <a href="/admin/questions/editfromtopic/2" class="btn btn-primary">Add Question</a>
+        </div>
+        <div class="col-8">
+            <div class="input-group">
+                <InputNumber @bind-Value="searchEntry" DisplayName="searchInput" placeholder="Search by Id..." class="form-control" />
+                <button class="btn btn-primary" @onclick="() => SearchForInput()"><i class="oi oi-magnifying-glass"></i></button>
+            </div>
+        </div>
     </div>
+</div>
 
 @if (!questionsList.Any())
 {
