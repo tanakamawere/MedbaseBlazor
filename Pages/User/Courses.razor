@@ -4,25 +4,24 @@
 @inject IApiRepository repository
 
 <PageTitle>Courses</PageTitle>
-
 <div class="container">
 
-    <h1>Courses😙</h1>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+        </ol>
+    </nav>
 
-    <div class="row gx-5">
-        @if (!CoursesList.Any())
+    @if (!CoursesList.Any())
+    {
+        <LoadingComponent />
+    }
+    else
+    {
+        @foreach (Course item in CoursesList)
         {
-            <div class="text-center">
-                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-            <span class="visible">Loading available courses, please wait a bit...🥲</span>
-        }
-        else
-        {
-            @foreach (Course item in CoursesList)
-            {
+            <div class="row gx-5">
                 <div class="col-lg-4 mb-5">
                     <div class="card h-100 shadow border-0">
                         <img class="card-img-top" src="@item.ImageURL" alt="..." />
@@ -38,9 +37,9 @@
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         }
-    </div>
+    }
 </div>
 
 @code {

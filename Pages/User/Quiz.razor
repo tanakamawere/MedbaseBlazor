@@ -5,6 +5,15 @@
 
 <PageTitle>Quiz | Medbase</PageTitle>
 
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/courses">Courses</a></li>
+        <li class="breadcrumb-item"><a href="/courses">Topics</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Quiz</li>
+    </ol>
+</nav>
+
 <input type="text" @onkeydown="HandleKeyDown"  @ref="answerKeyboardInput" style="visibility:hidden"/>
 
 <div style="display:@(quizDone == false ? "block" : "none")">
