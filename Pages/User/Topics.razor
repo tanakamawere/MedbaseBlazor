@@ -9,7 +9,7 @@
 <div class="container mt-1">
     <div class="row gx-5 align-items-center justify-content-center">
         <div class="text-center text-xl-start">
-            <h1 class="display-5 fw-bolder text-dark mb-2">Choose Topic😗</h1>
+            <h1 class="display-5 fw-bolder mb-2">Choose Topic😗</h1>
         </div>
         <div class="row">
             @if (!TopicsList.Any())
@@ -31,11 +31,15 @@
                                     <h5 class="card-title mb-3">
                                         @item.Name
                                     </h5>
-                                    <div class="btn-group justify-content-center">
-                                        <a class="btn btn-primary" href="@($"questions/{item.TopicRef}")">View😆</a>
-                                        <button class="btn btn-outline-dark" @onclick="() => CustomiseQuiz(item.TopicRef)">
-                                            Quiz🤔
-                                        </button>
+                                    <div class="row text-center">
+                                        <div class="col-6">
+                                            <a class="btn btn-primary" href="@($"questions/{item.TopicRef}")">View😆</a>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-primary" @onclick="() => CustomiseQuiz(item.TopicRef)">
+                                                Quiz🤔
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="container-fluid text-center border-0 shadow card-footer mt-2" style="display:@(showCustomisation.Equals(true) && topicToCustomise == item.TopicRef ? "block" : "none")">
                                         <h6 class="fw-bold">Customise Quiz🛠️z</h6>
