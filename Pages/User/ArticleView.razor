@@ -4,7 +4,14 @@
 @using Markdig
 
 <PageTitle>Article</PageTitle>
-<div class="container">   
+<div class="container">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Article.Title</li>
+        </ol>
+    </nav>
   <!-- Page Content -->
   <div class="container">
 

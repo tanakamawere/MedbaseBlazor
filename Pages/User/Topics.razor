@@ -8,18 +8,19 @@
 
 <div class="container mt-1">
     <div class="row gx-5 align-items-center justify-content-center">
-        <div class="text-center text-xl-start">
-            <h1 class="display-5 fw-bolder mb-2">Choose Topic😗</h1>
-        </div>
+
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/courses">Courses</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Topics</li>
+            </ol>
+        </nav>
+
         <div class="row">
             @if (!TopicsList.Any())
             {
-                <div class="text-center">
-                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <span class="visible">Loading, please wait a bit...🔃</span>
+                <LoadingComponent />
             }
             else
             {
