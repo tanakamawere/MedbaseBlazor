@@ -3,6 +3,8 @@
 @inject IApiRepository repository
 @using Markdig
 
+<PageTitle>Quiz | Medbase</PageTitle>
+
 <input type="text" @onkeydown="HandleKeyDown"  @ref="answerKeyboardInput" style="visibility:hidden"/>
 
 <div style="display:@(quizDone == false ? "block" : "none")">
@@ -88,7 +90,7 @@
 
     protected async override Task OnParametersSetAsync()
     {
-        foreach (var item in GetQuizQuestionsAsync(await repository.GetQuestionsSimple((long)topicId)))
+        foreach (var item in GetQuizQuestionsAsync(await repository.GetQuizQuestions(topicId, number)))
         {
             QuizQuestion card = new()
                 {

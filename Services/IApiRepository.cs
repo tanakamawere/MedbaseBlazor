@@ -18,6 +18,7 @@ namespace MedbaseBlazor.Repositories
         Task<IEnumerable<Subscription>> GetSubscriptions();
         Task<Subscription> GetSubscription(string email);
         Task<IEnumerable<Question>> GetAllQuestions();
+        Task<IEnumerable<Question>> GetQuizQuestions(int topic, int number);
 
         void PostArticle(Article article);
         void PostTopic(Topic topic);

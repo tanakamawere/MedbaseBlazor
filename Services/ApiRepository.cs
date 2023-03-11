@@ -9,6 +9,10 @@ namespace MedbaseBlazor.Repositories
         {
             httpClient = _httpClient;
         }
+        public async Task<IEnumerable<Question>> GetQuizQuestions(int topic, int number)
+        {
+            return await httpClient.GetFromJsonAsync<IEnumerable<Question>>($"questions/quiz/{topic}/{number}");
+        }
 
         public async Task<IEnumerable<Article>> GetArticlesNumbered(int num)
         {
