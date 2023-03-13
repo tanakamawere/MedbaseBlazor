@@ -12,59 +12,64 @@
             <li class="breadcrumb-item active" aria-current="page">@Article.Title</li>
         </ol>
     </nav>
-  <!-- Page Content -->
   <div class="container">
+        @if (loading.Equals(true))
+        {
+            <LoadingComponent/>
+        }
+        else
+        {
 
-    <!-- Page Heading/Breadcrumbs -->
-    <h1 class="mt-4 mb-3">@Article.Title
-      <small>by
-        <a href="#">@Article.Writer</a>
-      </small>
-    </h1>
+            <h1 class="mt-4 mb-3">
+                @Article.Title
+                <small>
+                    by
+                    <a href="#">@Article.Writer</a>
+                </small>
+            </h1>
 
-    <div class="row">
+            <div class="row">
 
-      <!-- Post Content Column -->
-      <div class="col-lg-8">
+                <!-- Post Content Column -->
+                <div class="col-lg-8">
 
-        <!-- Preview Image -->
-        <img class="img-fluid rounded" src="@Article.ImageURL" alt="">
+                    <!-- Preview Image -->
+                    <img class="img-fluid rounded" src="@Article.ImageURL" alt="">
 
-        <hr>
+                    <hr>
 
-        <!-- Date/Time -->
-        <p>@Article.DatePosted.ToString("dddd, dd MMMM yyyy")</p>
+                    <!-- Date/Time -->
+                    <p>@Article.DatePosted.ToString("dddd, dd MMMM yyyy")</p>
 
-        <hr>
+                    <hr>
 
-        <!-- Post Content -->
-            <p class="font-italic">@Article.Summary)</p>
+                    <!-- Post Content -->
+                    <p class="font-italic">@Article.Summary</p>
 
-                <p>@((MarkupString)Markdown.ToHtml(Article.Body))</p>
-      </div>
+                    <p>@((MarkupString)Markdown.ToHtml(Article.Body))</p>
+                </div>
 
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
+                <!-- Sidebar Widgets Column -->
+                <div class="col-md-4">
 
-        <!-- Side Widget -->
-        <div class="card my-4">
-          <h5 class="card-header">More to read?</h5>
-          <div class="card-body">
-            Go back to <a class="ml-5" asp-action="Articles">Articles</a>.
-          </div>
-        </div>
+                    <!-- Side Widget -->
+                    <div class="card my-4">
+                        <h5 class="card-header">More to read?</h5>
+                        <div class="card-body">
+                            Go back to <a class="ml-5" asp-action="Articles">Articles</a>.
+                        </div>
+                    </div>
 
-      </div>
+                </div>
 
+            </div>
+        }
     </div>
-    <!-- /.row -->
-
-  </div>
-  <!-- /.container -->
 </div>
 @code {
 
     public Article Article { get; set; } = new();
+    private bool loading;
 
     [Parameter]
     public int id { get; set; } = 0;
@@ -73,7 +78,9 @@
     {
         if (id != 0)
         {
+            loading = true;
             Article = await repository.GetArticle(id) ?? new();
+            loading = false;
         }
     }
 }
