@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using MedbaseBlazor.Models;
 @using MedbaseBlazor.Repositories;
+@inject NavigationManager navManager;
 @inject IApiRepository repository
 
 <!-- Header-->
@@ -61,7 +62,7 @@
         @foreach (Article item in Articles)
         {
             <div class="col-lg-4 mb-5">
-                <div class="card h-100 shadow border-0">
+                <div class="card h-100 shadow border-0" @onclick="() => GoToArticle(item.Id)">
                     <img class="card-img-top" src="@item.ImageURL" alt="..." />
                     <div class="card-body p-4">
                         <a class="text-decoration-none link-dark stretched-link" asp-action="ArticleView" asp-route-id="@item.Id">
@@ -97,4 +98,9 @@
     protected override Task OnInitializedAsync() => GetArticlesAsync();
 
     private async Task GetArticlesAsync() => Articles = await repository.GetArticlesNumbered(3);
+
+    private void GoToArticle(int article)
+    {
+        navManager.NavigateTo($"/article/{article}");
+    }
 }

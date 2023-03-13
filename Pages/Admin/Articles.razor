@@ -5,47 +5,36 @@
 <PageTitle>Articles</PageTitle>
 <a class="btn btn-primary m-2" style="max-width:200px" href="@GetArticlesAddUrl()">Add</a>
 
-@if (!ArticlesList.Any())
-{
-    <div><em><strong>Loading...</strong></em></div>
-}
-else
-{
-    <table class="table table-bordered table-striped table-sm">
-        <thead>
+<table class="table table-bordered table-striped table-sm">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Summary</th>
+            <th>Writer</th>
+            <th>DatePosted</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Article item in allArticles)
+        {
             <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Summary</th>
-                <th>Writer</th>
-                <th>DatePosted</th>
+                <td>@item.Id</td>
+                <td>@item.Title</td>
+                <td>@item.Summary</td>
+                <td>@item.Writer</td>
+                <td>@item.DatePosted</td>
+                <td>
+                    <NavLink class="btn btn-primary btn-sm" href="@GetArticlesEditUrl(item.Id)">
+                        Edit
+                    </NavLink>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (Article item in ArticlesList)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Title</td>
-                    <td>@item.Summary</td>
-                    <td>@item.Writer</td>
-                    <td>@item.DatePosted</td>
-                    <td>
-                        <NavLink class="btn btn-primary btn-sm" href="@GetArticlesEditUrl(item.Id)">
-                            Edit
-                        </NavLink>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
+        }
+    </tbody>
+</table>
 
 @code {
-
-    [Parameter]
-    public IEnumerable<Article> ArticlesList { get; set; } = Enumerable.Empty<Article>();
     public string GetArticlesEditUrl(int id) => $"/admin/articles/edit/{id}";
     public string GetArticlesAddUrl() => $"/admin/articles/add";
     public IEnumerable<Article> allArticles { get; set; } = Enumerable.Empty<Article>();
