@@ -30,7 +30,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
-        server: ftp://155.254.244.35/www.medbase.somee.com
+        server: ftp://medbase.somee.com/www.medbase.somee.com
         # FTP account username
         username: tanakamawere
         # FTP account password
