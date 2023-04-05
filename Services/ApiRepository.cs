@@ -49,6 +49,11 @@ namespace MedbaseBlazor.Repositories
             return await httpClient.GetFromJsonAsync<QuestionPaged>($"questions/{topic}/{numResults}/{page}");
         }
 
+        public async Task<QuestionPaged> GetSearchPagedQuestions(int topic, int page, double numResults, string keyword)
+        {
+            return await httpClient.GetFromJsonAsync<QuestionPaged>($"questions/{topic}/{numResults}/{page}/{keyword}");
+        }
+
         public async Task<IEnumerable<Topic>> GetAllTopics()
         {
             return await httpClient.GetFromJsonAsync<IEnumerable<Topic>>("topics");

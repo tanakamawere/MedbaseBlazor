@@ -1,43 +1,30 @@
 ﻿@inherits LayoutComponentBase
 
 <PageTitle>Medbase Admin</PageTitle>
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav class="navbar nav-pills sticky-top" style="background-color:#6397ff">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="/admin">Medbase Administration</a>
-    <div class="nav">
-        <div class="sb-sidenav-menu-heading">Core</div>
-
-        <NavLink class="nav-link" href="/admin" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="home" class="align-text-bottom"></span>
-            Home
-        </NavLink>
-        <NavLink class="nav-link" href="/admin/courses" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="home" class="align-text-bottom"></span>
-            Courses
-        </NavLink>
-        <NavLink class="nav-link" href="/admin/topics" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="file" class="align-text-bottom"></span>
-            Topics
-        </NavLink>
-        <NavLink class="nav-link" href="/admin/questions" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="users" class="align-text-bottom"></span>
-            Questions
-        </NavLink>
-        <NavLink class="nav-link" href="/admin/articles" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="users" class="align-text-bottom"></span>
-            Articles
-        </NavLink>
-        <NavLink class="nav-link" href="/admin/subscriptions" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="users" class="align-text-bottom"></span>
-            Subscriptions
-        </NavLink>
-        <NavLink class="nav-link" href="/" ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">
-            <span data-feather="users" class="align-text-bottom"></span>
-            Go To Medbase
-        </NavLink>
-    </div>
-    <!-- Sidebar Toggle-->
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    <a class="navbar-brand ps-3" href="/admin">Medbase Admin</a>
+    <a class="nav-link" href="/admin">
+        Home
+    </a>
+    <a class="nav-link" href="/admin/courses">
+        Courses
+    </a>
+    <a class="nav-link" href="/admin/topics">
+        Topics
+    </a>
+    <a class="nav-link" href="/admin/questions">
+        Questions
+    </a>
+    <a class="nav-link" href="/admin/articles">
+        Articles
+    </a>
+    <a class="nav-link" href="/admin/subscriptions">
+        Subscriptions
+    </a>
+    <a class="nav-link" href="/">
+        Go To Medbase
+    </a>
 </nav>
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
