@@ -35,5 +35,3 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         # FTP account password
         password: ${{ secrets.FTP_PASSWORD }}
-        # The local folder to copy, defaults to root project folder
-        local-dir: /home/runner/work/MyApp/MyApp/publish/
