@@ -5,30 +5,28 @@
 
 <PageTitle>Quiz | Medbase</PageTitle>
 
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item"><a href="/courses">Courses</a></li>
-        <li class="breadcrumb-item"><a href="/courses">Topics</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Quiz</li>
-    </ol>
-</nav>
+<div>
 
-<input type="text" @onkeydown="HandleKeyDown"  @ref="answerKeyboardInput" style="visibility:hidden"/>
-
-<div style="display:@(quizDone == false ? "block" : "none")">
-    @if (!Quizzes.Any())
-    {
-        <div class="text-center">
-            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/courses">Courses</a></li>
+            <li class="breadcrumb-item"><a href="/courses">Topics</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quiz</li>
+        </ol>
+    </nav>
+    <div class="container" style="display:@(quizDone == false ? "block" : "none")">
+        @if (!Quizzes.Any())
+        {
+            <div class="text-center">
+                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <span class="visible">Loading your quiz, please wait a bit...</span>
             </div>
-            <span class="visible">Loading your quiz, please wait a bit...</span>
-        </div>
-    }
-    else
-    {
-        <div class="container-fluid justify-content-center text-center">
+        }
+        else
+        {
             <div class="align-top">
                 <h4>@QuestionSelected.Question</h4>
             </div>
@@ -41,23 +39,35 @@
                 <br />
                 Explanation: @((MarkupString)Markdown.ToHtml(@QuestionSelected.Explanation))
             </div>
+        }
+    </div>
+    <div class="fixed-bottom">
+        <TopNavBar>
 
-            <div class="btn-group align-bottom align-text-bottom fixed-bottom" role="group" aria-label="Basic example" style="display:@(quizDone == false ? "block" : "none"); margin-bottom:8rem">
-                <button type="button" class="btn btn-outline-success m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerTrue)">
-                    True
-                </button>
-                <button type="button" class="btn btn-outline-info m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerLeft)">
-                    I don't know
-                </button>
-                <button type="button" class="btn btn-outline-primary m-1" style="visibility:@((answerVisibility == "visible") ? "hidden" : "visible")" @onclick="() => AnswerResponse(answerFalse)">
-                    False
-                </button>
-            </div>
-            <button class="btn btn-primary align-bottom fixed-bottom m-5" style="visibility:@answerVisibility; margin-bottom:8rem;" @onclick="NextQuestion">
+            <button class="btn btn-primary justify-content-center" style="display:@((answerVisibility == "visible") ? "block" : "none");" @onclick="NextQuestion">
                 Next
             </button>
-        </div>
-    }
+            <div class="row">
+                <div class="col-4">
+                    <button class="btn btn-outline-success" style="display:@((answerVisibility == "visible") ? "none" : "block");" @onclick="() => AnswerResponse(answerTrue)">
+                        True
+                    </button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-outline-info" style="display:@((answerVisibility == "visible") ? "none" : "block");" @onclick="() => AnswerResponse(answerLeft)">
+                        Leave
+                    </button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-outline-primary" style="display:@((answerVisibility == "visible") ? "none" : "block");" @onclick="() => AnswerResponse(answerFalse)">
+                        False
+                    </button>
+                </div>
+            </div>
+
+
+        </TopNavBar>
+    </div>
 </div>
 
 <QuizDone 
@@ -74,7 +84,7 @@
     [Parameter]
     public int topicId { get; set; }
     [Parameter]
-    public int number { get; set; }
+    public int number { get; set; } 
     [Parameter]
     public string negativeMarking { get; set; }
 
@@ -149,7 +159,6 @@
         if (count < totalQuizzes)
         {
             answerVisibility = "hidden";
-            answerKeyboardInput.FocusAsync();
 
             numberLeft = $"{totalQuizzes - count} questions left";
 
@@ -160,29 +169,6 @@
             QuizDone();
         }
     }
-
-
-    private ElementReference answerKeyboardInput;
-    private string pressedKey;
-
-    private void HandleKeyDown(KeyboardEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case "j":
-                AnswerResponse(answerTrue);
-                break;
-            case "k":
-                AnswerResponse(answerLeft);
-                break;
-            case "l":
-                AnswerResponse(answerFalse);
-                break;
-            default:
-                return;
-        }
-    }
-
 
     void AnswerResponse(string answer)
     {

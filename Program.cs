@@ -11,8 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
 {
-    //client.BaseAddress = new Uri("http://localhost:5249/");
-    client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
+    client.BaseAddress = new Uri("http://localhost:5249/");
+    //client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
 });
 builder.Services.AddAuthorization(options =>
 {
