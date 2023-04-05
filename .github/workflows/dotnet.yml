@@ -26,12 +26,12 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+    - name: ftp-action
+      uses: sebastianpopp/ftp-action@v2.0.0
       with:
         # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
-        server: ${{ secrets.FTP_SERVER}}
+        host: ${{ secrets.FTP_SERVER}}
         # FTP account username
-        username: ${{ secrets.FTP_USERNAME}}
+        user: ${{ secrets.FTP_USERNAME}}
         # FTP account password
         password: ${{ secrets.FTP_PASSWORD }}
