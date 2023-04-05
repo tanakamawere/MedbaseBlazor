@@ -27,7 +27,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
         ftp-server: ${{ secrets.FTP_SERVER }}
