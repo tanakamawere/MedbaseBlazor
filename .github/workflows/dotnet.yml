@@ -30,8 +30,8 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
-        server: ${{ secrets.FTP_SERVER }}
+        server: ftp://155.254.244.35/www.medbase.somee.com
         # FTP account username
-        username: ${{ secrets.FTP_USERNAME }}
+        username: tanakamawere
         # FTP account password
         password: ${{ secrets.FTP_PASSWORD }}
