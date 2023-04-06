@@ -27,7 +27,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish -c Release --output ./Release
+      run: dotnet publish -c Release --property:PublishDir=./Release
     - name: ftp-action
       uses: sebastianpopp/ftp-action@v2.0.0
       with:
