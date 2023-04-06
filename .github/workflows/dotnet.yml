@@ -27,7 +27,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish --configuration Release --no-restore --output ./publish --self-contained true --runtime win-x86 -p:PublishTrimmed=true
+      run: dotnet publish -c Release --output ./Release
     - name: ftp-action
       uses: sebastianpopp/ftp-action@v2.0.0
       with:
@@ -37,3 +37,4 @@ jobs:
         user: ${{ secrets.FTP_USERNAME}}
         # FTP account password
         password: ${{ secrets.FTP_PASSWORD }}
+        localDir: ./Release/
