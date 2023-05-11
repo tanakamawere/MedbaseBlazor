@@ -14,13 +14,29 @@
 }
 else
 {
+    
+    
+    <div class="row">
+        <div class="col-4">
+            <button @onclick="() => ClearModel()" class="btn btn-primary">Clear Form</button>
+        </div>
+        <div class="col-8">
+            <div class="col-form-label">
+                <label>Course</label>
+                <select class="form-control" @onchange="GetCourseTopics">
+                    @foreach (Course item in Courses)
+                    {
+                        <option value="@item.CourseRef">@item.Title</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
     <EditForm Model="Question" OnSubmit="SaveChanges">
         <DataAnnotationsValidator />
         <div class="row">
-            <div class="col-2">
-                <button @onclick="() => ClearModel()" class="btn btn-primary">Clear Form</button>
-            </div>
-            <div class="col-4">
+            <div class="col-6">
+                
                 <div class="col-form-label">
                     <label>Topic</label>
                     <InputSelect class="form-control" @bind-Value="Question.TopicRef">
@@ -183,11 +199,13 @@ else
     bool myBool;
 
     private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
+    private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
+
 
     protected async override Task OnInitializedAsync()
     {
+        Courses = await repository.GetCourses();
         Question = await repository.GetQuestion(id);
-        Topics = await repository.GetAllTopics();
     }
 
     [Inject]
@@ -205,6 +223,12 @@ else
             this.Question = new();
             Question.TopicRef = topicId;
         }
+    }
+
+    private async void GetCourseTopics(ChangeEventArgs e)
+    {
+        Topics = await repository.GetTopics(e.Value.ToString());
+        StateHasChanged();
     }
 
     private void SaveChanges()
