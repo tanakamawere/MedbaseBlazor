@@ -1,4 +1,5 @@
 using MedbaseBlazor.Repositories;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,15 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
 {
-    //client.BaseAddress = new Uri("http://localhost:5249/");
-    client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
+    client.BaseAddress = new Uri("http://localhost:5249/");
+    //client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
 });
 builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to the default policy
     //options.FallbackPolicy = options.DefaultPolicy;
 });
-
+builder.Services.AddMudServices();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
     //.AddMicrosoftIdentityConsentHandler();
