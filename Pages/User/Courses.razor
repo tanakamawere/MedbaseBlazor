@@ -19,24 +19,27 @@
     }
     else
     {
-        <div class="row gx-5">
+        <div class="row">
             @foreach (Course item in CoursesList)
             {
-                <div class="col-6 col-lg-4 mb-5">
-                    <div class="card h-100 shadow border-0">
-                        <img class="card-img-top" src="@item.ImageURL" alt="..." />
-                        <div class="card-body p-4">
-                            <a class="text-decoration-none stretched-link" href="@($"/topics/{item.CourseRef}")">
-                                <h6 class="card-title mb-3">
-                                    @item.Title
-                                </h6>
-                            </a>
-                            <p class="card-text mb-0 d-lg-block d-none fw-light fst-normal">
+                <div class="col-lg-4 col-sm-6 mb-5">
+                    <MudCard>
+                        <MudCardMedia Image="@item.ImageURL" Height="200" />
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">
+                                @item.Title
+                            </MudText>
+                            <MudText Typo="Typo.body2">
                                 @item.Description
-                            </p>
-                        </div>
-                    </div>
+                            </MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/topics/{item.CourseRef}")">Go To Course</MudButton>
+                            <MudButton Variant="Variant.Text" Color="Color.Secondary">Share</MudButton>
+                        </MudCardActions>
+                    </MudCard>
                 </div>
+
             }
         </div>
         

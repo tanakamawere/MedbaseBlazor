@@ -3,119 +3,14 @@
 @using System.Diagnostics;
 @inject IApiRepository repository
 
-<div class="top-row ps-3 navbar navbar-dark position-sticky sticky-top" style="background-color:#6397ff">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Medbase</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+<MudNavMenu Rounded="true" Margin="Margin.Dense" Color="Color.Primary" Class="pa-2">
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        @*<div class="nav-item px-3 border-3">
-                <AuthorizeView>
-                    <Authorized>
-                        @if (context.User.Identity.IsAuthenticated)
-                    {
-                        isSignedIn = true;
-                        email = context.User.Claims.Where(x => x.Type == "emails").Select(x => x.Value).First().ToString();
-                        GetSubscription();
-                    }
-                        <a class="text-white btn btn-outline-light" @onclick="ToggleUserMenu">
-                            <span class="oi oi-expand-down" aria-hidden="true"></span>
-                                Hi, @context.User.Identity?.Name!
-                        </a>
-                        <ul class="dropdown-menu bg-dark @UserMenuCssClass">
-                        <a class="dropdown-item btn-outline-light">
-                                @premiumLabel
-                            </a>
-                        <a class="dropdown-item btn-outline-light" href="MicrosoftIdentity/Account/SignOut">
-                                <span class="oi oi-account-logout" aria-hidden="true"></span>Log out
-                            </a>
-                        </ul>
-                    </Authorized>
-                    <NotAuthorized>
-                        <NavLink class="nav-link" href="MicrosoftIdentity/Account/SignIn">
-                                <span class="oi oi-account-login" aria-hidden="true"></span>Log in
-                        </NavLink>
-                    </NotAuthorized>
-                </AuthorizeView>
-        </div>
-        <hr />*@
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="courses">
-                <span class="oi oi-plus" aria-hidden="true"></span> Courses
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="articles">
-                <span class="oi oi-book" aria-hidden="true"></span> Articles
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="about">
-                <span class="oi oi-question-mark" aria-hidden="true"></span> About
-            </NavLink>
-        </div>
-        <div class="nav-item px-3 d-none" style="visibility:@(subActive > 0 ? "hidden" : "visible")">
-            <NavLink class="nav-link" href="admin">
-                <span class="oi oi-dashboard" aria-hidden="true"></span> Go To Admin
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
+    <MudNavLink Href="/courses" Icon="@Icons.Material.Filled.PlusOne">Courses</MudNavLink>
+    <MudNavLink Href="/articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
+    <MudNavLink Href="/about" Icon="@Icons.Material.Filled.QuestionAnswer">About</MudNavLink>
+</MudNavMenu>
 
-@code {
-    private bool collapseNavMenu = true;
-    private bool collapseUserMenu = true;
-    private bool isSignedIn = false;
-    string premiumLabel = "Check Subscription";
-    string email = string.Empty;
-    int subActive = 0;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-    private string? UserMenuCssClass => collapseUserMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
-    private void ToggleUserMenu()
-    {
-        collapseUserMenu = !collapseUserMenu;
-    }
-
-    private async Task GetSubscription()
-    {
-        Subscription subscription = await repository.GetSubscription(email);
-        try
-            {
-                if (subscription.Email is not null)
-                {
-                    subActive = subscription.EndDate.Date.CompareTo(DateTime.Now.Date);
-                    if (subActive <= 0)
-                    {
-                        premiumLabel = "Resubscribe";
-                    }
-                    else if (subActive > 0)
-                    {
-                        premiumLabel = $"{(subscription.EndDate.Date - DateTime.Now.Date).Days} days left";
-                    }
-                    else
-                        premiumLabel = "Not subscribed";
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-        }   
-    }
+@code
+{
+}

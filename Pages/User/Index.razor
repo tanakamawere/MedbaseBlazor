@@ -1,17 +1,15 @@
 ﻿@page "/"
+@page "/home"
 @using MedbaseBlazor.Models;
 @using MedbaseBlazor.Repositories;
 @inject NavigationManager navManager;
 @inject IApiRepository repository
 
 <!-- Header-->
-<div class="alert alert-primary" role="alert">
-    Did you know Medbase is now in the Play Store? <a href="https://play.google.com/store/apps/details?id=com.tanakamawere.medbasehybrid">Download Now</a>
-</div>
 <header class="py-5">
     <div class="container px-5">
         <div class="row gx-5 align-items-center justify-content-center">
-            <div class="col-lg-8 col-xl-7 col-xxl-6">
+            <div class="col-lg-6 col-xl-6 col-xxl-4">
                 <div class="my-5 text-center text-xl-start">
                     <h1 class="display-5 fw-bolder mb-2">medbase😃</h1>
                     <p class="lead fw-normal text-dark-50 mb-4">Over 1,500 MCQs (with answers) on Anatomy, Physiology & Pathology</p>
@@ -21,7 +19,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="img/home_illustration.svg" alt="..." /></div>
+            <div class="col-xl-6 col-xxl-6 text-center">
+                <img class="img-fluid rounded-3 my-5" src="img/home_illustration.svg" alt="..." />
+            </div>
         </div>
     </div>
 </header>

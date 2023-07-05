@@ -1,39 +1,35 @@
 ﻿@inherits LayoutComponentBase
 
 <PageTitle>Medbase Admin</PageTitle>
-<nav class="navbar nav-pills sticky-top" style="background-color:#6397ff">
-    <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="/admin">Medbase Admin</a>
-    <a class="nav-link" href="/admin">
-        Home
-    </a>
-    <a class="nav-link" href="/admin/courses">
-        Courses
-    </a>
-    <a class="nav-link" href="/admin/topics">
-        Topics
-    </a>
-    <a class="nav-link" href="/admin/questions">
-        Questions
-    </a>
-    <a class="nav-link" href="/admin/articles">
-        Articles
-    </a>
-    <a class="nav-link" href="/admin/subscriptions">
-        Subscriptions
-    </a>
-    <a class="nav-link" href="/">
-        Go To Medbase
-    </a>
-</nav>
-<div id="layoutSidenav">
-    <div id="layoutSidenav_content">
-        <main>
-            <div class="container-fluid p-5">
-                <div class="row">
-                    @Body
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
+
+<MudThemeProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <MudNavMenu Bordered="true">
+            <MudNavLink Href="/admin/courses">Courses</MudNavLink>
+            <MudNavLink Href="/admin/topics">Topics</MudNavLink>
+            <MudNavLink Href="/admin/Questions">Questions</MudNavLink>
+            <MudNavLink Href="/admin/Articles">Articles</MudNavLink>
+            <MudNavLink Href="/home">Go To Medbase</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}
