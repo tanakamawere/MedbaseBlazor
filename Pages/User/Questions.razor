@@ -23,50 +23,32 @@
     }
     else
     {
-        <div class="fixed-top">
-            <TopNavBar>
-                <div class="container align-content-center justify-content-center text-center">
-                    <div class="row">
-                        
-                        <div class="col-2 align-self-center" @onclick="() => OpenSearchBar()">
-                            <span class="oi oi-magnifying-glass text-white" aria-hidden="true"></span>
-                        </div>
-                    </div>
-                    <div style="display:@(searchBarOpen == true ? "block" : "none");" class="m-1">
-                        <div class="row text-center">
-                            <div class="col-10">
-                                <InputText class="form-control" DisplayName="searchQuestions" @bind-Value="searchTerm" placeholder="Search for one keyword" />
-                            </div>
-                            <div class="col-2">
-                                <button class="btn btn-primary" @onclick="() => GetSearchQuestions()">
-                                    <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </TopNavBar>
+        <div class="m-2 position-fixed bottom-0 @(showToolbar.Equals(false) ? "d-none" : "d-block")">
+            <MudPaper Elevation="25" Outlined=true>
+                <MudToolBar>
+                    <MudIconButton Icon="@Icons.Material.Outlined.Search" />
+                    <MudGrid Spacing="1" Justify="Justify.Center">
+                        <MudIconButton @onclick="() => GetQuestions(QuestionPaged.CurrentPage -1)" class="@(!(QuestionPaged.CurrentPage > 1) ? "disabled" : "")" Icon="@Icons.Material.Filled.ArrowBack">
+                        </MudIconButton>
+                        <MudButton Disabled="true" Typo="Typo.caption" Align="Align.Center">
+                            Page @QuestionPaged.CurrentPage / @QuestionPaged.Pages
+                        </MudButton>
+                        <MudIconButton @onclick="() => GetQuestions(QuestionPaged.CurrentPage +1)"
+                                       class="@(!(QuestionPaged.CurrentPage < QuestionPaged.Pages) ? "disabled" : "")" Icon="@Icons.Material.Filled.ArrowForward">
+                        </MudIconButton>
+                    </MudGrid>
+                    <MudIconButton Icon="@Icons.Material.Outlined.Menu" OnClick="OpenToolbar" />
+                </MudToolBar>
+            </MudPaper>
         </div>
-
-        <MudPaper Elevation="25" Class="m-2">
-            <MudToolBar>
-                <MudIconButton Icon="@Icons.Material.Outlined.Menu" />
-                <MudGrid Spacing="1" Justify="Justify.Center">
-                    <MudButton @onclick="() => GetQuestions(QuestionPaged.CurrentPage -1)" class="@(!(QuestionPaged.CurrentPage > 1) ? "disabled" : "")">
-                        Previous
-                    </MudButton>
-                    <MudButton Disabled="true" Typo="Typo.caption" Align="Align.Center">
-                        Page @QuestionPaged.CurrentPage / @QuestionPaged.Pages
-                    </MudButton>
-                    <MudButton @onclick="() => GetQuestions(QuestionPaged.CurrentPage +1)"
-                               class="@(!(QuestionPaged.CurrentPage < QuestionPaged.Pages) ? "disabled" : "")">
-                        Next
-                    </MudButton>
-                </MudGrid>
-                <MudIconButton Icon="@Icons.Material.Outlined.Search"  />
-            </MudToolBar>
-        </MudPaper>
-        <div>
+        <div class="m-2 position-fixed bottom-0 end-0 justify-content-center @(showToolbar.Equals(true) ? "d-none" : "d-block")">
+            <MudFab Color="Color.Primary" 
+                    StartIcon="@Icons.Material.Filled.More" 
+                    OnClick="OpenToolbar"
+                    Label="Show Toolbar"
+                    Class="object-left" />
+        </div>
+        <div style="margin-bottom:100px;">
             <Virtualize Items="QuestionPaged.Questions.ToList()" Context="question" TItem="Question">
                 <ItemContent>
                     <MudCard class="mb-2">
@@ -163,6 +145,8 @@
     private int paginationPage = 1;
     public bool searchBarOpen = false;
     public bool searchResultsNull = false;
+
+    private bool showToolbar = true;
     private string searchTerm = "";
     public int qts;
 
@@ -190,6 +174,7 @@
     }
 
     private async Task GetQuestions(int page = 1) => QuestionPaged = await repository.GetPagedQuestions(topicRef, page, 10f);
+
     private async Task GetSearchQuestions(int page = 1)
     {
         QuestionPaged = await repository.GetSearchPagedQuestions(topicRef, page, 30f, searchTerm);
@@ -198,7 +183,9 @@
             searchResultsNull = true;
         }
     }
+
     private void OpenSearchBar() => searchBarOpen = !searchBarOpen;
+    private void OpenToolbar() => showToolbar = !showToolbar;
 
     private void OpenDialog(int questionId)
     {
