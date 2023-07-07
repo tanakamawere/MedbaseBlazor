@@ -8,26 +8,11 @@
 </style>
 
 <EditForm Model="Course" OnValidSubmit="SaveChanges">
-    <div class="col-form-label">
-        <label>Course Reference</label>
-        <ValidationMessage For="@(() => Course.CourseRef)"/>
-        <InputText class="form-control" @bind-Value="Course.CourseRef" />
-    </div>
-    <div class="col-form-label">
-        <label>Title</label>
-        <ValidationMessage For="@(() => Course.Title)" />
-        <InputText class="form-control" @bind-Value="Course.Title" />
-    </div>
-    <div class="col-form-label">
-        <label>Description</label>
-        <ValidationMessage For="@(() => Course.Description)" />
-        <InputText class="form-control" @bind-Value="Course.Description" />
-    </div>
-    <div class="col-form-label">
-        <label>Image URL</label>
-        <ValidationMessage For="@(() => Course.ImageURL)" />
-        <InputText class="form-control" @bind-Value="Course.ImageURL" />
-    </div>
+    <DataAnnotationsValidator />
+    <MudTextField Label="Course Reference" For="@(() => Course.CourseRef)" @bind-Value="Course.CourseRef" />
+    <MudTextField Label="Title" For="@(() => Course.Title)" @bind-Value="Course.Title" />
+    <MudTextField Label="Description" For="@(() => Course.Description)" @bind-Value="Course.Description" />
+    <MudTextField Label="Image Url" For="@(() => Course.ImageURL)" @bind-Value="Course.ImageURL" />
     <button type="submit" class="btn btn-primary">Save</button>
 </EditForm>
 

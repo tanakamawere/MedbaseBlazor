@@ -3,12 +3,7 @@
 <PageTitle>Medbase | Change Log</PageTitle>
 
 <div class="container">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Change Log</li>
-        </ol>
-    </nav>
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
     <div class="justify-content-center align-content-center">
         <ul>
             <li>
@@ -70,5 +65,9 @@
 </div>
 
 @code {
-
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "/home", icon: Icons.Material.Filled.Home),
+        new BreadcrumbItem("Changes", href: "/changelog", icon: Icons.Material.Filled.ChangeHistory)
+    };
 }
