@@ -11,40 +11,42 @@
 }
 else
 {
-    <table class="table table-bordered table-striped table-sm">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Course Reference</th>
-                <th>Topic Reference</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Topic item in allTopics)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.CourseRef</td>
-                    <td>@item.TopicRef</td>
-                    <td>@item.Name</td>
-                    <td>
-                        <NavLink class="btn btn-primary btn-sm" href="@GetQuestionsUrl(item.TopicRef)">
-                            Questions
-                        </NavLink>
-                        <NavLink class="btn btn-info btn-sm" href="@GetEditTopicUrl(item.TopicRef)">
-                            Edit
-                        </NavLink>
-                        <NavLink class="btn btn-dark btn-sm" href="@GetAddQuestionUrl(item.TopicRef)">
-                            Add Question
-                        </NavLink>@*
-                <button class="btn btn-danger" @onclick="() => DeleteTopic(item.Id)">Delete</button>*@
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+    <MudTable Items="@allTopics" Dense="true" Hover="true" Bordered="true" Striped="false">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">All Questions</MudText>
+            <MudSpacer />
+            <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Href="/admin/topics/add" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh HideSmall="true" >Course Reference</MudTh>
+            <MudTh HideSmall="true" >Topic Reference</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+
+            <MudTh DataLabel="ID">@context.Id</MudTh>
+            <MudTh HideSmall="true" DataLabel="CourseRef">@context.CourseRef</MudTh>
+            <MudTh HideSmall="true" DataLabel="TopicRef">@context.TopicRef</MudTh>
+            <MudTh DataLabel="Name">@context.Name</MudTh>
+            <MudTh DataLabel="Actions">
+                <NavLink class="btn btn-primary btn-sm" href="@GetQuestionsUrl(context.TopicRef)">
+                    Questions
+                </NavLink>
+                <NavLink class="btn btn-info btn-sm" href="@GetEditTopicUrl(context.TopicRef)">
+                    Edit
+                </NavLink>
+                <NavLink class="btn btn-dark btn-sm" href="@GetAddQuestionUrl(context.TopicRef)">
+                    Add Question
+                </NavLink>
+            </MudTh>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
 }
 
 

@@ -8,16 +8,8 @@
 
 
 <div class="container mt-1">
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
     <div class="row gx-5 align-items-center justify-content-center">
-
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="/courses">Courses</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Topics</li>
-            </ol>
-        </nav>
-
         <div class="row">
             @if (!TopicsList.Any())
             {
@@ -80,6 +72,12 @@
     int topicToCustomise;
     private bool negativeMarking = false;
     private int numberOfQuestions = 1;
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
+        new BreadcrumbItem("Courses", href: "/courses", icon: Icons.Material.Filled.Book),
+        new BreadcrumbItem("Topics", href: "/courses", icon: Icons.Material.Filled.LibraryBooks)
+    };
 
     private IEnumerable<Topic> TopicsList { get; set; } = Enumerable.Empty<Topic>();
 

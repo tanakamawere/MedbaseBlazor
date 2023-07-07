@@ -20,13 +20,14 @@ namespace MedbaseBlazor.Repositories
         Task<Subscription> GetSubscription(string email);
         Task<IEnumerable<Question>> GetAllQuestions();
         Task<IEnumerable<Question>> GetQuizQuestions(int topic, int number);
+        Task<IEnumerable<Corrections>> GetCorrections();
 
 
-        void PostArticle(Article article);
-        void PostTopic(Topic topic);
-        void PostCourse(Course course);
-        void PostQuestion(Question question);
-        void PostSubscription(Subscription subscription);
+        Task<bool> PostArticle(Article article);
+        Task<bool> PostTopic(Topic topic);
+        Task<bool> PostCourse(Course course);
+        Task<bool> PostQuestion(Question question);
+        Task<bool> PostSubscription(Subscription subscription);
 
         void DeleteCourse(int id);
         void DeleteQuestion(int id);
@@ -39,5 +40,10 @@ namespace MedbaseBlazor.Repositories
         void UpdateCourse(int id, Course course);
         void UpdateArticle(int id, Article article);
         void UpdateSubscription(int id, Subscription subscription);
+
+        Task<bool> PostCorrection(Corrections corrections);
+        Task DeleteCorrection(int id);
+        Task MergeCorrections();
+        Task ClearAllCorrection();
     }
 }
