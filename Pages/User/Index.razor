@@ -6,16 +6,16 @@
 @inject IApiRepository repository
 
 <!-- Header-->
-<header class="py-5">
+<header class="py-5 background-state">
     <div class="container px-5">
         <div class="row gx-5 align-items-center justify-content-center">
             <div class="col-lg-6 col-xl-6 col-xxl-4">
                 <div class="my-5 text-center text-xl-start">
-                    <h1 class="display-5 fw-bolder mb-2">medbase😃</h1>
-                    <p class="lead fw-normal text-dark-50 mb-4">Over 1,500 MCQs (with answers) on Anatomy, Physiology & Pathology</p>
+                    <MudText Typo="Typo.h2" Class="fw-bold text-light" Color="Color.Inherit">medbase😃</MudText>
+                    <MudText Typo="Typo.subtitle1" Class="lead fw-normal text-light">Over 1,500 MCQs (with answers) on Anatomy, Physiology & Pathology</MudText>
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/courses">Get Started👉</a>
-                        <a class="btn btn-outline-primary btn-lg px-4" href="/about">Learn More📖</a>
+                        <MudButton Variant="Variant.Filled" Href="/courses" StartIcon="@Icons.Material.Filled.ContentPasteGo" Color="Color.Primary">Get Started</MudButton>
+                        <MudButton Variant="Variant.Filled" Href="/about" StartIcon="@Icons.Material.Filled.Book" Color="Color.Primary">Learn More</MudButton>
                     </div>
                 </div>
             </div>
@@ -24,26 +24,9 @@
             </div>
         </div>
     </div>
+
 </header>
 
-<div class="b-example-divider"></div>
-
-<div class="container my-5">
-    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-            <h1 class="display-4 fw-bold lh-1">Medbase Mobile Application📱</h1>
-            <p class="lead">
-                Get your MCQs offline, create quizzes & much more. Everything is better in the app.
-            </p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                <a href="https://play.google.com/store/apps/details?id=com.tanakamawere.medbasehybrid"><img src="img/google_play_badge.png" alt="" style="max-width:300px" /></a>
-            </div>
-        </div>
-        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-            <img class="rounded-lg-3" src="img/deviceframes.png" alt="" height="450">
-        </div>
-    </div>
-</div>
 <section class="container">
     <div class="row gx-5 mt-5 justify-content-center">
         <div class="col-lg-8 col-xl-6">
@@ -86,6 +69,25 @@
                 </div>
             </div>
         }
+    </div>
+</section>
+
+<section class="stacked stacked-image">
+    <div class="container">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-centershadow-lg">
+            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                <MudText Typo="Typo.h2" class="display-4 fw-bold text-light">Medbase Mobile Application📱</MudText>
+                <MudText class="text-light">
+                    Get your MCQs offline, create quizzes & much more. Everything is better in the app.
+                </MudText>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                    <a href="https://play.google.com/store/apps/details?id=com.tanakamawere.medbasehybrid"><img src="img/google_play_badge.png" alt="" style="max-width:300px" /></a>
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+                <img class="rounded-lg-3" src="img/deviceframes.png" alt="" height="450">
+            </div>
+        </div>
     </div>
 </section>
 

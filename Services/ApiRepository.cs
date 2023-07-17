@@ -201,12 +201,17 @@ namespace MedbaseBlazor.Repositories
 
         public async Task MergeCorrections()
         {
-            await httpClient.PostAsync("corrections/merge", null);
+            await httpClient.PostAsync("corrections/mergeall", null);
         }
 
         public async Task ClearAllCorrection()
         {
             await httpClient.DeleteAsync("corrections/clearall");
+        }
+
+        public async Task MergeOneCorrection(int id)
+        {
+            await httpClient.PostAsJsonAsync($"corrections/mergeone/{id}", id);
         }
     }
 }

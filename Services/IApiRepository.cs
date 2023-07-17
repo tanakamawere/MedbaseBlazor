@@ -44,6 +44,7 @@ namespace MedbaseBlazor.Repositories
         Task<bool> PostCorrection(Corrections corrections);
         Task DeleteCorrection(int id);
         Task MergeCorrections();
+        Task MergeOneCorrection(int id);
         Task ClearAllCorrection();
     }
 }

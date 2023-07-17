@@ -2,21 +2,21 @@
 
 <PageTitle>About</PageTitle>
 
-<header class="py-5 medbase-font">
+<header class="py-5 medbase-font background-state">
     <div class="container px-5">
         <div class="row gx-5 align-items-center justify-content-center">
             <div class="col-lg-6 col-xl-6 col-xxl-4">
                 <div class="my-5 text-center text-xl-start">
-                    <h1 class="display-5 fw-bolder mb-2">
-                        About Medbase😍
-                    </h1>
-                    <p class="lead fw-normal mb-0">
+                    <MudText Typo="Typo.h2" class="display-5 text-light fw-bolder mb-2">
+                        About & Contact😍
+                    </MudText>
+                    <MudText Class="text-light">
                         Medbase is built around the best learning practises of spaced repetition and
                         active recall. All the questions are available for ease of access to medical students, pharmacy students and everyone in the
                         health sciences field.
-                    </p>
+                    </MudText>
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/changelog">Change Log🚼</a>
+                        <MudButton Variant="Variant.Filled" Href="/changelog" StartIcon="@Icons.Material.Filled.ChangeCircle" Color="Color.Primary">Version History</MudButton>
                     </div>
                 </div>
             </div>
@@ -27,10 +27,9 @@
         </div>
     </div>
 </header>
-<hr />
 
 <!-- Contact cards-->
-<section class="py-5 medbase-font">
+<section class="py-5 medbase-font" id="contacts">
     <div class="container px-5">
         <div class="text-center mb-5">
             <i class="bi bi-envelope"></i>
@@ -68,24 +67,24 @@
     <div class="container px-5">
         <div class="text-center mb-5">
             <i class="bi bi-laptop text-dark"></i>
-            <h1 class="fw-bolder">Website Info🫡</h1>
-            <p class="lead fw-normal mb-0">How this website was made🔧</p>
+            <MudText Class="h1 fw-bold">Website Info🫡</MudText>
+            <MudText class="lead fw-normal mb-0">How this website was made🔧</MudText>
         </div>
 
-        <p class="lead mb-1 text-center">
-            This website was coded using C# 11 on the dotNET 7 platform.
+        <MudText class="lead mb-1 text-center">
+            This website was coded using C# 12 on the .NET 8 platform.
             <br />
-            Blazor
-        </p>
+            using Blazor
+        </MudText>
         <div class="col text-center">
             <i class="bi bi-globe"></i>
             <div class="h5">Visit my website</div>
-            <p class="mb-0">
+            <MudText class="mb-0">
                 Get in touch at
-                <a href="https://www.tanakamawere.co.zw">
-                    www.tanakamawere.co.zw
-                </a>
-            </p>
+                <MudLink href="https://www.tanakamawere.com">
+                    www.tanakamawere.com
+                </MudLink>
+            </MudText>
         </div>
     </div>
 </section>

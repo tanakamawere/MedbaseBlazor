@@ -3,6 +3,8 @@
 <PageTitle>Medbase Admin</PageTitle>
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1">
@@ -16,6 +18,7 @@
             <MudNavLink Href="/admin/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
             <MudNavLink Href="/admin/topics" Icon="@Icons.Material.Filled.LibraryBooks">Topics</MudNavLink>
             <MudNavLink Href="/admin/Questions" Icon="@Icons.Material.Filled.QuestionAnswer">Questions</MudNavLink>
+            <MudNavLink Href="/admin/corrections" Icon="@Icons.Material.Filled.QuestionMark">Corrections</MudNavLink>
             <MudNavLink Href="/admin/Articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
             <MudNavLink Href="/home" Icon="@Icons.Material.Filled.ArrowUpward">Go To Medbase</MudNavLink>
         </MudNavMenu>

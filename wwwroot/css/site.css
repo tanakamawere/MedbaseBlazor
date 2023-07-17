@@ -1,5 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
+:root {
+    --gradient: linear-gradient(90deg, purple, #00B6FF );
+}
 
 html, body {
     font-family: 'Montserrat', Helvetica, Arial, sans-serif;
@@ -67,3 +70,60 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+.background-state {
+    background-size: 500%;
+    background-image: linear-gradient(90deg, purple, #48009f, purple);
+    animation: bg-animation 30s infinite;
+}
+
+@keyframes bg-animation {
+    0% {
+        background-position: left
+    }
+
+    50% {
+        background-position: right
+    }
+
+    100% {
+        background-position: left
+    }
+}
+
+section{
+    position:relative;
+}
+
+.wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+    .wave svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 170px;
+    }
+
+    .wave .shape-fill {
+        fill: #FFFFFF;
+    }
+
+.stacked {
+    aspect-ratio: 900/300;
+    width:100%;
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:cover;
+}
+
+.stacked-image{
+    background-image:url('../img/stacked_purple.svg')
+}
