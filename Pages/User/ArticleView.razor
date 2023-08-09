@@ -5,13 +5,7 @@
 
 <PageTitle>Article</PageTitle>
 <div class="container">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
-            <li class="breadcrumb-item active" aria-current="page">@Article.Title</li>
-        </ol>
-    </nav>
+    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
   <div class="container">
         @if (loading.Equals(true))
         {
@@ -46,7 +40,7 @@
                     <!-- Post Content -->
                     <p class="font-italic">@Article.Summary</p>
 
-                    <p>@((MarkupString)Markdown.ToHtml(Article.Body))</p>
+                    <MudMarkdown Value="@Article.Body"/>
                 </div>
 
                 <!-- Sidebar Widgets Column -->
@@ -67,12 +61,18 @@
     </div>
 </div>
 @code {
+    [Parameter]
+    public int id { get; set; } = 0;
 
     public Article Article { get; set; } = new();
     private bool loading;
 
-    [Parameter]
-    public int id { get; set; } = 0;
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
+        new BreadcrumbItem("Articles", href: "/articles", icon: Icons.Material.Filled.Newspaper),
+    };
 
     protected async override Task OnParametersSetAsync()
     {

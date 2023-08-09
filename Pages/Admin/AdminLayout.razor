@@ -1,39 +1,58 @@
 ﻿@inherits LayoutComponentBase
 
 <PageTitle>Medbase Admin</PageTitle>
-<nav class="navbar nav-pills sticky-top" style="background-color:#6397ff">
-    <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="/admin">Medbase Admin</a>
-    <a class="nav-link" href="/admin">
-        Home
-    </a>
-    <a class="nav-link" href="/admin/courses">
-        Courses
-    </a>
-    <a class="nav-link" href="/admin/topics">
-        Topics
-    </a>
-    <a class="nav-link" href="/admin/questions">
-        Questions
-    </a>
-    <a class="nav-link" href="/admin/articles">
-        Articles
-    </a>
-    <a class="nav-link" href="/admin/subscriptions">
-        Subscriptions
-    </a>
-    <a class="nav-link" href="/">
-        Go To Medbase
-    </a>
-</nav>
-<div id="layoutSidenav">
-    <div id="layoutSidenav_content">
-        <main>
-            <div class="container-fluid p-5">
-                <div class="row">
-                    @Body
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">Medbase Admin</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <MudNavMenu Bordered="true">
+            <MudNavLink Href="/admin/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
+            <MudNavLink Href="/admin/topics" Icon="@Icons.Material.Filled.LibraryBooks">Topics</MudNavLink>
+            <MudNavLink Href="/admin/Questions" Icon="@Icons.Material.Filled.QuestionAnswer">Questions</MudNavLink>
+            <MudNavLink Href="/admin/corrections" Icon="@Icons.Material.Filled.QuestionMark">Corrections</MudNavLink>
+            <MudNavLink Href="/admin/Articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
+            <MudNavLink Href="/home" Icon="@Icons.Material.Filled.ArrowUpward">Go To Medbase</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        <div class="container">
+            @Body
+        </div>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _drawerOpen = true;
+    private MudThemeProvider _mudThemeProvider;
+    private bool _isDarkMode;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _isDarkMode = newValue;
+        StateHasChanged();
+    }
+}

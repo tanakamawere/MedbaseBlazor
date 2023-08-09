@@ -1,17 +1,8 @@
-﻿@page "/admin"
-@layout AdminLayout
+﻿@layout AdminLayout
 @inject IApiRepository repository
 @using MedbaseBlazor.Pages.Admin.Utilities
 
-<SubscriptionsInsights Subscriptions="@Subscriptions"></SubscriptionsInsights>
+
 
 @code {
-    private IEnumerable<Subscription> Subscriptions { get; set; } = Enumerable.Empty<Subscription>();
-
-    protected async override Task OnInitializedAsync() => await UpdatePage();
-
-    private async Task UpdatePage()
-    {
-        Subscriptions = await repository.GetSubscriptions();   
-    }
 }

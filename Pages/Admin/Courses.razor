@@ -1,4 +1,5 @@
 ﻿@page "/admin/courses"
+@page "/admin"
 @layout AdminLayout
 @inject IApiRepository repository
 
@@ -11,37 +12,31 @@
 }
 else
 {
-    <table class="table table-bordered table-striped table-sm">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Course Reference</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Course item in allCourses)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.CourseRef</td>
-                    <td>@item.Title</td>
-                    <td>@item.Description</td>
-                    <td>
-                        <NavLink class="btn btn-info btn-sm" href="@($"/admin/courses/edit/{item.Id}")">
-                            Edit
-                        </NavLink>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <MudTable Items="@allCourses" Hover="true" Breakpoint="Breakpoint.Sm" Loading="_loading" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Course Ref</MudTh>
+            <MudTh>Title</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd HideSmall="true" DataLabel="ID">@context.Id</MudTd>
+            <MudTd HideSmall="true" DataLabel="Course Ref">@context.CourseRef</MudTd>
+            <MudTd DataLabel="Title">@context.Title</MudTd>
+            <MudTd HideSmall="true" DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="Actions">
+                <NavLink class="btn btn-info btn-sm" href="@($"/admin/courses/edit/{context.Id}")">
+                    Edit
+                </NavLink>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 @code {
     private IEnumerable<Course> allCourses { get; set; } = Enumerable.Empty<Course>();
 
+    private bool _loading;
     protected async override Task OnInitializedAsync() => await UpdatePage();
 
     private async Task UpdatePage()
