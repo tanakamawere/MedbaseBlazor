@@ -23,10 +23,10 @@
     }
     else
     {
-        <div class="m-2 position-fixed bottom-0 @(showToolbar.Equals(false) ? "d-none" : "d-block")">
+        <div style="margin-bottom:75px;" class="me-3 position-fixed end-0 bottom-0 @(showToolbar.Equals(false) ? "d-none" : "d-block")">
             <MudPaper Elevation="25" Outlined=true>
                 <MudToolBar>
-                    <MudIconButton Icon="@Icons.Material.Outlined.Search" />
+                    @*<MudIconButton Icon="@Icons.Material.Outlined.Search" />*@
                     <MudGrid Spacing="1" Justify="Justify.Center">
                         <MudIconButton @onclick="() => GetQuestions(QuestionPaged.CurrentPage -1)" class="@(!(QuestionPaged.CurrentPage > 1) ? "disabled" : "")" Icon="@Icons.Material.Filled.ArrowBack">
                         </MudIconButton>
@@ -37,18 +37,18 @@
                                        class="@(!(QuestionPaged.CurrentPage < QuestionPaged.Pages) ? "disabled" : "")" Icon="@Icons.Material.Filled.ArrowForward">
                         </MudIconButton>
                     </MudGrid>
-                    <MudIconButton Icon="@Icons.Material.Outlined.Menu" OnClick="OpenToolbar" />
+                    @*<MudIconButton Icon="@Icons.Material.Outlined.Menu" OnClick="OpenToolbar" />*@
                 </MudToolBar>
             </MudPaper>
         </div>
-        <div class="m-2 position-fixed bottom-0 end-0 justify-content-center @(showToolbar.Equals(true) ? "d-none" : "d-block")">
+        <div style="margin-bottom:75px;" class="m-2 position-fixed bottom-0 end-0 justify-content-center @(showToolbar.Equals(true) ? "d-none" : "d-block")">
             <MudFab Color="Color.Primary" 
                     StartIcon="@Icons.Material.Filled.More" 
                     OnClick="OpenToolbar"
                     Label="Show Toolbar"
                     Class="object-left" />
         </div>
-        <div style="margin-bottom:100px;">
+        <div style="margin-bottom:150px;">
             <Virtualize Items="QuestionPaged.Questions.ToList()" Context="question" TItem="Question">
                 <ItemContent>
                     <MudCard class="mb-2">

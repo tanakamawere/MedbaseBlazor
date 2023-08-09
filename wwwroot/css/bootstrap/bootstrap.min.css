@@ -7898,9 +7898,15 @@ textarea.form-control-lg {
 .bottom-0 {
     bottom: 0 !important
 }
+.bottom-25 {
+    bottom: 25% !important
+}
 
 .bottom-50 {
     bottom: 50% !important
+}
+.bottom-75 {
+    bottom: 75% !important
 }
 
 .bottom-100 {
