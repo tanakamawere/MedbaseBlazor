@@ -7,68 +7,61 @@
 <PageTitle>Questions</PageTitle>
 
 
-
-<div class="container text-center" style="max-width:30rem;">
-    <div class="row">
-        <div class="col-4">
-            <a href="/admin/questions/editfromtopic/2" class="btn btn-primary">Add Question</a>
-        </div>
-        <div class="col-8">
-            <div class="input-group">
-                <InputNumber @bind-Value="searchEntry" DisplayName="searchInput" placeholder="Search by Id..." class="form-control" />
-                <button class="btn btn-primary" @onclick="() => SearchForInput()"><i class="oi oi-magnifying-glass"></i></button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @if (!questionsList.Any())
 {
     <div><em><strong>Loading...</strong></em></div>
 }
 else
 {
-    <table class="table table-bordered table-striped table-sm">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Question</th>
-                <th>ChildA</th>
-                <th>ChildB</th>
-                <th>ChildC</th>
-                <th>ChildD</th>
-                <th>ChildE</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Question item in questionsList)
-            {
+    <MudTable Items="@questionsList" Dense="true" Hover="true" Bordered="true" Striped="@striped">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">All Questions</MudText>
+                <MudSpacer />
+                <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Href="/admin/question/add" />
+            <MudTextField @bind-Value="searchEntry" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Question</MudTh>
+            <MudTh>ChildA</MudTh>
+            <MudTh>ChildB</MudTh>
+            <MudTh>ChildC</MudTh>
+            <MudTh>ChildD</MudTh>
+            <MudTh>ChildE</MudTh>
+        </HeaderContent>
+        <RowTemplate>
 
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.QuestionMain</td>
-                    <td>@item.ChildA</td>
-                    <td>@item.ChildB</td>
-                    <td>@item.ChildC</td>
-                    <td>@item.ChildD</td>
-                    <td>@item.ChildE</td>
-                    <td>
-                        <NavLink class="btn btn-primary btn-sm" href="@GetQuestionDetailsUrl(item.Id)">
-                            Details
-                        </NavLink>
-                        <NavLink class="btn btn-info btn-sm" href="@GetQuestionEditUrl(item.Id)">
-                            Edit
-                        </NavLink>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            <MudTd DataLabel="ID">@context.Id</MudTd>
+            <MudTd DataLabel="Question">@context.QuestionMain</MudTd>
+            <MudTd DataLabel="ChildA">@context.ChildA</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildB">@context.ChildB</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildC">@context.ChildC</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildD">@context.ChildD</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildE">@context.ChildE</MudTd>
+            <MudTd DataLabel="Actions">
+                <NavLink class="btn btn-primary btn-sm" href="@GetQuestionDetailsUrl(context.Id)">
+                    Details
+                </NavLink>
+                <NavLink class="btn btn-info btn-sm" href="@GetQuestionEditUrl(context.Id)">
+                    Edit
+                </NavLink>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+    <div class="d-flex flex-wrap mt-4">
+        <MudSwitch @bind-Checked="@striped" Color="Color.Tertiary">Striped</MudSwitch>
+        <MudSpacer />
+    </div>
 }
+
 
 @code {
     public IEnumerable<Question> questionsList { get; set; } = Enumerable.Empty<Question>();
     private int? searchEntry;
+    private bool striped = false;
 
     [Parameter]
     public int topicId { get; set; }

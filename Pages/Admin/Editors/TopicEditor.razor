@@ -6,26 +6,14 @@
 
 <EditForm Model="Topic" OnValidSubmit="SaveChanges">
     <DataAnnotationsValidator />
-    <div class="col-form-label">
-        <label>Course Reference</label>
-        <ValidationMessage For="@(() => Topic.CourseRef)" />
-        <InputSelect class="form-control" @bind-Value="Topic.CourseRef">
-            @foreach (Course item in Courses)
-            {
-                <option value="@item.CourseRef">@item.CourseRef</option>
-            }
-        </InputSelect>
-    </div>
-    <div class="col-form-label">
-        <label>Topic Reference</label>
-        <ValidationMessage For="@(() => Topic.TopicRef)" />
-        <InputNumber class="form-control" @bind-Value="Topic.TopicRef"/>
-    </div>
-    <div class="col-form-label">
-        <label>Name</label>
-        <ValidationMessage For="@(() => Topic.Name)" />
-        <InputText class="form-control" @bind-Value="Topic.Name" />
-    </div>
+    <MudSelect AnchorOrigin="Origin.BottomCenter" For="@(() => Topic.CourseRef)" Label="Course Reference" @bind-Value="Topic.CourseRef">
+        @foreach (Course item in Courses)
+        {
+            <MudSelectItem Value="@item.CourseRef">@item.CourseRef</MudSelectItem>
+        }
+    </MudSelect>
+    <MudNumericField Label="Topic Reference"For="@(() => Topic.TopicRef)" @bind-Value="Topic.TopicRef" />
+    <MudTextField Label="Name" @bind-Value="Topic.Name" For="@(() => Topic.Name)" />
     <button class="btn btn-primary" type="submit">Done</button>
 </EditForm>
 

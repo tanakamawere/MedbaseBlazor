@@ -1,4 +1,6 @@
 using MedbaseBlazor.Repositories;
+using MudBlazor;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,8 @@ builder.Services.AddAuthorization(options =>
     // By default, all incoming requests will be authorized according to the default policy
     //options.FallbackPolicy = options.DefaultPolicy;
 });
-
+builder.Services.AddMudServices();
+builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
     //.AddMicrosoftIdentityConsentHandler();

@@ -88,27 +88,47 @@ namespace MedbaseBlazor.Repositories
             return await httpClient.GetFromJsonAsync<IEnumerable<Question>>($"questions");
         }
 
-        public async void PostArticle(Article article)
+        public async Task<bool> PostArticle(Article article)
         {
-            await httpClient.PostAsJsonAsync($"articles/{article}", article);
+            var response = await httpClient.PostAsJsonAsync($"articles/{article}", article);
+            if (response.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
         }
 
-        public async void PostTopic(Topic topic)
+        public async Task<bool> PostTopic(Topic topic)
         {
-            await httpClient.PostAsJsonAsync($"topics/{topic}", topic);
+            var response = await httpClient.PostAsJsonAsync($"topics/{topic}", topic);
+               if(response.IsSuccessStatusCode)
+                    return true;
+                else
+                return false;
         }
 
-        public async void PostCourse(Course course)
+        public async Task<bool> PostCourse(Course course)
         {
-            await httpClient.PostAsJsonAsync($"courses/{course}", course);
+            var response = await httpClient.PostAsJsonAsync($"courses/{course}", course);
+            if(response.IsSuccessStatusCode)
+                    return true;
+            else
+                return false;
         }
-        public async void PostQuestion(Question question)
+        public async Task<bool> PostQuestion(Question question)
         {
-            await httpClient.PostAsJsonAsync($"questions/{question}", question);
+            var response = await httpClient.PostAsJsonAsync($"questions/{question}", question);
+            if(response.IsSuccessStatusCode)
+                    return true;
+            else
+                return false;
         }
-        public async void PostSubscription(Subscription subscription)
+        public async Task<bool> PostSubscription(Subscription subscription)
         {
-            await httpClient.PostAsJsonAsync($"subscriptions/{subscription}", subscription);
+            var response = await httpClient.PostAsJsonAsync($"subscriptions/{subscription}", subscription);
+            if(response.IsSuccessStatusCode)
+                    return true;
+            else
+                return false;
         }
 
         public async void DeleteCourse(int id)
@@ -158,6 +178,40 @@ namespace MedbaseBlazor.Repositories
         public async void UpdateSubscription(int id, Subscription subscription)
         {
             await httpClient.PutAsJsonAsync($"subscriptions/{id}", subscription);
+        }
+
+        public async Task<IEnumerable<Corrections>> GetCorrections()
+        {
+            return await httpClient.GetFromJsonAsync<IEnumerable<Corrections>>($"corrections");
+        }
+
+        public async Task<bool> PostCorrection(Corrections corrections)
+        {
+            var response = await httpClient.PostAsJsonAsync($"corrections/{corrections}", corrections);
+            if (response.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
+        }
+
+        public async Task DeleteCorrection(int id)
+        {
+            await httpClient.DeleteAsync($"corrections/deleteone/{id}");
+        }
+
+        public async Task MergeCorrections()
+        {
+            await httpClient.PostAsync("corrections/mergeall", null);
+        }
+
+        public async Task ClearAllCorrection()
+        {
+            await httpClient.DeleteAsync("corrections/clearall");
+        }
+
+        public async Task MergeOneCorrection(int id)
+        {
+            await httpClient.PostAsJsonAsync($"corrections/mergeone/{id}", id);
         }
     }
 }

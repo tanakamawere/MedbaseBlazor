@@ -14,8 +14,6 @@
 }
 else
 {
-    
-    
     <div class="row">
         <div class="col-4">
             <button @onclick="() => ClearModel()" class="btn btn-primary">Clear Form</button>
@@ -23,7 +21,7 @@ else
         <div class="col-8">
             <div class="col-form-label">
                 <label>Course</label>
-                <select class="form-control" @onchange="GetCourseTopics">
+                <select Label="" @onchange="GetCourseTopics">
                     @foreach (Course item in Courses)
                     {
                         <option value="@item.CourseRef">@item.Title</option>
@@ -36,155 +34,106 @@ else
         <DataAnnotationsValidator />
         <div class="row">
             <div class="col-6">
-                
-                <div class="col-form-label">
-                    <label>Topic</label>
-                    <InputSelect class="form-control" @bind-Value="Question.TopicRef">
-                        @foreach (Topic item in Topics)
-                        {
-                            <option value="@item.TopicRef">@item.Name</option>
-                        }
-                    </InputSelect>
-                </div>
+                <MudSelect Label="Topic" @bind-Value="Question.TopicRef">
+                    @foreach (Topic item in Topics)
+                    {
+                        <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
             </div>
             <div class="col-6">
-                <div class="col-form-label">
-                    <label>Question Main</label>
-                    <InputText class="form-control" @bind-Value="Question.QuestionMain" />
-                </div>
+                <MudTextField Label="Question Main" @bind-Value="Question.QuestionMain" />
             </div>
         </div>
         <hr />
 
-        <!--Child A-->
-        <div class="row">
-            <div class="col-6 col-sm-5 col-md-5">
-                <label>ChildA</label>
-                <InputText class="form-control" @bind-Value="Question.ChildA" />
-            </div>
-            <div class="col-1 col-sm-2 col-md-2">
-                <div class="col-form-label">
-                    <label>AnswerA</label>
-                    <InputSelect class="form-control" @bind-Value="Question.AnswerA">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </InputSelect>
-                </div>
-            </div>
-            <div class="col-5 col-sm-5 col-md-5">
-                <div class="text-center text-xl-start">
-                    <div class="col-form-label">
-                        <label>Explanation A (As Markdown)</label>
-                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationA" />
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Text="Child A" MaxHeight="150">
+                <!--Child A-->
+                <div class="row">
+                    <div class="col-6 col-sm-5 col-md-5">
+                        <MudTextField Label="Child A" @bind-Value="Question.ChildA" />
+                    </div>
+                    <div class="col-1 col-sm-2 col-md-2">
+                        <MudSelect Label="Answer A" @bind-Value="Question.AnswerA">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="col-5 col-sm-5 col-md-5">
+                        <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation A (Markdown)" @bind-Value="Question.ExplanationA" />
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <hr />
-        <!--Child B-->
-        <div class="row">
-            <div class="col-6 col-sm-5 col-md-5">
-                <label>ChildB</label>
-                <InputText class="form-control" @bind-Value="Question.ChildB" />
-            </div>
-            <div class="col-1 col-sm-2 col-md-2">
-                <div class="col-form-label">
-                    <label>AnswerB</label>
-                    <InputSelect class="form-control" @bind-Value="Question.AnswerB">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </InputSelect>
-                </div>
-            </div>
-            <div class="col-5 col-sm-5 col-md-5">
-                <div class="text-center text-xl-start">
-                    <div class="col-form-label">
-                        <label>Explanation B (As Markdown)</label>
-                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationB" />
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Child B" MaxHeight="150">
+                <!--Child B-->
+                <div class="row">
+                    <div class="col-6 col-sm-5 col-md-5">
+                        <MudTextField Label="Child B" @bind-Value="Question.ChildB" />
+                    </div>
+                    <div class="col-1 col-sm-2 col-md-2">
+                        <MudSelect Label="Answer B" @bind-Value="Question.AnswerB">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="col-5 col-sm-5 col-md-5">
+                        <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation B" @bind-Value="Question.ExplanationB" />
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <hr/>
-        <!--Child C-->
-        <div class="row">
-            <div class="col-6 col-sm-5 col-md-5">
-                <label>ChildC</label>
-                <InputText class="form-control" @bind-Value="Question.ChildC" />
-            </div>
-            <div class="col-1 col-sm-2 col-md-2">
-                <div class="col-form-label">
-                    <label>AnswerC</label>
-                    <InputSelect class="form-control" @bind-Value="Question.AnswerC">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </InputSelect>
-                </div>
-            </div>
-            <div class="col-5 col-sm-5 col-md-5">
-                <div class="text-center text-xl-start">
-                    <div class="col-form-label">
-                        <label>Explanation C (As Markdown)</label>
-                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationC" />
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Child C" MaxHeight="150">
+                <!--Child C-->
+                <div class="row">
+                    <div class="col-6 col-sm-5 col-md-5">
+                        <MudTextField Label="Child C" @bind-Value="Question.ChildC" />
+                    </div>
+                    <div class="col-1 col-sm-2 col-md-2">
+                        <MudSelect Label="Answer C" @bind-Value="Question.AnswerC">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="col-5 col-sm-5 col-md-5">
+                        <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation C (As Markdown)" @bind-Value="Question.ExplanationC" />
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <hr />
-        <!--Child D-->
-        <div class="row">
-            <div class="col-6 col-sm-5 col-md-5">
-                <label>ChildD</label>
-                <InputText class="form-control" @bind-Value="Question.ChildD" />
-            </div>
-            <div class="col-1 col-sm-2 col-md-2">
-                <div class="col-form-label">
-                    <label>AnswerD</label>
-                    <InputSelect class="form-control" @bind-Value="Question.AnswerD">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </InputSelect>
-                </div>
-            </div>
-            <div class="col-5 col-sm-5 col-md-5">
-                <div class="text-center text-xl-start">
-                    <div class="col-form-label">
-                        <label>Explanation D (As Markdown)</label>
-                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationD" />
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Child D">
+                <!--Child D-->
+                <div class="row">
+                    <div class="col-6 col-sm-5 col-md-5">
+                        <MudTextField Label="ChildD" @bind-Value="Question.ChildD" />
+                    </div>
+                    <div class="col-1 col-sm-2 col-md-2">
+                        <MudSelect Label="AnswerD" @bind-Value="Question.AnswerD">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="col-5 col-sm-5 col-md-5">
+                        <MarkdownTextInput Label="Explanation D (As Markdown)" @bind-Value="Question.ExplanationD" />
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <hr />
-        <!--Child E-->
-        <div class="row">
-            <div class="col-6 col-sm-5 col-md-5">
-                <label>ChildE</label>
-                <InputText class="form-control" @bind-Value="Question.ChildE" />
-            </div>
-            <div class="col-1 col-sm-2 col-md-2">
-                <div class="col-form-label">
-                    <label>AnswerE</label>
-                    <InputSelect class="form-control" @bind-Value="Question.AnswerE">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </InputSelect>
-                </div>
-            </div>
-            <div class="col-5 col-sm-5 col-md-5">
-                <div class="text-center text-xl-start">
-                    <div class="col-form-label">
-                        <label>Explanation E (As Markdown)</label>
-                        <MarkdownTextInput class="form-control" @bind-Value="Question.ExplanationE" />
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Child E">
+                <!--Child E-->
+                <div class="row">
+                    <div class="col-6 col-sm-5 col-md-5">
+                        <MudTextField Label="ChildE" @bind-Value="Question.ChildE" />
+                    </div>
+                    <div class="col-1 col-sm-2 col-md-2">
+                        <MudSelect Label="AnswerE" @bind-Value="Question.AnswerE">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="col-5 col-sm-5 col-md-5">
+                        <MarkdownTextInput Label="Explanation E (As Markdown)" @bind-Value="Question.ExplanationE" />
                     </div>
                 </div>
-            </div>
-        </div>
-
+            </MudExpansionPanel>
+        </MudExpansionPanels>
         <button class="btn btn-primary" type="submit">Done</button>
     </EditForm>
 }
@@ -205,7 +154,6 @@ else
     protected async override Task OnInitializedAsync()
     {
         Courses = await repository.GetCourses();
-        Question = await repository.GetQuestion(id);
     }
 
     [Inject]
@@ -217,6 +165,8 @@ else
         {
             Question = await repository.GetQuestion(id) ?? new();
         }
+        else
+            return;
 
         if (topicId != 0)
         {
@@ -225,7 +175,7 @@ else
         }
     }
 
-    private async void GetCourseTopics(ChangeEventArgs e)
+    private async Task GetCourseTopics(ChangeEventArgs e)
     {
         Topics = await repository.GetTopics(e.Value.ToString());
         StateHasChanged();

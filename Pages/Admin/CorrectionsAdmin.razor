@@ -1,0 +1,69 @@
+﻿@page "/admin/corrections"
+@layout AdminLayout
+@inject IApiRepository repository
+@using MedbaseBlazor.Pages.Admin.Utilities;
+@inject IDialogService DialogService
+@using MedbaseBlazor.Services
+
+<MudTable Class="mt-2" Items="corrections">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Question ID</MudTh>
+        <MudTh>Question Child</MudTh>
+        <MudTh>Suggested Answer</MudTh>
+        <MudTh>Suggested Explanation</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd HideSmall="true" DataLabel="ID">@context.Id</MudTd>
+        <MudTd HideSmall="true" DataLabel="Question ID">@context.QuestionId</MudTd>
+        <MudTd DataLabel="Question Child">@context.QuestionChild</MudTd>
+        <MudTd DataLabel="Suggested Answer">@context.SuggestedAnswer</MudTd>
+        <MudTd DataLabel="Suggested Explanation">@context.SuggestedExplanation</MudTd>
+        <MudTd>
+            <MudButton OnClick="() => DeleteCorrection(context.Id)" Class="mt-2" Color="Color.Warning" Variant="Variant.Filled">Delete</MudButton>
+            <MudButton OnClick="() => MergeOneCorrection(context.Id)" Class="mt-2" Color="Color.Info" Variant="Variant.Filled">Merge</MudButton>
+            <MudButton OnClick="() => ReviewCorrection(context.QuestionId, context.Id)"  Class="mt-2" Color="Color.Secondary" Variant="Variant.Filled">Review</MudButton>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+<MudButton Class="mt-2" Color="Color.Warning" Variant="Variant.Filled">Delete All</MudButton>
+
+@code {
+    public IEnumerable<Corrections> corrections { get; set; } = Enumerable.Empty<Corrections>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllCorrection();
+    }
+
+    private async Task GetAllCorrection()
+    {
+        corrections = await repository.GetCorrections();   
+    }
+    private async Task DeleteCorrection(int id)
+    {
+        await repository.DeleteCorrection(id);
+        await GetAllCorrection();
+    }
+    private async Task MergeOneCorrection(int id)
+    { 
+        await repository.MergeOneCorrection(id);
+        await GetAllCorrection();
+    }
+    private async void ReviewCorrection(int questionId, int correctionId)
+    {
+        var parameters = new DialogParameters<CorrectionsReviewDialog>();
+        parameters.Add(x => x.questionId, questionId);
+        parameters.Add(x => x.correctionId, correctionId);
+        var options = new DialogOptions()
+            {
+                MaxWidth = MaxWidth.Large,
+                Position = DialogPosition.Center,
+            };
+        DialogService.Show<CorrectionsReviewDialog>("Review Correction", parameters, options);
+
+        await GetAllCorrection();
+    }
+}
