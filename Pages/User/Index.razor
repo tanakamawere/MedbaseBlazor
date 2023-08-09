@@ -72,12 +72,12 @@
     </div>
 </section>
 
-<section class="stacked stacked-image">
-    <div class="container">
+<section class="stacked-image stacked">
+    <div class="container mt-5">
         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-centershadow-lg">
             <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
                 <MudText Typo="Typo.h2" class="display-4 fw-bold text-light">Medbase Mobile Application📱</MudText>
-                <MudText class="text-light">
+                <MudText Class="text-light">
                     Get your MCQs offline, create quizzes & much more. Everything is better in the app.
                 </MudText>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
@@ -100,6 +100,7 @@
 
     private void GoToArticle(int article)
     {
+        Console.WriteLine(navManager.BaseUri.ToString());
         navManager.NavigateTo($"/article/{article}");
     }
 }

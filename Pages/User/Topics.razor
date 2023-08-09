@@ -6,7 +6,6 @@
 
 <PageTitle>Topics</PageTitle>
 
-
 <div class="container mt-1">
     <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
     <div class="row gx-5 align-items-center justify-content-center">
@@ -27,9 +26,6 @@
                                             @item.Name
                                         </MudText>
                                     </CardHeaderContent>
-                                    <CardHeaderActions>
-                                        <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
-                                    </CardHeaderActions>
                                 </MudCardHeader>
                                 <MudCardActions>
                                     <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"questions/{item.TopicRef}")">View</MudButton>

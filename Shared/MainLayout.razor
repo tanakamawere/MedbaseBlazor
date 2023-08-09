@@ -7,7 +7,7 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <MudAppBar Elevation="0" style="background-image:var(--gradient); background-size:210%">
+    <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudLink Typo="Typo.h6" Class="ml-3" Href="/home" Color="Color.Inherit">
             Medbase
@@ -27,6 +27,7 @@
             <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
             <MudNavLink Href="/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
             <MudNavLink Href="/articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
+            @* <MudNavLink Href="/Gamma" Icon="@Icons.Material.Filled.Download">Gamma</MudNavLink> *@
             <MudNavLink Href="/about" Icon="@Icons.Material.Filled.QuestionAnswer">About & Contact</MudNavLink>
 
             <MudDivider/>
@@ -49,8 +50,12 @@
     {
         Palette = new PaletteLight()
         {
-            Primary = Colors.Blue.Lighten1,
-            AppbarBackground = Colors.Blue.Lighten2,
+                Primary = Colors.Blue.Darken2,
+            AppbarBackground = Colors.Purple.Darken3,
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1
         },
     };
 
