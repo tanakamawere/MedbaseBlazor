@@ -1,6 +1,6 @@
 ﻿@page "/questions/{topicRef:int}"
-@using MedbaseBlazor.Models
-@using MedbaseBlazor.Repositories
+@using MedbaseLibrary.Models
+@using MedbaseLibrary.Services
 @inject IDialogService DialogService
 @inject IApiRepository repository
 @using Markdig
@@ -10,7 +10,7 @@
 
     <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
 
-    @if (!QuestionPaged.Questions.Any())
+    @if (isLoading.Equals(true))
     {
         <div style="display:@(searchResultsNull == true ? "none" : "block");">
             <LoadingComponent />
@@ -20,6 +20,10 @@
             Your search term did not bring back any results on this topic.
             Try to search in another topic.
         </div>
+    }
+    else if(isLoading.Equals(false) && QuestionPaged.Questions.Count().Equals(0))
+    {
+        <UnderConstruction/>
     }
     else
     {
@@ -145,6 +149,7 @@
     private int paginationPage = 1;
     public bool searchBarOpen = false;
     public bool searchResultsNull = false;
+    private bool isLoading;
 
     private bool showToolbar = true;
     private string searchTerm = "";
@@ -162,7 +167,10 @@
 
     private List<Question> QuestionsList { get; set; } = new();
 
-    protected override async Task OnParametersSetAsync() => await GetQuestions();
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetQuestions();
+    }
 
     private void ShowAnswers(int questionToShow)
     {
@@ -173,7 +181,12 @@
             Answers = 0;
     }
 
-    private async Task GetQuestions(int page = 1) => QuestionPaged = await repository.GetPagedQuestions(topicRef, page, 10f);
+    private async Task GetQuestions(int page = 1)
+    {
+        isLoading = true;
+        QuestionPaged = await repository.GetPagedQuestions(topicRef, page, 10f);
+        isLoading = false;
+    }
 
     private async Task GetSearchQuestions(int page = 1)
     {

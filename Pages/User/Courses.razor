@@ -1,13 +1,34 @@
 ﻿@page "/courses"
-@using MedbaseBlazor.Models
-@using MedbaseBlazor.Repositories
 @inject IApiRepository repository
-@inject NavigationManager navMananger;
+@inject NavigationManager navManager;
 
 <PageTitle>Courses</PageTitle>
-<div class="container">
 
-    <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+<!-- Header-->
+<header class="py-5 medbase-font background-state">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-4 col-xxl-4">
+                <div class="my-5 text-center text-xl-start">
+
+                    <MudBreadcrumbs Class="text-white" Items="_items"></MudBreadcrumbs>
+                    <MudText Typo="Typo.h2" class="display-5 fw-bolder mb-2 text-light">
+                        Courses🥙
+                    </MudText>
+                    <MudText class="text-light fw-normal mb-4">
+                        From preclinical to clinical, you will find all the courses you need here.
+                    </MudText>
+                </div>
+            </div>
+            <div class="col-xl-8 col-xxl-8 text-center">
+                <img class="img-fluid rounded-3 my-5"
+                     src="img/courses.svg" alt="..." />
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
 
     @if (!CoursesList.Any())
     {
@@ -20,7 +41,7 @@
             {
                 <div class="col-6 col-lg-4 col-sm-6 mb-5">
                     <MudCard @onclick="() => GoToTopics(item.CourseRef)">
-                        <MudCardMedia Image="@item.ImageURL" Height="100" />
+                        <MudCardMedia Image="@item.ImageURL" Height="300" />
                         <MudCardContent>
                             <MudText Typo="Typo.h6">
                                 @item.Title
@@ -52,6 +73,6 @@
     private async Task GetArticlesAsync() => CoursesList = await repository.GetCourses();
     private void GoToTopics(string courseRef)
     {
-        navMananger.NavigateTo($"/topics/{courseRef}");
+        navManager.NavigateTo($"/topics/{courseRef}");
     }
 }
