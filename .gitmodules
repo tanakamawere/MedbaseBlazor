@@ -1,0 +1,3 @@
+[submodule "MedbaseLibrary"]
+	path = MedbaseLibrary
+	url = https://github.com/tanakamawere/MedbaseLibrary
