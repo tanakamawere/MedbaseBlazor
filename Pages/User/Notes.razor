@@ -1,0 +1,77 @@
+﻿@page "/notes"
+@using MedbaseLibrary.Models
+@inject NavigationManager navManager;
+@inject IApiRepository repository
+
+<PageTitle>Notes</PageTitle>
+
+<!-- Header-->
+<header class="py-5 medbase-font background-state">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-4 col-xxl-4">
+                <div class="my-5 text-center text-xl-start">
+                    <MudText Typo="Typo.h2" class="display-5 fw-bolder mb-2 text-light">
+                        Notes📝
+                    </MudText>
+                    <MudText class="text-light fw-normal mb-4">
+                        Medical school notes adapted from lecture slides and textbooks. Dive in!
+                    </MudText>
+                </div>
+            </div>
+            <div class="col-xl-8 col-xxl-8 text-center">
+                <img class="img-fluid rounded-3 my-5"
+                     src="img/notes.svg" alt="..." />
+            </div>
+        </div>
+    </div>
+</header>
+
+<MudContainer Class="mt-5">
+        @if (!_courseTopics.Any())
+        {
+        <LoadingComponent />
+    }
+    else
+    {
+        <div class="row gx-5">
+            <Virtualize Items="_courseTopics" Context="courseTopics" TItem="CourseTopicsDto">
+                <ItemContent>
+                    <div class="col-lg-4 mb-5">
+                        <MudCard>
+                            <MudCardMedia Image="@courseTopics.CourseImage" Height="100" />
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h5">@courseTopics.Course</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                                <MudCardContent>
+                                    @foreach (var topic in courseTopics.Topics)
+                                {
+                                    @* <MudText @onclick="() => GoTo(topic.TopicRef)" Typo="Typo.body1">@topic.Name</MudText> *@
+                                    <span>> </span><MudLink @onclick="() => GoTo(topic.TopicRef)" Typo="Typo.body1">@topic.Name</MudLink> <br/>
+                                }
+                            </MudCardContent>
+                        </MudCard>
+                    </div>
+                </ItemContent>
+            </Virtualize>
+        </div>
+    }
+</MudContainer>
+
+@code {
+    private List<CourseTopicsDto> _courseTopics = new();
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        _courseTopics = await repository.GetListCourseTopicsDto();
+        loading = false;
+    }
+    private void GoTo(int topicRef)
+    {
+        navManager.NavigateTo($"/note/{topicRef}");
+    }
+}

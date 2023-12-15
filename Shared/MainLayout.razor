@@ -26,6 +26,7 @@
 
             <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
             <MudNavLink Href="/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
+            <MudNavLink Href="/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
             <MudNavLink Href="/articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
             @* <MudNavLink Href="/Gamma" Icon="@Icons.Material.Filled.Download">Gamma</MudNavLink> *@
             <MudNavLink Href="/about" Icon="@Icons.Material.Filled.QuestionAnswer">About & Contact</MudNavLink>
@@ -41,6 +42,26 @@
     <MudMainContent>
         @Body
     </MudMainContent>
+    <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item">
+                <MudNavLink Href="/home">Home</MudNavLink>
+            </li>
+            <li class="nav-item">
+                <MudNavLink Href="/notes">Notes</MudNavLink>
+            </li>
+            <li class="nav-item">
+                <MudNavLink Href="/courses">Courses</MudNavLink>
+            </li>
+            <li class="nav-item">
+                <MudNavLink Href="/articles">Articles</MudNavLink>
+            </li>
+            <li class="nav-item">
+                <MudNavLink Href="/about">About & Contact</MudNavLink>
+            </li>
+        </ul>
+        <p class="text-center text-body-secondary">© @DateTime.Now.Year Medbase, Inc</p>
+    </footer>
 </MudLayout>
 @code {
     bool _drawerOpen = true;
@@ -51,7 +72,7 @@
         Palette = new PaletteLight()
         {
                 Primary = Colors.Blue.Darken2,
-            AppbarBackground = Colors.Purple.Darken3,
+            AppbarBackground = Colors.Blue.Accent1,
         },
         PaletteDark = new PaletteDark()
         {

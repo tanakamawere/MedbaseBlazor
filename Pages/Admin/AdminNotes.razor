@@ -1,0 +1,41 @@
+﻿@page "/admin/notes"
+@layout AdminLayout
+@inject IApiRepository repository
+
+<PageTitle>Admin Notes</PageTitle>
+
+@if (!allNotes.Any())
+{
+    <LoadingComponent />
+}
+else
+{
+    <MudButton>
+        <NavLink href="/admin/notes/add">Create New Note</NavLink>
+    </MudButton>
+    <MudTable Items="allNotes" Hover="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Topic Reference</MudTh>
+            <MudTh>Date Updated</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd HideSmall="true" DataLabel="ID">@context.Id</MudTd>
+            <MudTd HideSmall="true" DataLabel="Course Ref">@context.TopicReferenceName</MudTd>
+            <MudTd DataLabel="Title">@context.DateUpdated.ToString("dddd MMMM yy, hh:mm")</MudTd>
+            <MudTd DataLabel="Actions">
+                <NavLink class="btn btn-info btn-sm" href="@($"/admin/notes/edit/{context.Id}")">
+                    Edit
+                </NavLink>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    private IEnumerable<NoteDto> allNotes { get; set; } = Enumerable.Empty<NoteDto>();
+
+    private bool _isLoading;
+    protected async override Task OnInitializedAsync() => allNotes = await repository.GetAllNotesAsync();
+}

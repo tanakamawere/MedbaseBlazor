@@ -3,7 +3,7 @@
 @inject IApiRepository repository
 @using MedbaseBlazor.Pages.Admin.Utilities;
 @inject IDialogService DialogService
-@using MedbaseBlazor.Services
+@using MedbaseLibrary.Services
 
 <MudTable Class="mt-2" Items="corrections">
     <HeaderContent>
@@ -30,7 +30,7 @@
 
 <MudButton Class="mt-2" Color="Color.Warning" Variant="Variant.Filled">Delete All</MudButton>
 
-@code {
+    @code {
     public IEnumerable<Corrections> corrections { get; set; } = Enumerable.Empty<Corrections>();
 
     protected override async Task OnInitializedAsync()
@@ -40,7 +40,7 @@
 
     private async Task GetAllCorrection()
     {
-        corrections = await repository.GetCorrections();   
+        corrections = await repository.GetCorrections();
     }
     private async Task DeleteCorrection(int id)
     {

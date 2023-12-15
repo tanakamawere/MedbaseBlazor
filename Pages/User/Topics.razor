@@ -1,6 +1,6 @@
 ﻿@page "/topics/{courseRef}"
-@using MedbaseBlazor.Models
-@using MedbaseBlazor.Repositories
+@using MedbaseLibrary.Models
+@using MedbaseLibrary.Services
 @inject IApiRepository repository
 @inject IDialogService DialogService
 
@@ -10,9 +10,13 @@
     <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
     <div class="row gx-5 align-items-center justify-content-center">
         <div class="row">
-            @if (!TopicsList.Any())
+            @if (isLoading.Equals(true))
             {
                 <LoadingComponent />
+            }
+            else if (isLoading.Equals(false) && TopicsList.Count().Equals(0))
+            {
+                <UnderConstruction />
             }
             else
             {
@@ -68,6 +72,7 @@
     int topicToCustomise;
     private bool negativeMarking = false;
     private int numberOfQuestions = 1;
+    private bool isLoading;
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
@@ -77,7 +82,12 @@
 
     private IEnumerable<Topic> TopicsList { get; set; } = Enumerable.Empty<Topic>();
 
-    protected async override Task OnParametersSetAsync() => TopicsList = await repository.GetTopics(courseRef);
+    protected async override Task OnParametersSetAsync()
+    {
+        isLoading = true;
+        TopicsList = await repository.GetTopics(courseRef);
+        isLoading = false;
+    }
 
     private void ToggleNegativeMarking()
     {

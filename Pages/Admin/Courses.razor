@@ -8,7 +8,7 @@
 <a class="btn btn-primary m-2" style="max-width:200px" href="@($"/admin/courses/add")">Add</a>
 @if (!allCourses.Any())
 {
-    <div><em><strong>Loading...</strong></em></div>
+    <LoadingComponent />
 }
 else
 {
