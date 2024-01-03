@@ -1,6 +1,26 @@
 ﻿@page "/about"
+@inject NavigationManager navManager
 
-<PageTitle>About</PageTitle>
+<PageTitle>@title</PageTitle>
+    <HeadContent>
+        <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
 
 <header class="py-5 medbase-font background-state">
     <div class="container px-5">
@@ -92,4 +112,7 @@
 
 @code {
 
+    private string description = "Medbase is a website and an app that helps medical students learn anatomy, physiology and pathology through true or false format MCQs and Notes. Medbase is a useful tool for medical students who want to test their knowledge and prepare for their exams";
+    private string title = "About | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
 }

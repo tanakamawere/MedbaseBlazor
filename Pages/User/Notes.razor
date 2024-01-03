@@ -2,8 +2,26 @@
 @using MedbaseLibrary.Models
 @inject NavigationManager navManager;
 @inject IApiRepository repository
+<PageTitle>@title</PageTitle>
+    <HeadContent>
+        <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
 
-<PageTitle>Notes</PageTitle>
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
 
 <!-- Header-->
 <header class="py-5 medbase-font background-state">
@@ -15,7 +33,7 @@
                         Notes📝
                     </MudText>
                     <MudText class="text-light fw-normal mb-4">
-                        Medical school notes adapted from lecture slides and textbooks. Dive in!
+                        @description
                     </MudText>
                 </div>
             </div>
@@ -63,6 +81,11 @@
 @code {
     private List<CourseTopicsDto> _courseTopics = new();
     private bool loading = true;
+
+    private string description = "Medbase notes are a convenient and effective way to study for medical school exams. A summary of key slides and high yield information. Dive in!";
+    private string title = "Notes | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
+
 
     protected override async Task OnInitializedAsync()
     {
