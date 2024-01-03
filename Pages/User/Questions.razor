@@ -4,8 +4,29 @@
 @inject IDialogService DialogService
 @inject IApiRepository repository
 @using Markdig
+@inject NavigationManager navManager
 
-<PageTitle>Questions</PageTitle>
+<PageTitle>@title</PageTitle>
+    <HeadContent>
+        <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
+
 <div class="container">
 
     <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
@@ -154,6 +175,11 @@
     private bool showToolbar = true;
     private string searchTerm = "";
     public int qts;
+
+
+    private string description = "Questions on your chosen topic";
+    private string title = "Questions | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {

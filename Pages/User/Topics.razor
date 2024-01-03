@@ -3,8 +3,28 @@
 @using MedbaseLibrary.Services
 @inject IApiRepository repository
 @inject IDialogService DialogService
+@inject NavigationManager navManager
 
-<PageTitle>Topics</PageTitle>
+<PageTitle>@title</PageTitle>
+    <HeadContent>
+        <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
 
 <div class="container mt-1">
     <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
@@ -67,12 +87,18 @@
 
 @code {
     [Parameter]
-    public string courseRef { get; set; } = "";
+    public string courseRef { get; set; } = "1";
     bool showCustomisation = false;
     int topicToCustomise;
     private bool negativeMarking = false;
     private int numberOfQuestions = 1;
     private bool isLoading;
+
+    private string description = "Topics on your chosen topic";
+    private string title = "Topics | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
+
+
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),

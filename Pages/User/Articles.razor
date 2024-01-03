@@ -1,5 +1,27 @@
 ﻿@page "/articles"
 @inject IApiRepository repository
+@inject NavigationManager navManager
+
+<PageTitle>@title</PageTitle>
+    <HeadContent>
+        <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
 
 <!-- Header-->
 <header class="py-5 medbase-font background-state">
@@ -12,7 +34,7 @@
                     </MudText>
                     <MudText class="text-light fw-normal mb-4">
                         Welcome to our Articles.
-                        New articles every <em>Monday at 6pm</em>, touching on topics like psychology, money, studying and book reviews.
+                        @description
                     </MudText>
                 </div>
             </div>
@@ -23,8 +45,7 @@
         </div>
     </div>
 </header>
-<div class="container">
-
+<div class="container mt-5">
     <div class="row gx-5">
         @foreach (Article item in allArticles.Reverse())
         {
@@ -68,5 +89,10 @@
     {
         allArticles = await repository.GetArticles();
     }
+
+
+    private string description = "Medbase articles are articles that cover various topics related to medicine, health, and wellness. They are written by medical students, doctors, and other experts in the field.";
+    private string title = "Articles | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
 }
 

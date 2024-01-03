@@ -2,7 +2,29 @@
 @using MedbaseLibrary.Models
 @inject IApiRepository repository
 @using Markdig
+@inject NavigationManager navManager;
 
+
+<PageTitle>@Note.TopicReferenceName | Medbase</PageTitle>
+<HeadContent>
+    <title>@Note.TopicReferenceName | Medbase</title>
+    <meta name="title" content="@Note.TopicReferenceName | Medbase" />
+    <meta name="description" content="Read notes on @Note.TopicReferenceName. Dive in" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@Note.TopicReferenceName | Medbase" />
+    <meta name="og:description" content="Read notes on @Note.TopicReferenceName. Dive in" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@Note.TopicReferenceName | Medbase" />
+    <meta name="twitter:description" content="Read notes on @Note.TopicReferenceName. Dive in" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
 
 @if (loading.Equals(true))
 {
@@ -43,7 +65,6 @@ else
 @code {
     [Parameter]
     public int topicReference { get; set; } = 0;
-
     public NoteDto Note { get; set; } = new();
     public bool loading { get; set; } = true;
 
@@ -56,4 +77,6 @@ else
             loading = false;
         }
     }
+
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
 }

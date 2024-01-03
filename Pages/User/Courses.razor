@@ -2,7 +2,26 @@
 @inject IApiRepository repository
 @inject NavigationManager navManager;
 
-<PageTitle>Courses</PageTitle>
+<PageTitle>@title</PageTitle>
+    <HeadContent>
+        <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
 
 <!-- Header-->
 <header class="py-5 medbase-font background-state">
@@ -62,11 +81,19 @@
 @code {
     private IEnumerable<Course> CoursesList { get; set; } = Enumerable.Empty<Course>();
 
+
+    private string description = "Choose the course you want to view notes or MCQs on";
+    private string title = "Courses | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
+
+
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
         new BreadcrumbItem("Courses", href: "/courses", icon: Icons.Material.Filled.Book)
     };
+
+
 
     protected override Task OnInitializedAsync() => GetArticlesAsync();
 
