@@ -1,0 +1,57 @@
+﻿@page "/ai"
+@inject NavigationManager navManager
+
+<PageTitle>@title</PageTitle>
+<HeadContent>
+    <title>@title</title>
+    <meta name="title" content="@title" />
+    <meta name="description" content="@description" />
+
+    <!-- Open Graph / Facebook -->
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="@navManager.BaseUri" />
+    <meta name="og:title" content="@title" />
+    <meta name="og:description" content="@description" />
+    <meta name="og:image" content="@image" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@navManager.BaseUri" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@image" />
+</HeadContent>
+
+<div class="container px-5">
+    <div class="row gx-5 align-items-center justify-content-center">
+        <div class="col-xl-6 col-xxl-6 text-center">
+            <img class="img-fluid"
+                 src="img/medbase_ai.png" alt="..." />
+        </div>
+        <div class="col-lg-6 col-xl-6 col-xxl-6">
+            <div class="my-5 text-center text-xl-start p-5 border rounded shadow">
+                <h1 class="display-1 fw-bold">Medbase <span class="text-muted">AI</span></h1>
+                <p class="lead fw-normal">Ask questions, get answers from your textbooks and slides directly</p>
+                <br/>
+                <p class="lead fw-light">Join the waiting list to get early access</p>                
+                <form>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">WhatsApp Number</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Enter your WhatsApp number">
+                    </div>
+                    <button type="submit" class="btn btn-primary m-3">Join Waiting List</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string description = "Medbase AI: Ask questions, get answers from your textbooks and slides directly";
+    private string title = "AI | Medbase";
+    private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
+}
