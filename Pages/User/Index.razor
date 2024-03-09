@@ -154,6 +154,7 @@
 
     private async Task GetArticlesAsync() => Articles = await repository.GetArticlesNumbered(3);
 
+
     private void GoToArticle(int article)
     {
         Console.WriteLine(navManager.BaseUri.ToString());
