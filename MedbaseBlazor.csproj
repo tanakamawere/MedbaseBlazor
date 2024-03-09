@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="changelog.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Pages\Error.cshtml" />
     <None Include="Pages\_Host.cshtml" />
   </ItemGroup>
