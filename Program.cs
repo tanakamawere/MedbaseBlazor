@@ -11,8 +11,8 @@ builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o450591
 //builder.Services.AddControllersWithViews()
 //    .AddMicrosoftIdentityUI();
 //Dependencies
-builder.Services.AddScoped<IApiRepository, ApiRepository>();
-builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
+builder.Services.AddScoped<IApiRepository, MedbaseBlazor.ApiRepository>();
+builder.Services.AddHttpClient<IApiRepository, MedbaseBlazor.ApiRepository>(client =>
 {
     client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
 });
