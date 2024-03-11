@@ -3,6 +3,7 @@
 @page "/admin/question/add"
 @layout AdminLayout
 @inject IApiRepository repository
+@inject ISnackbar Snackbar
 @using MedbaseLibrary.Models
 @using MedbaseBlazor.Pages.Admin.Utilities
 @using Markdig
@@ -16,12 +17,12 @@ else
 {
     <div class="row">
         <div class="col-4">
-            <button @onclick="() => ClearModel()" class="btn btn-primary">Clear Form</button>
+            <button @onclick="() => ClearFields()" class="btn btn-primary">Clear Form</button>
         </div>
         <div class="col-8">
             <div class="col-form-label">
                 <label>Course</label>
-                <select Label="" @onchange="GetCourseTopics">
+                <select @onchange="GetCourseTopics">
                     @foreach (Course item in Courses)
                     {
                         <option value="@item.CourseRef">@item.Title</option>
@@ -47,93 +48,82 @@ else
         </div>
         <hr />
 
-        <MudExpansionPanels MultiExpansion="true">
-            <MudExpansionPanel Text="Child A" MaxHeight="150">
-                <!--Child A-->
-                <div class="row">
-                    <div class="col-6 col-sm-5 col-md-5">
-                        <MudTextField Label="Child A" @bind-Value="Question.ChildA" />
-                    </div>
-                    <div class="col-1 col-sm-2 col-md-2">
-                        <MudSelect Label="Answer A" @bind-Value="Question.AnswerA">
-                            <MudSelectItem Value="true">True</MudSelectItem>
-                            <MudSelectItem Value="false">False</MudSelectItem>
-                        </MudSelect>
-                    </div>
-                    <div class="col-5 col-sm-5 col-md-5">
-                        <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation A (Markdown)" @bind-Value="Question.ExplanationA" />
-                    </div>
+        <div class="container">
+            <!--Child A-->
+            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child A" @bind-Value="Question.ChildA" />
+            <div class="row text-center">
+                <div class="col-4 col-sm-4 col-md-4">
+                    <MudSelect Label="Answer A" @bind-Value="Question.AnswerA">
+                        <MudSelectItem Value="true">True</MudSelectItem>
+                        <MudSelectItem Value="false">False</MudSelectItem>
+                    </MudSelect>
                 </div>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Child B" MaxHeight="150">
-                <!--Child B-->
-                <div class="row">
-                    <div class="col-6 col-sm-5 col-md-5">
-                        <MudTextField Label="Child B" @bind-Value="Question.ChildB" />
-                    </div>
-                    <div class="col-1 col-sm-2 col-md-2">
-                        <MudSelect Label="Answer B" @bind-Value="Question.AnswerB">
-                            <MudSelectItem Value="true">True</MudSelectItem>
-                            <MudSelectItem Value="false">False</MudSelectItem>
-                        </MudSelect>
-                    </div>
-                    <div class="col-5 col-sm-5 col-md-5">
-                        <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation B" @bind-Value="Question.ExplanationB" />
-                    </div>
+                <div class="col-8 col-sm-8 col-md-8">
+                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation A (Markdown)" @bind-Value="Question.ExplanationA" />
                 </div>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Child C" MaxHeight="150">
-                <!--Child C-->
-                <div class="row">
-                    <div class="col-6 col-sm-5 col-md-5">
-                        <MudTextField Label="Child C" @bind-Value="Question.ChildC" />
-                    </div>
-                    <div class="col-1 col-sm-2 col-md-2">
-                        <MudSelect Label="Answer C" @bind-Value="Question.AnswerC">
-                            <MudSelectItem Value="true">True</MudSelectItem>
-                            <MudSelectItem Value="false">False</MudSelectItem>
-                        </MudSelect>
-                    </div>
-                    <div class="col-5 col-sm-5 col-md-5">
-                        <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation C (As Markdown)" @bind-Value="Question.ExplanationC" />
-                    </div>
+            </div>
+            <hr />
+
+            <!--Child B-->
+            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child B" @bind-Value="Question.ChildB" />
+            <div class="row text-center">
+                <div class="col-4 col-sm-4 col-md-4">
+                    <MudSelect Label="Answer B" @bind-Value="Question.AnswerB">
+                        <MudSelectItem Value="true">True</MudSelectItem>
+                        <MudSelectItem Value="false">False</MudSelectItem>
+                    </MudSelect>
                 </div>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Child D">
-                <!--Child D-->
-                <div class="row">
-                    <div class="col-6 col-sm-5 col-md-5">
-                        <MudTextField Label="ChildD" @bind-Value="Question.ChildD" />
-                    </div>
-                    <div class="col-1 col-sm-2 col-md-2">
-                        <MudSelect Label="AnswerD" @bind-Value="Question.AnswerD">
-                            <MudSelectItem Value="true">True</MudSelectItem>
-                            <MudSelectItem Value="false">False</MudSelectItem>
-                        </MudSelect>
-                    </div>
-                    <div class="col-5 col-sm-5 col-md-5">
-                        <MarkdownTextInput Label="Explanation D (As Markdown)" @bind-Value="Question.ExplanationD" />
-                    </div>
+                <div class="col-8 col-sm-8 col-md-8">
+                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation B (Markdown)" @bind-Value="Question.ExplanationB" />
                 </div>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Child E">
-                <!--Child E-->
-                <div class="row">
-                    <div class="col-6 col-sm-5 col-md-5">
-                        <MudTextField Label="ChildE" @bind-Value="Question.ChildE" />
-                    </div>
-                    <div class="col-1 col-sm-2 col-md-2">
-                        <MudSelect Label="AnswerE" @bind-Value="Question.AnswerE">
-                            <MudSelectItem Value="true">True</MudSelectItem>
-                            <MudSelectItem Value="false">False</MudSelectItem>
-                        </MudSelect>
-                    </div>
-                    <div class="col-5 col-sm-5 col-md-5">
-                        <MarkdownTextInput Label="Explanation E (As Markdown)" @bind-Value="Question.ExplanationE" />
-                    </div>
+            </div>
+
+            <hr />
+            <!--Child C-->
+
+            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child C" @bind-Value="Question.ChildC" />
+            <div class="row text-center">
+                <div class="col-4 col-sm-4 col-md-4">
+                    <MudSelect Label="Answer C" @bind-Value="Question.AnswerC">
+                        <MudSelectItem Value="true">True</MudSelectItem>
+                        <MudSelectItem Value="false">False</MudSelectItem>
+                    </MudSelect>
                 </div>
-            </MudExpansionPanel>
-        </MudExpansionPanels>
+                <div class="col-8 col-sm-8 col-md-8">
+                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation C (Markdown)" @bind-Value="Question.ExplanationC" />
+                </div>
+            </div>
+
+            <hr />
+            <!--Child D-->
+            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child D" @bind-Value="Question.ChildD" />
+            <div class="row text-center">
+                <div class="col-4 col-sm-4 col-md-4">
+                    <MudSelect Label="Answer D" @bind-Value="Question.AnswerD">
+                        <MudSelectItem Value="true">True</MudSelectItem>
+                        <MudSelectItem Value="false">False</MudSelectItem>
+                    </MudSelect>
+                </div>
+                <div class="col-8 col-sm-8 col-md-8">
+                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation D (Markdown)" @bind-Value="Question.ExplanationD" />
+                </div>
+            </div>
+            <hr/>
+
+            <!--Child E-->
+            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child E" @bind-Value="Question.ChildE" />
+            <div class="row text-center">
+                <div class="col-4 col-sm-4 col-md-4">
+                    <MudSelect Label="Answer E" @bind-Value="Question.AnswerE">
+                        <MudSelectItem Value="true">True</MudSelectItem>
+                        <MudSelectItem Value="false">False</MudSelectItem>
+                    </MudSelect>
+                </div>
+                <div class="col-8 col-sm-8 col-md-8">
+                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation E (Markdown)" @bind-Value="Question.ExplanationE" />
+                </div>
+            </div>
+        </div>
         <button class="btn btn-primary" type="submit">Done</button>
     </EditForm>
 }
@@ -146,6 +136,8 @@ else
     [Parameter]
     public int topicId { get; set; } = 0;
     bool myBool;
+
+    private Snackbar snackbar;
 
     private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
     private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
@@ -181,20 +173,50 @@ else
         StateHasChanged();
     }
 
-    private void SaveChanges()
+    private async Task SaveChanges()
     {
         if (id == 0)
         {
-            repository.PostQuestion(Question);
+            try
+            {
+                var success = await repository.PostQuestion(Question); // Assuming PostQuestion returns a bool indicating success
+                if (success)
+                {
+                    snackbar = Snackbar.Add("Question posted successfully!", Severity.Success);
+                    ClearFields();
+                }
+                else
+                {
+                    snackbar = Snackbar.Add("Failed to post question. Please try again.", Severity.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                snackbar = Snackbar.Add($"An error occurred: {ex.Message}", Severity.Error);
+            }
         }
         else
         {
-            repository.UpdateQuestion(id, Question);
+            try
+            {
+                var success = await repository.UpdateQuestion(id, Question); // Assuming UpdateQuestion returns a bool indicating success
+                if (success)
+                {
+                    snackbar = Snackbar.Add("Question updated successfully!", Severity.Success);
+                }
+                else
+                {
+                    snackbar = Snackbar.Add("Failed to update question. Please try again.", Severity.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                snackbar = Snackbar.Add($"An error occurred: {ex.Message}", Severity.Error);
+            }
         }
-        NavManager.NavigateTo($"/admin/questions");
     }
 
-    private void ClearModel()
+    private void ClearFields()
     {
         Question.QuestionMain = string.Empty;
         Question.ChildA = string.Empty;

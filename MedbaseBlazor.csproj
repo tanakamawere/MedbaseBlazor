@@ -15,10 +15,13 @@
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.35.0" />
-    <PackageReference Include="Medbase.MedbaseLibrary" Version="1.0.1" />
     <PackageReference Include="MudBlazor" Version="6.6.0" />
     <PackageReference Include="MudBlazor.Markdown" Version="0.1.1" />
     <PackageReference Include="Sentry.AspNetCore" Version="4.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MedbaseLibrary\MedbaseLibrary.csproj" />
   </ItemGroup>
 
 </Project>
