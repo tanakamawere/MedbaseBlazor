@@ -14,7 +14,7 @@ builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o450591
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
 {
-    client.BaseAddress = new Uri("http://apimedbase.azurewebsites.net/");
+    client.BaseAddress = new Uri("http://localhost:5249/");
 });
 builder.Services.AddAuthorization(options =>
 {
