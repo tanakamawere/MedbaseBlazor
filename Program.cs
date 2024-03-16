@@ -1,4 +1,4 @@
-using MedbaseLibrary.Services;
+using MedbaseComponents.Services;
 using MudBlazor;
 using MudBlazor.Services;
 
