@@ -1,7 +1,7 @@
 ﻿@page "/"
 @page "/home"
-@using MedbaseLibrary.Models;
-@using MedbaseLibrary.Services;
+@using MedbaseComponents.Models;
+@using MedbaseComponents.Services;
 @inject NavigationManager navManager;
 @inject IApiRepository repository
 
@@ -43,6 +43,8 @@
         </div>
     </div>
 </header>
+
+<MedbaseComponents.Component1/>
 
 <section class="container mt-5">
     <div class="row gx-5 mt-5 justify-content-center">
