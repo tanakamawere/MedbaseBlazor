@@ -1,3 +1,5 @@
+using MedbaseBlazor;
+using MedbaseComponents.MsalClient;
 using MedbaseComponents.Services;
 using MudBlazor;
 using MudBlazor.Services;
@@ -25,7 +27,9 @@ builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-    //.AddMicrosoftIdentityConsentHandler();
+//.AddMicrosoftIdentityConsentHandler();
+
+builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
 
 var app = builder.Build();
 

@@ -3,7 +3,6 @@
 @layout AdminLayout
 @using MedbaseBlazor.Pages.Admin.Utilities
 @inject IApiRepository repository
-@using Markdig
 
 <div class="container px-5 mt-5">
     <div class="row gx-5 align-items-center justify-content-center">
@@ -20,7 +19,7 @@
                     <div class="col-form-label">
                         <label>Body</label>
                         <ValidationMessage For="@(() => Article.Body)" />
-                        <MarkdownTextInput class="form-control" @bind-Value="Article.Body" />
+                        <MarkdownEditor @bind-Value="Article.Body"/>
                     </div>
                     <div class="col-form-label">
                         <label>Summary</label>
@@ -44,14 +43,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </EditForm>
-            </div>
-        </div>
-        <div class="col-xl-4 col-xxl-5 text-center">
-            <div class="my-5 text-center text-xl-start form-group">
-                <label for="bodyPreview">Body Preview</label>
-                <div id="bodyPreview" style="height: 100%;" class="form-control">
-                    @((MarkupString)Markdown.ToHtml(Article.Body))
-                </div>
             </div>
         </div>
     </div>
