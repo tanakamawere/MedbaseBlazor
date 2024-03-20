@@ -59,7 +59,7 @@ else
                     </MudSelect>
                 </div>
                 <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation A (Markdown)" @bind-Value="Question.ExplanationA" />
+                    <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationA" />
                 </div>
             </div>
             <hr />
@@ -74,7 +74,7 @@ else
                     </MudSelect>
                 </div>
                 <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation B (Markdown)" @bind-Value="Question.ExplanationB" />
+                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationB" />
                 </div>
             </div>
 
@@ -90,7 +90,7 @@ else
                     </MudSelect>
                 </div>
                 <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation C (Markdown)" @bind-Value="Question.ExplanationC" />
+                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationC" />
                 </div>
             </div>
 
@@ -105,7 +105,7 @@ else
                     </MudSelect>
                 </div>
                 <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation D (Markdown)" @bind-Value="Question.ExplanationD" />
+                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationD" />
                 </div>
             </div>
             <hr/>
@@ -113,14 +113,14 @@ else
             <!--Child E-->
             <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child E" @bind-Value="Question.ChildE" />
             <div class="row text-center">
-                <div class="col-4 col-sm-4 col-md-4">
+                <div class="col-4 col-sm-4 col-md-4 justify-content-center">
                     <MudSelect Label="Answer E" @bind-Value="Question.AnswerE">
                         <MudSelectItem Value="true">True</MudSelectItem>
                         <MudSelectItem Value="false">False</MudSelectItem>
                     </MudSelect>
                 </div>
                 <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownTextInput Variant="Variant.Outlined" Lines="3" Label="Explanation E (Markdown)" @bind-Value="Question.ExplanationE" />
+                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationE" />
                 </div>
             </div>
         </div>
@@ -136,6 +136,7 @@ else
     [Parameter]
     public int topicId { get; set; } = 0;
     bool myBool;
+    private string markdownEditorHeight = "30";
 
     private Snackbar snackbar;
 
@@ -218,6 +219,7 @@ else
 
     private void ClearFields()
     {
+        id = 0;
         Question.QuestionMain = string.Empty;
         Question.ChildA = string.Empty;
         Question.ChildB = string.Empty;

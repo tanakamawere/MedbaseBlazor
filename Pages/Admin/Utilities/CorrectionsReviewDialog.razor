@@ -12,7 +12,7 @@
                 <MudText>
                     @question.AnswerA.ToString()
                 </MudText>
-                @((MarkupString)Markdown.ToHtml(question.ExplanationA == null ? " " : question.ExplanationA))
+                @((MarkupString)Markdig.Markdown.ToHtml(question.ExplanationA == null ? " " : question.ExplanationA))
             </MudPaper>
         </div>
         <!--Child2-->
@@ -22,7 +22,7 @@
                 <MudText>
                     @question.AnswerB.ToString()
                 </MudText>
-                @((MarkupString)Markdown.ToHtml(question.ExplanationB == null ? " " : question.ExplanationB))
+                @((MarkupString)Markdig.Markdown.ToHtml(question.ExplanationB == null ? " " : question.ExplanationB))
             </MudPaper>
         </div>
         <!--Child3-->
@@ -32,7 +32,7 @@
                 <MudText>
                     @question.AnswerC.ToString()
                 </MudText>
-                @((MarkupString)Markdown.ToHtml(question.ExplanationC == null ? " " : question.ExplanationC))
+                @((MarkupString)Markdig.Markdown.ToHtml(question.ExplanationC == null ? " " : question.ExplanationC))
             </MudPaper>
         </div>
         <!--Child4-->
@@ -42,7 +42,7 @@
                 <MudText>
                     @question.AnswerD.ToString()
                 </MudText>
-                @((MarkupString)Markdown.ToHtml(question.ExplanationD == null ? " " : question.ExplanationD))
+                @((MarkupString)Markdig.Markdown.ToHtml(question.ExplanationD == null ? " " : question.ExplanationD))
             </MudPaper>
         </div>
         <!--Child5-->
@@ -53,7 +53,7 @@
                 <MudText>
                     @question.AnswerE.ToString()
                 </MudText>
-                @((MarkupString)Markdown.ToHtml(question.ExplanationE == null ? " " : question.ExplanationE))
+                @((MarkupString)Markdig.Markdown.ToHtml(question.ExplanationE == null ? " " : question.ExplanationE))
             </MudPaper>
         </div>
     </DialogContent>
