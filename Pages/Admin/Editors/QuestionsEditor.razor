@@ -15,117 +15,124 @@
 }
 else
 {
-    <div class="row">
-        <div class="col-4">
-            <button @onclick="() => ClearFields()" class="btn btn-primary">Clear Form</button>
-        </div>
-        <div class="col-8">
-            <div class="col-form-label">
-                <label>Course</label>
-                <select @onchange="GetCourseTopics">
-                    @foreach (Course item in Courses)
-                    {
-                        <option value="@item.CourseRef">@item.Title</option>
-                    }
-                </select>
+    <div class="container mt-4">
+        @* <div class="row">
+            <div class="col-4">
             </div>
+            <div class="col-8">
+                
+            </div>
+        </div> *@
+        <div class="col-form-label">
+            <label>Course</label>
+            <select @onchange="GetCourseTopics">
+                @foreach (Course item in Courses)
+                {
+                    <option value="@item.CourseRef">@item.Title</option>
+                }
+            </select>
         </div>
+        <EditForm Model="Question" OnValidSubmit="SaveChanges">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <div class="col-6">
+                    <MudSelect For="@(() => Question.TopicRef)" Label="Topic" @bind-Value="Question.TopicRef">
+                        @foreach (Topic item in Topics)
+                        {
+                            <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </div>
+                <div class="col-6">
+                    <MudTextField For="@(() => Question.QuestionMain)" Variant="Variant.Filled" Lines="3" Label="Question Main" @bind-Value="Question.QuestionMain" />
+                </div>
+            </div>
+            <hr />
+
+            <MudPaper Class="p-3">
+                <!--Child A-->
+                <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child A" @bind-Value="Question.ChildA" For="@(() => Question.ChildA)" />
+                <MudGrid>
+                    <MudItem xs="12" sm="3">
+                        <MudSelect Label="Answer A" @bind-Value="Question.AnswerA">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationA" />
+                    </MudItem>
+                </MudGrid>
+                <hr />
+
+                <!--Child B-->
+                <MudTextField For="@(() => Question.ChildB)" T="string" Variant="Variant.Filled" Lines="2" Label="Child B" @bind-Value="Question.ChildB" />
+                <MudGrid>
+                    <MudItem xs="12" sm="3">
+                        <MudSelect Label="Answer B" @bind-Value="Question.AnswerB">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationB" />
+                    </MudItem>
+                </MudGrid>
+
+                <hr />
+                <!--Child C-->
+
+                <MudTextField For="@(() => Question.ChildC)" T="string" Variant="Variant.Filled" Lines="2" Label="Child C" @bind-Value="Question.ChildC" />
+                <MudGrid>
+                    <MudItem xs="12" sm="3">
+                        <MudSelect Label="Answer C" @bind-Value="Question.AnswerC">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationC" />
+                    </MudItem>
+                </MudGrid>
+
+                <hr />
+                <!--Child D-->
+                <MudTextField For="@(() => Question.ChildD)" T="string" Variant="Variant.Filled" Lines="2" Label="Child D" @bind-Value="Question.ChildD" />
+                <MudGrid>
+                    <MudItem xs="12" sm="3">
+                        <MudSelect Label="Answer D" @bind-Value="Question.AnswerD">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationD" />
+                    </MudItem>
+                </MudGrid>
+
+                <hr />
+
+                <!--Child E-->
+                <MudTextField For="@(() => Question.ChildE)" T="string" Variant="Variant.Filled" Lines="2" Label="Child E" @bind-Value="Question.ChildE" />
+                <MudGrid>
+                    <MudItem xs="12" sm="3">
+                        <MudSelect Label="Answer E" @bind-Value="Question.AnswerE">
+                            <MudSelectItem Value="true">True</MudSelectItem>
+                            <MudSelectItem Value="false">False</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationE" />
+                    </MudItem>
+                </MudGrid>
+
+                <MudButtonGroup>
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Submit Question</MudButton>
+                    <MudButton Color="Color.Secondary" Variant="Variant.Filled" ButtonType="ButtonType.Button" OnClick="ClearFields">Clear Fields</MudButton>
+                </MudButtonGroup>
+            </MudPaper>
+        </EditForm>
     </div>
-    <EditForm Model="Question" OnSubmit="SaveChanges">
-        <DataAnnotationsValidator />
-        <div class="row">
-            <div class="col-6">
-                <MudSelect Label="Topic" @bind-Value="Question.TopicRef">
-                    @foreach (Topic item in Topics)
-                    {
-                        <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
-                    }
-                </MudSelect>
-            </div>
-            <div class="col-6">
-                <MudTextField Label="Question Main" @bind-Value="Question.QuestionMain" />
-            </div>
-        </div>
-        <hr />
-
-        <div class="container">
-            <!--Child A-->
-            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child A" @bind-Value="Question.ChildA" />
-            <div class="row text-center">
-                <div class="col-4 col-sm-4 col-md-4">
-                    <MudSelect Label="Answer A" @bind-Value="Question.AnswerA">
-                        <MudSelectItem Value="true">True</MudSelectItem>
-                        <MudSelectItem Value="false">False</MudSelectItem>
-                    </MudSelect>
-                </div>
-                <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationA" />
-                </div>
-            </div>
-            <hr />
-
-            <!--Child B-->
-            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child B" @bind-Value="Question.ChildB" />
-            <div class="row text-center">
-                <div class="col-4 col-sm-4 col-md-4">
-                    <MudSelect Label="Answer B" @bind-Value="Question.AnswerB">
-                        <MudSelectItem Value="true">True</MudSelectItem>
-                        <MudSelectItem Value="false">False</MudSelectItem>
-                    </MudSelect>
-                </div>
-                <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationB" />
-                </div>
-            </div>
-
-            <hr />
-            <!--Child C-->
-
-            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child C" @bind-Value="Question.ChildC" />
-            <div class="row text-center">
-                <div class="col-4 col-sm-4 col-md-4">
-                    <MudSelect Label="Answer C" @bind-Value="Question.AnswerC">
-                        <MudSelectItem Value="true">True</MudSelectItem>
-                        <MudSelectItem Value="false">False</MudSelectItem>
-                    </MudSelect>
-                </div>
-                <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationC" />
-                </div>
-            </div>
-
-            <hr />
-            <!--Child D-->
-            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child D" @bind-Value="Question.ChildD" />
-            <div class="row text-center">
-                <div class="col-4 col-sm-4 col-md-4">
-                    <MudSelect Label="Answer D" @bind-Value="Question.AnswerD">
-                        <MudSelectItem Value="true">True</MudSelectItem>
-                        <MudSelectItem Value="false">False</MudSelectItem>
-                    </MudSelect>
-                </div>
-                <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationD" />
-                </div>
-            </div>
-            <hr/>
-
-            <!--Child E-->
-            <MudTextField T="string" Variant="Variant.Filled" Lines="2" Label="Child E" @bind-Value="Question.ChildE" />
-            <div class="row text-center">
-                <div class="col-4 col-sm-4 col-md-4 justify-content-center">
-                    <MudSelect Label="Answer E" @bind-Value="Question.AnswerE">
-                        <MudSelectItem Value="true">True</MudSelectItem>
-                        <MudSelectItem Value="false">False</MudSelectItem>
-                    </MudSelect>
-                </div>
-                <div class="col-8 col-sm-8 col-md-8">
-                    <MarkdownEditor MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationE" />
-                </div>
-            </div>
-        </div>
-        <button class="btn btn-primary" type="submit">Done</button>
-    </EditForm>
 }
 
 @code {
