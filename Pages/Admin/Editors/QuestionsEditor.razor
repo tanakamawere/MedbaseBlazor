@@ -4,6 +4,7 @@
 @layout AdminLayout
 @inject IApiRepository repository
 @inject ISnackbar Snackbar
+@inject NavigationManager navManager
 @using MedbaseComponents.Models
 @using MedbaseBlazor.Pages.Admin.Utilities
 @using Markdig
@@ -60,7 +61,7 @@ else
                         </MudSelect>
                     </MudItem>
                     <MudItem xs="12" sm="9">
-                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationA" />
+                        <MarkdownEditor Placeholder="Explanation A" LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationA" />
                     </MudItem>
                 </MudGrid>
                 <hr />
@@ -75,7 +76,7 @@ else
                         </MudSelect>
                     </MudItem>
                     <MudItem xs="12" sm="9">
-                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationB" />
+                        <MarkdownEditor Placeholder="Explanation B" LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationB" />
                     </MudItem>
                 </MudGrid>
 
@@ -91,7 +92,7 @@ else
                         </MudSelect>
                     </MudItem>
                     <MudItem xs="12" sm="9">
-                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationC" />
+                        <MarkdownEditor Placeholder="Explanation C" LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationC" />
                     </MudItem>
                 </MudGrid>
 
@@ -106,7 +107,7 @@ else
                         </MudSelect>
                     </MudItem>
                     <MudItem xs="12" sm="9">
-                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationD" />
+                        <MarkdownEditor Placeholder="Explanation D" LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationD" />
                     </MudItem>
                 </MudGrid>
 
@@ -122,7 +123,7 @@ else
                         </MudSelect>
                     </MudItem>
                     <MudItem xs="12" sm="9">
-                        <MarkdownEditor LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationE" />
+                        <MarkdownEditor Placeholder="Explanation E" LineNumbers="@false" MaxHeight="@markdownEditorHeight" @bind-Value="Question.ExplanationE" />
                     </MudItem>
                 </MudGrid>
 
@@ -155,9 +156,6 @@ else
     {
         Courses = await repository.GetCourses();
     }
-
-    [Inject]
-    public NavigationManager NavManager { get; set; }
 
     protected async override Task OnParametersSetAsync()
     {
