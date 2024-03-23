@@ -13,13 +13,16 @@
 }
 else
 {
-    <MudTable Items="@questionsList" Dense="true" Hover="true" Bordered="true" Striped="@striped">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">All Questions</MudText>
-                <MudSpacer />
-                <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Href="/admin/question/add" />
+    <MudGrid>
+        <MudItem sm="8">
+            <MudText Typo="Typo.h1">Questions</MudText>
+        </MudItem>
+        <MudItem sm="4">
             <MudTextField @bind-Value="searchEntry" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-        </ToolBarContent>
+        </MudItem>
+    </MudGrid>
+    <MudTable Items="@questionsList" Dense="true" Hover="true" Bordered="true" Striped="@striped">
+        
         <HeaderContent>
             <MudTh>ID</MudTh>
             <MudTh>Question</MudTh>
@@ -55,6 +58,7 @@ else
         <MudSwitch @bind-Checked="@striped" Color="Color.Tertiary">Striped</MudSwitch>
         <MudSpacer />
     </div>
+    <MudFab StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Href="/admin/question/add" style="margin-bottom:75px;" Label="Add Question" class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center" />
 }
 
 

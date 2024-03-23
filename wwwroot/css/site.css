@@ -127,3 +127,8 @@ section{
 .stacked-image{
     background-image:url('../img/stacked_purple.svg')
 }
+
+.max-width-explanation-image img {
+    max-width: 100%;
+    height: auto
+}
