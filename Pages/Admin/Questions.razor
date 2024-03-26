@@ -18,7 +18,13 @@ else
             <MudText Typo="Typo.h1">Questions</MudText>
         </MudItem>
         <MudItem sm="4">
-            <MudTextField @bind-Value="searchEntry" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudForm @ref="searchForm">
+                <MudTextField  @ref="searchTextField" 
+                     @bind-Value="searchEntry" 
+                        Placeholder="Search for keyword" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => SearchQuestions(searchTextField.Text.ToString()))" Class="ml-auto">Search</MudButton>
+            </MudForm>
+            
         </MudItem>
     </MudGrid>
     <MudTable Items="@questionsList" Dense="true" Hover="true" Bordered="true" Striped="@striped">
@@ -64,8 +70,10 @@ else
 
 @code {
     public IEnumerable<Question> questionsList { get; set; } = Enumerable.Empty<Question>();
-    private int? searchEntry;
+    private string? searchEntry {get;set;}
     private bool striped = false;
+    private MudForm searchForm;
+    private MudTextField<string> searchTextField;
 
     [Parameter]
     public int topicId { get; set; }
@@ -76,7 +84,7 @@ else
 
     protected async override Task OnParametersSetAsync() => await GetAllQuestions(topicId);
 
-    private async Task SearchForInput()
+    @* private async Task SearchForInput()
     {
         if (searchEntry == null || searchEntry == 0)
             await GetAllQuestions(topicId);
@@ -84,12 +92,25 @@ else
         {
             questionsList = questionsList.Where(x => x.Id == searchEntry).ToList();
         }
-    }
+    } *@
     private async Task GetAllQuestions(int topic)
     {
         if (topic.Equals(0))
             questionsList = await repository.GetAllQuestions();
         else
             questionsList = await repository.GetQuestionsSimple((long)topicId);
+    }
+
+    private async Task SearchQuestions(string keyword)
+    {
+        if(!string.IsNullOrEmpty(keyword))
+        {
+            questionsList = await repository.GetQuestionsByKeyword(keyword);
+            StateHasChanged();
+        }
+        else
+        {
+            return;
+        }
     }
 }
