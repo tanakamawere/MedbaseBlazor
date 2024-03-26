@@ -189,7 +189,7 @@ else
                 if (success)
                 {
                     snackbar = Snackbar.Add("Question posted successfully!", Severity.Success);
-                    ClearFields();
+                    navManager.NavigateTo("/admin/questions");
                 }
                 else
                 {
@@ -209,6 +209,7 @@ else
                 if (success)
                 {
                     snackbar = Snackbar.Add("Question updated successfully!", Severity.Success);
+                    navManager.NavigateTo("/admin/questions");
                 }
                 else
                 {
