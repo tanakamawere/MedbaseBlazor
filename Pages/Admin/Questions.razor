@@ -7,7 +7,7 @@
 <PageTitle>Questions</PageTitle>
 
 
-@if (!questionsList.Any())
+@if (!QuestionsWithTopicDto.Questions.Any())
 {
     <div><em><strong>Loading...</strong></em></div>
 }
@@ -15,7 +15,7 @@ else
 {
     <MudGrid>
         <MudItem sm="8">
-            <MudText Typo="Typo.h1">Questions</MudText>
+            <MudText Typo="Typo.h3">@QuestionsWithTopicDto.TopicName</MudText>
         </MudItem>
         <MudItem sm="4">
             <MudForm @ref="searchForm">
@@ -27,7 +27,7 @@ else
             
         </MudItem>
     </MudGrid>
-    <MudTable Items="@questionsList" Dense="true" Hover="true" Bordered="true" Striped="@striped">
+    <MudTable Items="@QuestionsWithTopicDto.Questions" Dense="true" Hover="true" Bordered="true" Striped="@striped">
         
         <HeaderContent>
             <MudTh>ID</MudTh>
@@ -69,7 +69,7 @@ else
 
 
 @code {
-    public IEnumerable<Question> questionsList { get; set; } = Enumerable.Empty<Question>();
+    private QuestionsWithTopicDto QuestionsWithTopicDto { get; set; } = new();
     private string? searchEntry {get;set;}
     private bool striped = false;
     private MudForm searchForm;
@@ -96,16 +96,20 @@ else
     private async Task GetAllQuestions(int topic)
     {
         if (topic.Equals(0))
-            questionsList = await repository.GetAllQuestions();
+        {
+            QuestionsWithTopicDto.Questions = await repository.GetAllQuestions();
+            QuestionsWithTopicDto.TopicName = "All Questions";
+        }
         else
-            questionsList = await repository.GetQuestionsSimple((long)topicId);
+            QuestionsWithTopicDto = await repository.GetQuestionsWithTopic(topic);
     }
 
     private async Task SearchQuestions(string keyword)
     {
         if(!string.IsNullOrEmpty(keyword))
         {
-            questionsList = await repository.GetQuestionsByKeyword(keyword);
+            QuestionsWithTopicDto.Questions = await repository.GetQuestionsByKeyword(keyword);
+            QuestionsWithTopicDto.TopicName = $"Search Results for: {keyword}";
             StateHasChanged();
         }
         else
