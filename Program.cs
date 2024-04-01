@@ -3,6 +3,9 @@ using MedbaseLibrary.MsalClient;
 using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
+using Blazored.LocalStorage;
+using MedbaseBlazor.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o4505919081873408.ingest.us.sentry.io/4506879230935040");
@@ -15,7 +18,15 @@ builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o450591
 //Dependencies
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
+builder.Services.AddScoped<ILocalStorage, AuthStateHandler>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IAuthMemory, JwtCache>();
+builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
+builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5249/");
+});
+builder.Services.AddHttpClient<IAuthService, AuthService>("AuthAPI", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5249/");
 });
@@ -30,7 +41,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 //.AddMicrosoftIdentityConsentHandler();
 
-builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
+
+builder.Services.AddBlazoredLocalStorage();   // local storage
+builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
 
 var app = builder.Build();
 
