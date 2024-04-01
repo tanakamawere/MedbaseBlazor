@@ -1,6 +1,6 @@
 using MedbaseBlazor;
-using MedbaseComponents.MsalClient;
-using MedbaseComponents.Services;
+using MedbaseLibrary.MsalClient;
+using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -14,6 +14,7 @@ builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o450591
 //    .AddMicrosoftIdentityUI();
 //Dependencies
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:5249/");
