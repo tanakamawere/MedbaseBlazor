@@ -8,6 +8,10 @@
     <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<StaticWebAssetBasePath>MedbaseComponents</StaticWebAssetBasePath>
+	</PropertyGroup>
+
   <ItemGroup>
     <None Include="Pages\Error.cshtml" />
     <None Include="Pages\_Host.cshtml" />
@@ -24,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MedbaseComponents\MedbaseComponents.csproj" />
-    <ProjectReference Include="..\MedbaseComponents\MedbaseComponents.csproj" />
+    <ProjectReference Include="..\MedbaseLibrary\MedbaseLibrary.csproj" />
   </ItemGroup>
 
 </Project>

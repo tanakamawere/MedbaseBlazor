@@ -1,5 +1,5 @@
 ﻿using Microsoft.Identity.Client;
-using MedbaseComponents.MsalClient;
+using MedbaseLibrary.MsalClient;
 
 namespace MedbaseBlazor;
 
