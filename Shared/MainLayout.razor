@@ -3,6 +3,8 @@
 @using Microsoft.Extensions.Configuration
 @inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider authState
 
 <PageTitle>Medbase | Medical School MCQs</PageTitle>
 
@@ -30,14 +32,52 @@
 
             <AuthorizeView>
                 <Authorized>
-                    <MudNavLink Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
+                    <MudMenu>
+                        <ActivatorContent>
+                            <MudGrid Spacing="2" Justify="Justify.Center" Class="m-1">
+                                <MudItem>
+                                    <MudAvatar Color="Color.Primary">TM</MudAvatar>
+                                </MudItem>
+                                <MudItem>
+                                    <MudText Class="my-auto">@authenticationState.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)</MudText>
+                                </MudItem>
+                            </MudGrid>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem Href="/profile" Icon="@Icons.Material.Filled.Person">
+                                Profile
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="ThemeToggle" Icon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)">
+                                @(_isDarkMode == true ? "Dark Mode On" : "Dark Mode Off")
+                            </MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Logout">Sign Out</MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
                 </Authorized>
                 <NotAuthorized>
-                    <MudNavLink Icon="@Icons.Material.Filled.Login" Href="/signin">Sign In</MudNavLink>
-                    <MudNavLink Icon="@Icons.Material.Filled.Login" Href="/signup">Sign Up</MudNavLink>
+                    <MudMenu>
+                        <ActivatorContent>
+                            <MudGrid Spacing="2" Justify="Justify.Center" Class="m-1">
+                                <MudItem>
+                                    <MudAvatar Color="Color.Primary">GU</MudAvatar>
+                                </MudItem>
+                                <MudItem>
+                                    <MudText Class="my-auto">Guest User</MudText>
+                                </MudItem>
+                            </MudGrid>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem OnClick="ThemeToggle" Icon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)">
+                                @(_isDarkMode == true ? "Dark Mode On" : "Dark Mode Off")
+                            </MudMenuItem>
+                            <MudMenuItem Href="/signup" Icon="@Icons.Material.Filled.Create">Sign Up</MudMenuItem>
+                            <MudMenuItem Href="/signin" Icon="@Icons.Material.Filled.Login">Sign In</MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
                 </NotAuthorized>
             </AuthorizeView>
             
+            <MudDivider/>
 
             <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
             <MudNavLink Href="/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
@@ -46,13 +86,6 @@
             <MudNavLink Href="/articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
             @* <MudNavLink Href="/Gamma" Icon="@Icons.Material.Filled.Download">Gamma</MudNavLink> *@
             <MudNavLink Href="/about" Icon="@Icons.Material.Filled.QuestionAnswer">About & Contact</MudNavLink>
-
-            <MudDivider />
-            <MudDivider />
-
-            <MudNavLink OnClick="ThemeToggle" Icon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)">
-                @(_isDarkMode == true ? "Dark Mode On" : "Dark Mode Off")
-            </MudNavLink>
 
         </MudNavMenu>
     </MudDrawer>
@@ -81,8 +114,13 @@
     </footer>
 </MudLayout>
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private AuthenticationState authenticationState;
+    private string FirstLastName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await authState.GetAuthenticationStateAsync();
+    }
 
 
     bool _drawerOpen = true;
