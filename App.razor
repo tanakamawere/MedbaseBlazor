@@ -8,7 +8,7 @@
     typeof(MedbaseComponents.Pages.User.Notes).Assembly, 
     typeof(MedbaseComponents.Pages.User.Articles).Assembly}">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(SharedLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
