@@ -1,5 +1,4 @@
-﻿using MedbaseLibrary.Models;
-using MedbaseLibrary.Services;
+﻿using MedbaseLibrary.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,12 +7,10 @@ namespace MedbaseBlazor.Services;
 
 public class MedbaseAuthStateProvider : AuthenticationStateProvider
 {
-    private readonly ILocalStorage _localStorage;
     private readonly IAuthMemory _authMemory;
 
-    public MedbaseAuthStateProvider(ILocalStorage localStorage, IAuthMemory authMemory)
+    public MedbaseAuthStateProvider(IAuthMemory authMemory)
     {
-        _localStorage = localStorage;
         _authMemory = authMemory;
     }
 

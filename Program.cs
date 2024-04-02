@@ -1,5 +1,3 @@
-using MedbaseBlazor;
-using MedbaseLibrary.MsalClient;
 using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
