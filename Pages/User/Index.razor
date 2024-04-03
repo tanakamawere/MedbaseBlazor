@@ -1,10 +1,12 @@
 ﻿@page "/"
 @page "/home"
 @using MedbaseLibrary.Models;
+@using MedbaseLibrary.Models.AIModels
 @using MedbaseLibrary.Services;
 @using MudBlazor
 @inject NavigationManager navManager;
 @inject IApiRepository repository
+@inject IChatEndpoints aiService
 
 <PageTitle>@title</PageTitle>
 <HeadContent>
@@ -26,7 +28,6 @@
     <meta name="twitter:description" content="@description" />
     <meta name="twitter:image" content="@image" />
 </HeadContent>
-
 <header>
     <div class="container my-5">
         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
@@ -83,6 +84,7 @@
     </div>
 </section>
 
+
 <div class="container my-5">
     <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
         <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
@@ -117,4 +119,33 @@
         Console.WriteLine(navManager.BaseUri.ToString());
         navManager.NavigateTo($"/article/{article}");
     }
+
+    private async Task GetChatResponse()
+    {
+        var response = await aiService.CompletionPost("Drugs used in malaria prophylaxis?", true);
+        if (response.IsSuccessStatusCode)
+        {
+            try
+            {
+                // Read the response content as a string
+                Completion? completion = await response.Content.ReadFromJsonAsync<Completion>();
+
+                Message choice = completion.Choices[0].Message;
+
+                // Now you can work with the response content (e.g., parse JSON, extract data)
+                Console.WriteLine($"Response content:\n{choice.content}");
+
+                // Add assistant's message to the conversation history
+                //messages.Add(new Message { role = "assistant", content = choice.content });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+        }
+    }       
 }

@@ -19,6 +19,12 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddScoped<ILocalStorage, AuthStateHandler>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IAuthMemory, JwtCache>();
+
+builder.Services.AddScoped<IChatEndpoints, ChatEndpoints>();
+builder.Services.AddHttpClient<IChatEndpoints, ChatEndpoints>("ChatAPI", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:8001");
+});
 builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
