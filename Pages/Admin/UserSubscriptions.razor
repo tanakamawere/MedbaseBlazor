@@ -1,0 +1,35 @@
+﻿@page "/admin/usersubscriptions"
+@layout AdminLayout
+@inject IApiRepository repository
+
+
+<MudContainer>
+    <MudPaper>
+        <MudTable Items="subscriptions" Class="table table-striped">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>User</MudTh>
+                <MudTh>Subscription</MudTh>
+                <MudTh>Start Date</MudTh>
+                <MudTh>End Date</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.User.Email</MudTd>
+                <MudTd>@context.Subscription.Name</MudTd>
+                <MudTd>@context.StartDate</MudTd>
+                <MudTd>@context.EndDate</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPaper>
+</MudContainer>
+
+
+@code {
+    private IEnumerable<UserSubscription> subscriptions = Enumerable.Empty<UserSubscription>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        subscriptions = await repository.GetUserSubscriptionsAsync();
+    }
+}

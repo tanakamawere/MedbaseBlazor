@@ -111,41 +111,22 @@
     private string title = "Home | Medbase";
     private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
 
-    private async Task GetArticlesAsync() => Articles = await repository.GetArticlesNumbered(3);
+    private async Task GetArticlesAsync()
+    {
+        try
+        {
+            Articles = await repository.GetArticlesNumbered(3);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Here is the problem: " + ex);
+        }   
+    }
 
 
     private void GoToArticle(int article)
     {
         Console.WriteLine(navManager.BaseUri.ToString());
         navManager.NavigateTo($"/article/{article}");
-    }
-
-    private async Task GetChatResponse()
-    {
-        var response = await aiService.CompletionPost("Drugs used in malaria prophylaxis?", true);
-        if (response.IsSuccessStatusCode)
-        {
-            try
-            {
-                // Read the response content as a string
-                Completion? completion = await response.Content.ReadFromJsonAsync<Completion>();
-
-                Message choice = completion.Choices[0].Message;
-
-                // Now you can work with the response content (e.g., parse JSON, extract data)
-                Console.WriteLine($"Response content:\n{choice.content}");
-
-                // Add assistant's message to the conversation history
-                //messages.Add(new Message { role = "assistant", content = choice.content });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-        else
-        {
-            Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-        }
-    }       
+    }      
 }
