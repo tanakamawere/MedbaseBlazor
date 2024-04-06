@@ -11,30 +11,30 @@
 </style>
 
 
-<EditForm OnSubmit="SaveChanges" Model="Subscription">
+<EditForm Model="UserSubscription">
     <div class="input-group">
         <span class="input-group-text">RTGS$</span>
-        <InputNumber class="form-control" readonly @bind-Value="Subscription.Amount" />
+        <InputNumber class="form-control" readonly @bind-Value="UserSubscription.Subscription.Price" />
     </div>
     <div class="col-form-label">
         <label asp-for="Email">Email</label>
-        <InputText class="form-control" @bind-Value="Subscription.Email" />
+        <InputText class="form-control" @bind-Value="UserSubscription.User.Email" />
     </div>
     <div class="col-form-label">
         <label asp-for="Phone">Phone</label>
         <div class="input-group">
             <span class="input-group-text" id="basic-addon3">+263</span>
-            <InputText class="form-control" @bind-Value="Subscription.Phone" />
+            <InputText class="form-control" @bind-Value="UserSubscription.User.PhoneNumber" />
         </div>
         <div class="form-text">Example: 712234567</div>
     </div>
     <div class="col-form-label">
         <label asp-for="Email">Start Date</label>
-        <InputDate class="form-control" @bind-Value="Subscription.StartDate"/>
+        <InputDate class="form-control" @bind-Value="UserSubscription.StartDate" />
     </div>
     <div class="col-form-label">
         <label asp-for="Email">End Date</label>
-        <InputDate class="form-control" @bind-Value="Subscription.EndDate" />
+        <InputDate class="form-control" @bind-Value="UserSubscription.EndDate" />
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -46,24 +46,24 @@
     [Inject]
     public NavigationManager NavManager { get; set; }
 
-    public Subscription Subscription { get; set; } = new();
+    public UserSubscription UserSubscription { get; set; } = new();
 
 
-    protected async override Task OnParametersSetAsync()
-    {
-        if (!string.IsNullOrEmpty(email))
-        {
-            Subscription = await repository.GetSubscription(email) ?? new();
-        }
-    }
+    // protected async override Task OnParametersSetAsync()
+    // {
+    //     if (!string.IsNullOrEmpty(email))
+    //     {
+    //         UserSubscription = await repository.GetSubscription(email) ?? new();
+    //     }
+    // }
 
 
-    private void SaveChanges()
-    {
-        if (Subscription.Id == 0)
-            repository.PostSubscription(Subscription);
-        else
-            repository.UpdateSubscription(Subscription.Id, Subscription);
-        NavManager.NavigateTo("/admin/subscriptions");
-    }
+    // private void SaveChanges()
+    // {
+    //     if (UserSubscription.Id == 0)
+    //         repository.PostSubscription(UserSubscription);
+    //     else
+    //         repository.UpdateSubscription(UserSubscription.Id, UserSubscription);
+    //     NavManager.NavigateTo("/admin/subscriptions");
+    // }
 }
