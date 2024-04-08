@@ -18,20 +18,31 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu Bordered="true">
-            <MudNavLink Href="/admin/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
-            <MudNavLink Href="/admin/topics" Icon="@Icons.Material.Filled.LibraryBooks">Topics</MudNavLink>
-            <MudNavLink Href="/admin/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
-            <MudNavLink Href="/admin/Questions" Icon="@Icons.Material.Filled.QuestionAnswer">Questions</MudNavLink>
-            <MudNavLink Href="/admin/corrections" Icon="@Icons.Material.Filled.QuestionMark">Corrections</MudNavLink>
-            <MudNavLink Href="/admin/Articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
-            <MudNavLink Href="/admin/subscriptions" Icon="@Icons.Material.Filled.Subscriptions">Subscriptions</MudNavLink>
-            <MudNavLink Href="/admin/usersubscriptions" Icon="@Icons.Material.Filled.SupervisedUserCircle">User Subscriptions</MudNavLink>
+            <AuthorizeView Roles="administrator, manager, contributor">
+                <MudNavLink Href="/admin/courses" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
+                <MudNavLink Href="/admin/topics" Icon="@Icons.Material.Filled.LibraryBooks">Topics</MudNavLink>
+                <MudNavLink Href="/admin/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
+                <MudNavLink Href="/admin/Questions" Icon="@Icons.Material.Filled.QuestionAnswer">Questions</MudNavLink>
+                <MudNavLink Href="/admin/corrections" Icon="@Icons.Material.Filled.QuestionMark">Corrections</MudNavLink>
+                <MudNavLink Href="/admin/Articles" Icon="@Icons.Material.Filled.Newspaper">Articles</MudNavLink>
+            </AuthorizeView>
+            <AuthorizeView Roles="administrator">
+                <MudNavLink Href="/admin/roles" Icon="@Icons.Material.Filled.LocalParking">Roles</MudNavLink>
+            </AuthorizeView>
+            <AuthorizeView Roles="administrator, manager">
+                <MudNavLink Href="/admin/subscriptions" Icon="@Icons.Material.Filled.Subscriptions">Subscriptions</MudNavLink>
+            </AuthorizeView>
+            <AuthorizeView Roles="administrator, manager, seller">
+                <MudNavLink Href="/admin/usersubscriptions" Icon="@Icons.Material.Filled.SupervisedUserCircle">User Subscriptions</MudNavLink>
+            </AuthorizeView>
             <MudNavLink Href="/home" Icon="@Icons.Material.Filled.ArrowUpward">Go To Medbase</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>
         <MudContainer>
-            @Body
+            <AuthorizeView Roles="administrator">
+                @Body
+            </AuthorizeView>
         </MudContainer>
     </MudMainContent>
 </MudLayout>

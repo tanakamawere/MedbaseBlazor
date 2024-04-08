@@ -32,4 +32,9 @@ public class JwtCache : IAuthMemory
         // Token not found in cache
         return null;
     }
+
+    public void RemoveToken(string userId)
+    {
+        _memoryCache.Remove(userId);
+    }
 }
