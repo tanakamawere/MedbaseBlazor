@@ -12,10 +12,10 @@
 
 
 <EditForm Model="UserSubscription">
-    <div class="input-group">
+    @* <div class="input-group">
         <span class="input-group-text">RTGS$</span>
         <InputNumber class="form-control" readonly @bind-Value="UserSubscription.Subscription.Price" />
-    </div>
+    </div> *@
     <div class="col-form-label">
         <label asp-for="Email">Email</label>
         <InputText class="form-control" @bind-Value="UserSubscription.User.Email" />

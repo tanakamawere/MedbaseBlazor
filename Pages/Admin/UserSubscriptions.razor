@@ -1,24 +1,36 @@
 ﻿@page "/admin/usersubscriptions"
 @layout AdminLayout
+@using MedbaseBlazor.Pages.Admin.Utilities
 @inject IApiRepository repository
-
+@inject IDialogService DialogService
 
 <MudContainer>
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+                OnClick="AddSubscriptionToUser">
+        Add Subscription to User
+    </MudButton>
     <MudPaper>
         <MudTable Items="subscriptions" Class="table table-striped">
             <HeaderContent>
                 <MudTh>Id</MudTh>
                 <MudTh>User</MudTh>
-                <MudTh>Subscription</MudTh>
                 <MudTh>Start Date</MudTh>
                 <MudTh>End Date</MudTh>
+                <MudTh>Actions</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Id</MudTd>
                 <MudTd>@context.User.Email</MudTd>
-                <MudTd>@context.Subscription.Name</MudTd>
                 <MudTd>@context.StartDate</MudTd>
                 <MudTd>@context.EndDate</MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               OnClick="() => EditSub(context.Id)">
+                        Edit
+                    </MudButton>
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </MudPaper>
@@ -31,5 +43,17 @@
     protected override async Task OnInitializedAsync()
     {
         subscriptions = await repository.GetUserSubscriptionsAsync();
+    }
+
+
+    private void AddSubscriptionToUser()
+    {
+        var options = new DialogOptions()
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.ExtraExtraLarge,
+                Position = DialogPosition.Center,
+            };
+        DialogService.Show<AddUserSubDialog>("Add User Subscription");
     }
 }
