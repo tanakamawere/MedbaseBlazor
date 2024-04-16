@@ -1,4 +1,5 @@
-﻿using MedbaseLibrary.Services;
+﻿using MedbaseLibrary.Helpers;
+using MedbaseLibrary.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,7 +19,7 @@ public class MedbaseAuthStateProvider : AuthenticationStateProvider
     {
         // Your custom logic here (e.g., validate password, retrieve claims)
         //var token = await _localStorage.GetObjectAsync<string>("auth");
-        var token = _authMemory.GetToken("testing");
+        var token = _authMemory.GetToken(Helpers.AuthMemory);
         if (string.IsNullOrEmpty(token))
         {
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));

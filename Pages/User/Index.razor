@@ -1,12 +1,16 @@
 ﻿@page "/"
 @page "/home"
+@page "/home/{userId}"
 @using MedbaseLibrary.Models;
 @using MedbaseLibrary.Models.AIModels
 @using MedbaseLibrary.Services;
+@using MedbaseComponents.Controls;
 @using MudBlazor
 @inject NavigationManager navManager;
 @inject IApiRepository repository
 @inject IChatEndpoints aiService
+@inject IAuthService authService
+@inject IDialogService DialogService
 
 <PageTitle>@title</PageTitle>
 <HeadContent>
@@ -32,7 +36,7 @@
     <div class="container my-5">
         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
             <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                <MudImage Src="img/medbase_transparent.png" Style="max-height:100px" />
+                <MudImage Src="img/medbase_transparent.png" Style="max-height:80px" />
                 <MudText Typo="Typo.h6" Class="lead fw-normal">Over 2,000 MCQs (with answers & explanations) on <strong>Pre-clinical</strong> and <strong>Clinical Medical School</strong> courses</MudText>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
                     <MudButton Variant="Variant.Filled" Href="/courses" StartIcon="@Icons.Material.Filled.EmojiEmotions" Color="Color.Primary">Get Started</MudButton>
@@ -104,8 +108,20 @@
 
 @code{
     private IEnumerable<Article> Articles { get; set; } = Enumerable.Empty<Article>();
+    [Parameter]
+    public string userId { get; set; } = "";
+    private UserDetails user;
 
     protected override Task OnInitializedAsync() => GetArticlesAsync();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(userId))
+        {
+            user = await authService.GetUserInfoAsync(userId);
+            OpenWelcomeDialog(user);
+        }
+    }
 
     private string description = "Medbase is a website and an app that helps medical students learn anatomy, physiology and pathology through true or false format MCQs and Notes. Medbase is a useful tool for medical students who want to test their knowledge and prepare for their exams";
     private string title = "Home | Medbase";
@@ -123,6 +139,18 @@
         }   
     }
 
+    private async void OpenWelcomeDialog(UserDetails user)
+    {
+        var parameters = new DialogParameters<WelcomeToMedbaseDialog>();
+        parameters.Add(x => x.UserDetails, user);
+        var options = new DialogOptions()
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.ExtraExtraLarge,
+                Position = DialogPosition.Center,
+            };
+        DialogService.Show<WelcomeToMedbaseDialog>(null, parameters, options);
+    }
 
     private void GoToArticle(int article)
     {
