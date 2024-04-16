@@ -23,7 +23,7 @@ builder.Services.AddScoped<IAuthMemory, JwtCache>();
 builder.Services.AddScoped<IChatEndpoints, ChatEndpoints>();
 builder.Services.AddHttpClient<IChatEndpoints, ChatEndpoints>("ChatAPI", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:8001");
+    client.BaseAddress = new Uri("http://medbaseai.echab4e0dyhce4cv.southafricanorth.azurecontainer.io:8080");
 });
 builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
