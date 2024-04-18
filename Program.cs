@@ -22,11 +22,11 @@ builder.Services.AddScoped<IAuthMemory, JwtCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5249/");
+    client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
 });
 builder.Services.AddHttpClient<IAuthService, AuthService>("AuthAPI", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5249/");
+    client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
 });
 builder.Services.AddAuthorization(options =>
 {
