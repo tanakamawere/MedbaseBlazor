@@ -5,7 +5,6 @@ using MedbaseBlazor.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o4505919081873408.ingest.us.sentry.io/4506879230935040");
 
 // Add services to the container.
 //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
