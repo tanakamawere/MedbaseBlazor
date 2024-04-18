@@ -21,7 +21,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 8.0.x
+    - name: Add Medbase Components Package 
+      # This automatically add the library project since the components project is dependent on it
+      run: dotnet add package MedbaseComponents
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
