@@ -1,7 +1,6 @@
 using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
-using Blazored.LocalStorage;
 using MedbaseBlazor.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -16,15 +15,10 @@ builder.WebHost.UseSentry(dsn: "https://33e9efbdf42e02a857a7e54fde618aab@o450591
 //Dependencies
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddScoped<ILocalStorage, AuthStateHandler>();
 builder.Services.AddMemoryCache();
-builder.Services.AddScoped<IAuthMemory, JwtCache>();
 
-builder.Services.AddScoped<IChatEndpoints, ChatEndpoints>();
-builder.Services.AddHttpClient<IChatEndpoints, ChatEndpoints>("ChatAPI", client =>
-{
-    client.BaseAddress = new Uri("http://medbaseai.echab4e0dyhce4cv.southafricanorth.azurecontainer.io:8080");
-});
+//How to remember the user that has been logged in
+builder.Services.AddScoped<IAuthMemory, JwtCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
@@ -44,10 +38,6 @@ builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 //.AddMicrosoftIdentityConsentHandler();
-
-
-builder.Services.AddBlazoredLocalStorage();   // local storage
-builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
 
 var app = builder.Build();
 

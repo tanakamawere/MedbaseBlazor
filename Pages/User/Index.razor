@@ -2,13 +2,13 @@
 @page "/home"
 @page "/home/{userId}"
 @using MedbaseLibrary.Models;
-@using MedbaseLibrary.Models.AIModels
+
 @using MedbaseLibrary.Services;
 @using MedbaseComponents.Controls;
 @using MudBlazor
 @inject NavigationManager navManager;
 @inject IApiRepository repository
-@inject IChatEndpoints aiService
+
 @inject IAuthService authService
 @inject IDialogService DialogService
 
