@@ -1,6 +1,5 @@
 ﻿@page "/"
 @page "/home"
-@page "/home/{userId}"
 @using MedbaseLibrary.Models;
 
 @using MedbaseLibrary.Services;
@@ -8,8 +7,6 @@
 @using MudBlazor
 @inject NavigationManager navManager;
 @inject IApiRepository repository
-
-@inject IAuthService authService
 @inject IDialogService DialogService
 
 <PageTitle>@title</PageTitle>
@@ -118,7 +115,6 @@
     {
         if (!string.IsNullOrWhiteSpace(userId))
         {
-            user = await authService.GetUserInfoAsync(userId);
             OpenWelcomeDialog(user);
         }
     }

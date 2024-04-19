@@ -1,8 +1,11 @@
 using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
-using MedbaseBlazor.Services;
-using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web.UI;
+using Microsoft.Identity.Web;
+using MedbaseLibrary.MsalClient;
+using MedbaseBlazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +16,15 @@ var builder = WebApplication.CreateBuilder(args);
 //    .AddMicrosoftIdentityUI();
 //Dependencies
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
-builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
+//builder.Services.AddTransient<IAuthService, AuthService>();
+//builder.Services.AddMemoryCache();
 
 //How to remember the user that has been logged in
-builder.Services.AddScoped<IAuthMemory, JwtCache>();
-builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
+//builder.Services.AddScoped<IAuthMemory, JwtCache>();
+//builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
+
+
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
     client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
@@ -27,16 +33,16 @@ builder.Services.AddHttpClient<IAuthService, AuthService>("AuthAPI", client =>
 {
     client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
 });
-builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to the default policy
-    //options.FallbackPolicy = options.DefaultPolicy;
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    // By default, all incoming requests will be authorized according to the default policy
+//    options.FallbackPolicy = options.DefaultPolicy;
+//});
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-//.AddMicrosoftIdentityConsentHandler();
+builder.Services.AddServerSideBlazor().
+    AddMicrosoftIdentityConsentHandler();
 
 var app = builder.Build();
 
@@ -53,9 +59,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 app.MapBlazorHub();
