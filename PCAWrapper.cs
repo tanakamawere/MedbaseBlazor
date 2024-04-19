@@ -44,9 +44,6 @@ public class PCAWrapper : IPCAWrapper
             return null;
 
         var accounts = await PCA.GetAccountsAsync(_settings?.PolicySignUpSignIn).ConfigureAwait(false);
-        if (accounts == null || !accounts.Any())
-            return null;
-
         var account = accounts.FirstOrDefault();
 
         var authResult = await PCA.AcquireTokenSilent(scopes, account)

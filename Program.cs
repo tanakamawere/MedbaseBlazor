@@ -1,29 +1,16 @@
 using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Identity.Web.UI;
 using Microsoft.Identity.Web;
 using MedbaseLibrary.MsalClient;
 using MedbaseBlazor;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
-//builder.Services.AddControllersWithViews()
-//    .AddMicrosoftIdentityUI();
 //Dependencies
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
-//builder.Services.AddTransient<IAuthService, AuthService>();
-//builder.Services.AddMemoryCache();
-
-//How to remember the user that has been logged in
-//builder.Services.AddScoped<IAuthMemory, JwtCache>();
-//builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthStateProvider>();
-
+builder.Services.AddSingleton<AuthenticationStateProvider, MedbaseAuthStateProvider>();
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
@@ -33,11 +20,7 @@ builder.Services.AddHttpClient<IAuthService, AuthService>("AuthAPI", client =>
 {
     client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
 });
-//builder.Services.AddAuthorization(options =>
-//{
-//    // By default, all incoming requests will be authorized according to the default policy
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
+builder.Services.AddAuthorization();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
@@ -59,9 +42,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 app.MapBlazorHub();
