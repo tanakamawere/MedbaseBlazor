@@ -15,10 +15,7 @@ builder.Services.AddSingleton<AuthenticationStateProvider, MedbaseAuthStateProvi
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
     client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
-});
-builder.Services.AddHttpClient<IAuthService, AuthService>("AuthAPI", client =>
-{
-    client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
+    //client.BaseAddress = new Uri("https://localhost:5249/");
 });
 builder.Services.AddAuthorization();
 builder.Services.AddMudServices();
