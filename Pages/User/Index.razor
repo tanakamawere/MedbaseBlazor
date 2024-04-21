@@ -6,6 +6,7 @@
 @using MedbaseComponents.Controls;
 @using MudBlazor
 @inject NavigationManager navManager;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IApiRepository repository
 @inject IDialogService DialogService
 
@@ -29,6 +30,7 @@
     <meta name="twitter:description" content="@description" />
     <meta name="twitter:image" content="@image" />
 </HeadContent>
+
 <header>
     <div class="container my-5">
         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
@@ -108,8 +110,13 @@
     [Parameter]
     public string userId { get; set; } = "";
     private UserDetails user;
+    private AuthenticationState authenticationState;
 
-    protected override Task OnInitializedAsync() => GetArticlesAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        await GetArticlesAsync(); 
+    }
 
     protected override async Task OnParametersSetAsync()
     {

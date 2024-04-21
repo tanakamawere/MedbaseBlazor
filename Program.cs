@@ -18,6 +18,7 @@ builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client 
     //client.BaseAddress = new Uri("https://localhost:5249/");
 });
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
