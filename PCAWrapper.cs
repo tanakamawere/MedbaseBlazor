@@ -28,10 +28,12 @@ public class PCAWrapper : IPCAWrapper
                                     .Create(_settings?.ClientId)
                                     .WithB2CAuthority(_settings?.Authority)
 #if !ANDROID
-                                    //.WithRedirectUri("https://medbase.co.zw")
-                                    .WithRedirectUri("http://localhost")
+                                     .WithRedirectUri($"https://medbase.co.zw/{_settings.CallbackPath}")
+                                     //.WithRedirectUri("http://localhost")
 #endif
                                     .Build();
+
+        Console.WriteLine(PCA.AppConfig.RedirectUri);
     }
 
     /// <summary>
