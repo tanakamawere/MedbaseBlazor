@@ -27,12 +27,8 @@ public class PCAWrapper : IPCAWrapper
         PCA = PublicClientApplicationBuilder
                                     .Create(_settings?.ClientId)
                                     .WithB2CAuthority(_settings?.Authority)
-#if !ANDROID
-                                    //.WithRedirectUri("http://localhost")
-#endif
+                                    .WithRedirectUri("http://localhost")
                                     .Build();
-
-        Console.WriteLine(PCA.AppConfig.RedirectUri);
     }
 
     /// <summary>
