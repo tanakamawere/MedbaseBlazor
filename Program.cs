@@ -18,7 +18,6 @@ builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
 builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
 builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
-builder.Services.AddSingleton<AuthenticationStateProvider, MedbaseAuthStateProvider>();
 
 //string apiString = "https://apimedbase.azurewebsites.net/";
 string apiString = "http://localhost:5249/";
