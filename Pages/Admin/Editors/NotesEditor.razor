@@ -2,41 +2,35 @@
 @page "/admin/notes/add"
 @layout AdminLayout
 @using MedbaseBlazor.Pages.Admin.Utilities
+@inject INotesRepository notesRepository
 @inject IApiRepository repository
 @using Markdig
 
 <PageTitle>Admin | Notes Editor</PageTitle>
 
 <MudContainer>
-    <div class="col-8">
-        <div class="col-form-label">
-            <label>Course</label>
-            <select Label="" @onchange="GetCourseTopics">
-                @foreach (Course item in Courses)
-                {
-                    <option value="@item.CourseRef">@item.Title</option>
-                }
-            </select>
-        </div>
-    </div>
     <EditForm Model="Note" OnValidSubmit="SaveChanges">
         <DataAnnotationsValidator />
-        <MudSelect Label="Topic" @bind-Value="Note.TopicReference">
-            @foreach (Topic item in Topics)
+        <MudSelect Label="Course" @bind-Value="Note.CourseRef">
+            @foreach (Course item in Courses)
             {
-                <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
+                <MudSelectItem Value="@item.CourseRef">@item.Title</MudSelectItem>
             }
         </MudSelect>
+        <MudTextField For="@(() => Note.Title)" T="string" 
+            Variant="Variant.Filled" 
+            Lines="1" 
+            Label="Title" 
+            @bind-Value="Note.Title" />
         <div class="col-form-label d-none">
             <label>Date Posted</label>
             <ValidationMessage For="@(() => Note.DateUpdated)" />
             <InputDate class="form-control" @bind-Value="Note.DateUpdated" />
         </div>
-        <div class="col-form-label">
-            <label>Text</label>
-            <ValidationMessage For="@(() => Note.Text)" />
-            <MarkdownTextInput class="form-control" @bind-Value="Note.Text" />
-        </div>
+        <MarkdownEditor Placeholder="Write the notes right here"
+                        LineNumbers="@false"
+                        MaxHeight="@markdownEditorHeight"
+                        @bind-Value="Note.Text" />
         <button type="submit" class="btn btn-primary">Save</button>
     </EditForm>
 </MudContainer>
@@ -45,39 +39,34 @@
     public Note Note { get; set; } = new Note();
 
     [Parameter]
-    public int Id { get; set; }
+    public int id { get; set; }
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
-    private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
     private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
+    private string markdownEditorHeight = "30";
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         Courses = await repository.GetCourses();
-
-        if (Id != 0)
+        if (id != 0)
         {
-            Note = await repository.GetNoteByReferenceAsync(Id);
+            Note = await notesRepository.GetNotesById(id) ?? new();
         }
-    }
-
-    private async Task GetCourseTopics(ChangeEventArgs e)
-    {
-        Topics = await repository.GetTopics(e.Value.ToString());
-        StateHasChanged();
+        else
+            return;
     }
 
     private async Task SaveChanges()
     {
-        if (Id != 0)
+        if (id != 0)
         {
             Note.DateUpdated = DateTime.Now;
-            await repository.UpdateNoteAsync(Note);
+            await notesRepository.UpdateNoteAsync(Note);
         }
         else
         {
-            await repository.AddNoteAsync(Note);
+            await notesRepository.AddNoteAsync(Note);
         }
         NavigationManager.NavigateTo("/admin/notes");
     }

@@ -5,18 +5,34 @@ using Microsoft.Identity.Web;
 using MedbaseLibrary.MsalClient;
 using MedbaseBlazor;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Identity.Web.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 //Dependencies
+JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
+builder.Services.AddScoped<INotesRepository, NotesRepository>();
 builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
+builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
+builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
+builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
 builder.Services.AddSingleton<AuthenticationStateProvider, MedbaseAuthStateProvider>();
+
+//string apiString = "https://apimedbase.azurewebsites.net/";
+string apiString = "http://localhost:5249/";
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
-    client.BaseAddress = new Uri("https://apimedbase.azurewebsites.net/");
-    //client.BaseAddress = new Uri("https://localhost:5249/");
+    client.BaseAddress = new Uri(apiString);
+}); 
+builder.Services.AddHttpClient<INotesRepository, NotesRepository>("ApiData", client =>
+{
+    client.BaseAddress = new Uri(apiString);
 });
+builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "Settings");
+builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
 builder.Services.AddMudServices();

@@ -1,6 +1,7 @@
 ﻿@page "/admin/notes"
 @layout AdminLayout
 @inject IApiRepository repository
+@inject INotesRepository notesRepository
 
 <PageTitle>Admin Notes</PageTitle>
 
@@ -16,13 +17,15 @@ else
     <MudTable Items="allNotes" Hover="true">
         <HeaderContent>
             <MudTh>ID</MudTh>
-            <MudTh>Topic Reference</MudTh>
+            <MudTh>Course Reference</MudTh>
+            <MudTh>Title</MudTh>
             <MudTh>Date Updated</MudTh>
             <MudTh>Actions</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd HideSmall="true" DataLabel="ID">@context.Id</MudTd>
-            <MudTd HideSmall="true" DataLabel="Course Ref">@context.TopicReferenceName</MudTd>
+            <MudTd HideSmall="true" DataLabel="Course Ref">@context.CourseRef</MudTd>
+            <MudTd HideSmall="true" DataLabel="Course Ref">@context.Title</MudTd>
             <MudTd DataLabel="Title">@context.DateUpdated.ToString("dddd MMMM yy, hh:mm")</MudTd>
             <MudTd DataLabel="Actions">
                 <NavLink class="btn btn-info btn-sm" href="@($"/admin/notes/edit/{context.Id}")">
@@ -34,8 +37,8 @@ else
 }
 
 @code {
-    private IEnumerable<NoteDto> allNotes { get; set; } = Enumerable.Empty<NoteDto>();
+    private IEnumerable<Note> allNotes { get; set; } = Enumerable.Empty<Note>();
 
     private bool _isLoading;
-    protected async override Task OnInitializedAsync() => allNotes = await repository.GetAllNotesAsync();
+    protected async override Task OnInitializedAsync() => allNotes = await notesRepository.GetAllNotes();
 }
