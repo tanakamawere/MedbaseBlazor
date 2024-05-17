@@ -19,8 +19,8 @@ builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
 builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
 
-//string apiString = "https://apimedbase.azurewebsites.net/";
-string apiString = "http://localhost:5249/";
+string apiString = "https://apimedbase.azurewebsites.net/";
+//string apiString = "http://localhost:5249/";
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
