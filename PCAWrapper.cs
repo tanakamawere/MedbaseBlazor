@@ -25,10 +25,14 @@ public class PCAWrapper : IPCAWrapper
         Scopes = _settings.Scopes.ToStringArray();
         // Create PCA once. Make sure that all the config parameters below are passed
         PCA = PublicClientApplicationBuilder
-                                    .Create(_settings?.ClientId)
-                                    .WithB2CAuthority(_settings?.Authority)
-                                    .WithRedirectUri("http://localhost")
-                                    .Build();
+                .Create(_settings?.ClientId)
+                .WithB2CAuthority(_settings?.Authority)
+                .WithLogging((level, message, containsPii) =>
+                {
+                    Console.WriteLine($"[{level}] {message}");
+                }, Microsoft.Identity.Client.LogLevel.Always, enablePiiLogging: false, enableDefaultPlatformLogging: true)
+                .WithRedirectUri("http://localhost")
+                .Build();
     }
 
     /// <summary>
