@@ -4,9 +4,9 @@ using MudBlazor.Services;
 using Microsoft.Identity.Web;
 using MedbaseLibrary.MsalClient;
 using MedbaseBlazor;
-using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 //Dependencies
@@ -18,6 +18,7 @@ builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
 builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
 builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
+builder.Services.AddSingleton<AuthenticationStateProvider, MedbaseAuthenticationStateProvider>();
 
 string apiString = "https://apimedbase.azurewebsites.net/";
 //string apiString = "http://localhost:5249/";
