@@ -7,7 +7,7 @@ namespace MedbaseBlazor;
 
 public class MedbaseAuthenticationStateProvider : AuthenticationStateProvider
 {
-    protected MedbaseAuthenticationStateProvider()
+    public MedbaseAuthenticationStateProvider()
     {
             
     }
@@ -29,11 +29,5 @@ public class MedbaseAuthenticationStateProvider : AuthenticationStateProvider
 
         var result = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "JwtBearer")));
         return result;
-    }
-
-    public string GetClaimValue(ClaimsPrincipal user, string claimType)
-    {
-        var claim = user.FindFirst(claimType);
-        return claim?.Value;
     }
 }
