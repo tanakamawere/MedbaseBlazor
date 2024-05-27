@@ -18,7 +18,7 @@ builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
 builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
 builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
-builder.Services.AddSingleton<AuthenticationStateProvider, MedbaseAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthenticationStateProvider>();
 
 string apiString = "https://apimedbase.azurewebsites.net/";
 //string apiString = "http://localhost:5249/";
@@ -35,6 +35,7 @@ builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration,
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorPages();
