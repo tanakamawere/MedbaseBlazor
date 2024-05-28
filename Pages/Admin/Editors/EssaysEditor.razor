@@ -1,0 +1,72 @@
+﻿@page "/admin/essays/edit/{id:int}"
+@page "/admin/essays/add"
+@layout AdminLayout
+@using MedbaseBlazor.Pages.Admin.Utilities
+@inject IEssaysRepository essaysRepository
+@inject IApiRepository repository
+@using Markdig
+
+<PageTitle>Admin | Notes Editor</PageTitle>
+
+<MudContainer>
+    <EditForm Model="Essay" OnValidSubmit="SaveChanges">
+        <DataAnnotationsValidator />
+        <MudSelect Label="Essay" @bind-Value="Essay.CourseRef">
+            @foreach (Course item in Courses)
+            {
+                <MudSelectItem Value="@item.CourseRef">@item.Title</MudSelectItem>
+            }
+        </MudSelect>
+        <div class="col-form-label d-none">
+            <label>Date Posted</label>
+            <ValidationMessage For="@(() => Essay.DateUpdated)" />
+            <InputDate class="form-control" @bind-Value="Essay.DateUpdated" />
+        </div>
+        <MarkdownEditor Placeholder="Write the question here"
+                        LineNumbers="@false"
+                        MaxHeight="@markdownEditorHeight"
+                      @bind-Value="Essay.Question" />
+        <MarkdownEditor Placeholder="Write the notes right here"
+                        LineNumbers="@false"
+                        MaxHeight="@markdownEditorHeight"
+                        @bind-Value="Essay.Answer" />
+        <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+</MudContainer>
+
+@code {
+    public Essay Essay { get; set; } = new();
+
+    [Parameter]
+    public int id { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
+    private string markdownEditorHeight = "30";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Courses = await repository.GetCourses();
+        if (id != 0)
+        {
+            Essay = await essaysRepository.GetEssaysById(id) ?? new();
+        }
+        else
+            return;
+    }
+
+    private async Task SaveChanges()
+    {
+        if (id != 0)
+        {
+            Essay.DateUpdated = DateTime.Now;
+            await essaysRepository.UpdateEssayAsync(Essay);
+        }
+        else
+        {
+            await essaysRepository.AddEssayAsync(Essay);
+        }
+        NavigationManager.NavigateTo("/admin/essays");
+    }
+}
