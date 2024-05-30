@@ -30,8 +30,8 @@ public class PCAWrapper : IPCAWrapper
                 .WithLogging((level, message, containsPii) =>
                 {
                     Console.WriteLine($"[{level}] {message}");
-                }, Microsoft.Identity.Client.LogLevel.Always, enablePiiLogging: false, enableDefaultPlatformLogging: true)
-                .WithRedirectUri("http://localhost")
+                }, Microsoft.Identity.Client.LogLevel.Verbose, enablePiiLogging: true, enableDefaultPlatformLogging: true)
+                .WithRedirectUri("https://medbase.co.zw/signin-oidc")
                 .Build();
     }
 
@@ -45,10 +45,11 @@ public class PCAWrapper : IPCAWrapper
         if (PCA == null)
             return null;
 
+
         var accounts = await PCA.GetAccountsAsync(_settings?.PolicySignUpSignIn).ConfigureAwait(false);
         var account = accounts.FirstOrDefault();
 
-        var authResult = await PCA.AcquireTokenSilent(scopes, account)
+        var authResult = await PCA.AcquireTokenSilent(scopes,account)
                                     .ExecuteAsync().ConfigureAwait(false);
         return authResult;
 

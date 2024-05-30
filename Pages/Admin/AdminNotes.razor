@@ -28,17 +28,34 @@ else
             <MudTd HideSmall="true" DataLabel="Course Ref">@context.Title</MudTd>
             <MudTd DataLabel="Title">@context.DateUpdated.ToString("dddd MMMM yy, hh:mm")</MudTd>
             <MudTd DataLabel="Actions">
-                <NavLink class="btn btn-info btn-sm" href="@($"/admin/notes/edit/{context.Id}")">
+                <MudButton Variant="Variant.Text" Color="Color.Warning" OnClick="() => DeleteNote(context.Id)">
+                    Delete
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="@($"/admin/notes/edit/{context.Id}")">
                     Edit
-                </NavLink>
+                </MudButton>
             </MudTd>
         </RowTemplate>
     </MudTable>
 }
 
 @code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
     private IEnumerable<Note> allNotes { get; set; } = Enumerable.Empty<Note>();
 
     private bool _isLoading;
-    protected async override Task OnInitializedAsync() => allNotes = await notesRepository.GetAllNotes();
+    protected async override Task OnInitializedAsync() => await GetNotesAsync();
+
+    private async Task GetNotesAsync()
+    {
+        allNotes = await notesRepository.GetAllNotes();
+    }
+
+    private async void DeleteNote(int noteId)
+    {
+        notesRepository.DeleteNotes(noteId);
+
+        await GetNotesAsync();
+    }
 }

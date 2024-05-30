@@ -4,39 +4,49 @@
 @using MedbaseBlazor.Pages.Admin.Utilities
 @inject INotesRepository notesRepository
 @inject IApiRepository repository
+@inject ISnackbar Snackbar
 @using Markdig
 
 <PageTitle>Admin | Notes Editor</PageTitle>
 
-<MudContainer>
-    <EditForm Model="Note" OnValidSubmit="SaveChanges">
-        <DataAnnotationsValidator />
-        <MudSelect Label="Course" @bind-Value="Note.CourseRef">
-            @foreach (Course item in Courses)
-            {
-                <MudSelectItem Value="@item.CourseRef">@item.Title</MudSelectItem>
-            }
-        </MudSelect>
-        <MudTextField For="@(() => Note.Title)" T="string" 
-            Variant="Variant.Filled" 
-            Lines="1" 
-            Label="Title" 
-            @bind-Value="Note.Title" />
-        <div class="col-form-label d-none">
-            <label>Date Posted</label>
-            <ValidationMessage For="@(() => Note.DateUpdated)" />
-            <InputDate class="form-control" @bind-Value="Note.DateUpdated" />
-        </div>
-        <MarkdownEditor Placeholder="Write the notes right here"
-                        LineNumbers="@false"
-                        MaxHeight="@markdownEditorHeight"
-                        @bind-Value="Note.Text" />
-        <button type="submit" class="btn btn-primary">Save</button>
-    </EditForm>
-</MudContainer>
+@if(isBusy)
+{
+    <LoadingComponent Message="Doing something over here..."></LoadingComponent>
+}
+else
+{
+    <MudContainer>
+        <EditForm Model="Note" OnValidSubmit="SaveChanges">
+            <DataAnnotationsValidator />
+            <MudSelect Label="Course" @bind-Value="Note.CourseRef">
+                @foreach (Course item in Courses)
+                {
+                    <MudSelectItem Value="@item.CourseRef">@item.Title</MudSelectItem>
+                }
+            </MudSelect>
+            <MudTextField For="@(() => Note.Title)" T="string"
+                          Variant="Variant.Filled"
+                          Lines="1"
+                          Label="Title"
+                          @bind-Value="Note.Title" />
+            <div class="col-form-label d-none">
+                <label>Date Posted</label>
+                <ValidationMessage For="@(() => Note.DateUpdated)" />
+                <InputDate class="form-control" @bind-Value="Note.DateUpdated" />
+            </div>
+            <MarkdownEditor Placeholder="Write the notes right here"
+                            LineNumbers="@false"
+                            MaxHeight="@markdownEditorHeight"
+                            @bind-Value="Note.Text" />
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Save Changes</MudButton>
+        </EditForm>
+    </MudContainer>
+}
 
 @code {
     public Note Note { get; set; } = new Note();
+    private Snackbar snackbar;
+    private bool isBusy;
 
     [Parameter]
     public int id { get; set; }
@@ -59,15 +69,28 @@
 
     private async Task SaveChanges()
     {
-        if (id != 0)
+        isBusy = true;
+        try
         {
-            Note.DateUpdated = DateTime.Now;
-            await notesRepository.UpdateNoteAsync(Note);
+            if (id != 0)
+            {
+                Note.DateUpdated = DateTime.Now;
+                await notesRepository.UpdateNoteAsync(Note);
+            }
+            else
+            {
+                await notesRepository.AddNoteAsync(Note);
+            }
+            NavigationManager.NavigateTo("/admin/notes");
         }
-        else
+        catch (Exception ex)
         {
-            await notesRepository.AddNoteAsync(Note);
+            //Snackbar notification of the error
+            snackbar = Snackbar.Add($"Failure. Error: {ex.Message}", Severity.Warning);
         }
-        NavigationManager.NavigateTo("/admin/notes");
+        finally
+        {
+            isBusy = false;
+        }   
     }
 }
