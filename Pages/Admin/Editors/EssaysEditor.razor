@@ -9,12 +9,21 @@
 <PageTitle>Admin | Notes Editor</PageTitle>
 
 <MudContainer>
-    <EditForm Model="Essay" OnValidSubmit="SaveChanges">
-        <DataAnnotationsValidator />
-        <MudSelect Label="Essay" @bind-Value="Essay.CourseRef">
+    <div class="col-form-label">
+        <label>Course</label>
+        <select @onchange="GetCourseTopics">
             @foreach (Course item in Courses)
             {
-                <MudSelectItem Value="@item.CourseRef">@item.Title</MudSelectItem>
+                <option value="@item.CourseRef">@item.Title</option>
+            }
+        </select>
+    </div>
+    <EditForm Model="Essay" OnValidSubmit="SaveChanges">
+        <DataAnnotationsValidator />
+        <MudSelect For="@(() => Essay.TopicRef)" Label="Topic" @bind-Value="Essay.TopicRef">
+            @foreach (Topic item in Topics)
+            {
+                <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
             }
         </MudSelect>
         <div class="col-form-label d-none">
@@ -42,8 +51,14 @@
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
+    private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
     private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
     private string markdownEditorHeight = "30";
+
+    protected async override Task OnInitializedAsync()
+    {
+        Courses = await repository.GetCourses();
+    }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -54,6 +69,12 @@
         }
         else
             return;
+    }
+
+    private async Task GetCourseTopics(ChangeEventArgs e)
+    {
+        Topics = await repository.GetTopics(e.Value.ToString());
+        StateHasChanged();
     }
 
     private async Task SaveChanges()

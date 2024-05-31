@@ -17,14 +17,14 @@ else
     <MudTable Items="allEssays" Hover="true">
         <HeaderContent>
             <MudTh>ID</MudTh>
-            <MudTh>Course Reference</MudTh>
+            <MudTh>Topic Reference</MudTh>
             <MudTh>Date Updated</MudTh>
             <MudTh>Question</MudTh>
             <MudTh>Actions</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd HideSmall="true" DataLabel="ID">@context.Id</MudTd>
-            <MudTd HideSmall="true" DataLabel="Course Ref">@context.CourseRef</MudTd>
+            <MudTd HideSmall="true" DataLabel="Course Ref">@context.TopicRef</MudTd>
             <MudTd DataLabel="DateTime">@context.DateUpdated.ToString("dddd MMMM yy, hh:mm")</MudTd>
             <MudTd HideSmall="true" DataLabel="Course Ref">@context.Question</MudTd>
             <MudTd DataLabel="Actions">
