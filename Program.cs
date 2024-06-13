@@ -7,8 +7,12 @@ using MedbaseBlazor;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Components.Authorization;
+using MedbaseBlazor.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var environment = args.Contains("--local") ? Environments.Development : Environments.Production;
+
 //Dependencies
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
@@ -21,7 +25,15 @@ builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
 builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthenticationStateProvider>();
 
 string apiString = "https://apimedbase.azurewebsites.net/";
-//string apiString = "http://localhost:5249/";
+
+if (environment == Environments.Development)
+{
+    apiString = "http://localhost:5249/";
+}
+else
+{
+    apiString = "https://apimedbase.azurewebsites.net/";
+}
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
@@ -42,9 +54,8 @@ builder.Services.AddAuthentication();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor().
-    AddMicrosoftIdentityConsentHandler();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
 
 var app = builder.Build();
 
@@ -58,15 +69,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-
-app.UseRouting();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
 
-app.MapControllers();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.UseAntiforgery();
+
+app.UseStatusCodePagesWithRedirects("/StatusCode/{0}");
 
 app.Run();

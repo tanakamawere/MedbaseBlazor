@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <None Include="Pages\Error.cshtml" />
-    <None Include="Pages\_Host.cshtml" />
+    <None Include="Pages\App.razor" />
   </ItemGroup>
 
   <ItemGroup>
