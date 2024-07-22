@@ -2,31 +2,49 @@
 @page "/admin/questions"
 @layout AdminLayout
 @inject IApiRepository repository
+@inject NavigationManager navManager
 @using MedbaseLibrary.Services
 
 <PageTitle>Questions</PageTitle>
 
+<MudGrid>
+    <MudItem sm="7">
+        <MudText Typo="Typo.h3">@QuestionsWithTopicDto.TopicName</MudText>
+    </MudItem>
+    <MudItem sm="5">
+        <MudTextField @bind-Value="@searchEntry" Label="Text"
+                      Variant="Variant.Outlined"
+                      AdornmentColor="Color.Secondary" AutoFocus="true"
+                      Placeholder="Search for keywords..." Lines="1"
+                      IconSize="Size.Large"
+                      Class="w-100 mx-lg-5"
+                      AdornmentIcon="@Icons.Material.Filled.Send"
+                      Adornment="Adornment.End"
+                      @ref="searchTextField"
+                      OnAdornmentClick="@(() => SearchQuestions(searchTextField.Text.ToString()))"
+                      Disabled=@isBusy
+                      Immediate="true"
+                      OnKeyUp="@OnKeyUpAsync" Clearable="true"
+                      Counter="1_000" MaxLength="1_000" />
+    </MudItem>
+</MudGrid>
 
-@if (!QuestionsWithTopicDto.Questions.Any())
+
+@if (isBusy.Equals(true))
 {
-    <div><em><strong>Loading...</strong></em></div>
+    <LoadingComponent Message="Looking that up for you..."/>
+}
+else if (QuestionsWithTopicDto.Questions.Count() == 0 && isBusy.Equals(false))
+{
+    <div class="align-content-center">
+        <MudAlert Severity="Severity.Info" Icon="@Icons.Material.Filled.Info">
+            No questions found for this topic.
+        </MudAlert>
+        <MudLink OnClick="ReloadPage" Typo="Typo.h6">Let's try that again</MudLink>
+    </div>
 }
 else
 {
-    <MudGrid>
-        <MudItem sm="8">
-            <MudText Typo="Typo.h3">@QuestionsWithTopicDto.TopicName</MudText>
-        </MudItem>
-        <MudItem sm="4">
-            <MudForm @ref="searchForm">
-                <MudTextField  @ref="searchTextField" 
-                     @bind-Value="searchEntry" 
-                        Placeholder="Search for keyword" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => SearchQuestions(searchTextField.Text.ToString()))" Class="ml-auto">Search</MudButton>
-            </MudForm>
-            
-        </MudItem>
-    </MudGrid>
     <MudTable Items="@QuestionsWithTopicDto.Questions" Dense="true" Hover="true" Bordered="true" Striped="@striped">
         
         <HeaderContent>
@@ -72,6 +90,7 @@ else
     private QuestionsWithTopicDto QuestionsWithTopicDto { get; set; } = new();
     private string? searchEntry {get;set;}
     private bool striped = false;
+    private bool isBusy = false;
     private MudForm searchForm;
     private MudTextField<string> searchTextField;
 
@@ -84,15 +103,14 @@ else
 
     protected async override Task OnParametersSetAsync() => await GetAllQuestions(topicId);
 
-    @* private async Task SearchForInput()
+    private async Task OnKeyUpAsync(KeyboardEventArgs e)
     {
-        if (searchEntry == null || searchEntry == 0)
-            await GetAllQuestions(topicId);
-        else
+        if (e.Key == "Enter" && !string.IsNullOrEmpty(searchEntry))
         {
-            questionsList = questionsList.Where(x => x.Id == searchEntry).ToList();
+            await SearchQuestions(searchEntry);
         }
-    } *@
+    }
+
     private async Task GetAllQuestions(int topic)
     {
         if (topic.Equals(0))
@@ -106,15 +124,29 @@ else
 
     private async Task SearchQuestions(string keyword)
     {
-        if(!string.IsNullOrEmpty(keyword))
+        isBusy = true;
+        try
         {
-            QuestionsWithTopicDto.Questions = await repository.GetQuestionsByKeyword(keyword);
-            QuestionsWithTopicDto.TopicName = $"Search Results for: {keyword}";
-            StateHasChanged();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                QuestionsWithTopicDto.Questions = await repository.GetQuestionsByKeyword(keyword);
+                QuestionsWithTopicDto.TopicName = $"Search Results for: {keyword}";
+                StateHasChanged();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return;
+            Console.WriteLine(ex.Message);
         }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+
+    //Method to reload same uri
+    private void ReloadPage()
+    {
+        navManager.NavigateTo(navManager.Uri, forceLoad: true);
     }
 }
