@@ -23,7 +23,7 @@ namespace MedbaseBlazor
                 .WithClientSecret(_settings?.ClientSecret)
                 .WithB2CAuthority(_settings?.Authority)
                 .WithLogging((level, message, containsPii) =>
-                { 
+                {
                     Console.WriteLine($"[{level}] {message}");
                 }, Microsoft.Identity.Client.LogLevel.Verbose, enablePiiLogging: true, enableDefaultPlatformLogging: true)
                 .Build();
