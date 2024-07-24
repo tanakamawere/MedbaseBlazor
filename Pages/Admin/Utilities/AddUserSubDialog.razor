@@ -7,7 +7,6 @@
     <DialogContent>
         <MudAutocomplete T="UserDto" Label="User Email Address"
                          @bind-Value="userDto"
-                         SearchFunc="OnUserBeingTyped"
                          ResetValueOnEmptyText="true"
                          ToStringFunc="@(u => u == null ? "Enter email" : u.Email)"
                          Placeholder="Enter email address"
