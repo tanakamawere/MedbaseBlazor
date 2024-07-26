@@ -1,20 +1,13 @@
 using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
-using Microsoft.Identity.Web;
-using MedbaseLibrary.MsalClient;
 using MedbaseBlazor;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Identity.Web.UI;
-using Microsoft.AspNetCore.Components.Authorization;
 using MedbaseBlazor.Pages;
 using MedbaseLibrary.Auth;
 using MedbaseLibrary.Essays;
 using MedbaseLibrary.Notes;
-using MedbaseComponents.Shared;
 using Auth0.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using MedbaseComponents.Pages;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 
