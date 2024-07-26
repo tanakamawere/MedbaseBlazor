@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.37.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.Identity.Web" Version="3.0.0" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.0" />

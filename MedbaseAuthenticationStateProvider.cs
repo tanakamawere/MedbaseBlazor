@@ -1,4 +1,4 @@
-﻿using MedbaseLibrary.MsalClient;
+﻿using MedbaseLibrary.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,19 +7,37 @@ namespace MedbaseBlazor;
 
 public class MedbaseAuthenticationStateProvider : AuthenticationStateProvider
 {
-    public MedbaseAuthenticationStateProvider()
+    private readonly IAuthMemory authMemory;
+    public MedbaseAuthenticationStateProvider(IAuthMemory authMemory)
     {
-            
+        this.authMemory = authMemory;
     }
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        // Your custom logic here(e.g., validate password, retrieve claims)
-        var token = GlobalValues.AccessToken;
-        if (string.IsNullOrEmpty(token))
+        string token = "";
+        AuthenticationState result = new(new ClaimsPrincipal(new ClaimsIdentity()));
+        try
         {
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            //token = authMemory.GetToken().Result;
+            if (string.IsNullOrEmpty(token))
+            {
+                return result;
+            }
+            else
+            {
+                result = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(TokenToClaims(token), "JwtBearer")));
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
 
+        return result;
+    }
+
+    private IEnumerable<Claim> TokenToClaims(string token)
+    {
         var tokenHandler = new JwtSecurityTokenHandler();
         JwtSecurityToken jwtSecurityToken;
 
@@ -27,7 +45,6 @@ public class MedbaseAuthenticationStateProvider : AuthenticationStateProvider
 
         var claims = jwtSecurityToken.Claims;
 
-        var result = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "JwtBearer")));
-        return result;
+        return claims;
     }
 }

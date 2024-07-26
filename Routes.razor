@@ -2,6 +2,7 @@
 @using MedbaseComponents.Pages
 @using MedbaseComponents.Controls
 <CascadingAuthenticationState>
+    <MedbaseBlazor.Pages.InitialAuthenticationStateProvider/>
     <Router AppAssembly="@typeof(Routes).Assembly"
         AdditionalAssemblies="new[]{typeof(MedbaseComponents.Pages.User.Questions).Assembly, 
     typeof(MedbaseComponents.Pages.User.Topics).Assembly, 

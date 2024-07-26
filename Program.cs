@@ -8,6 +8,12 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Components.Authorization;
 using MedbaseBlazor.Pages;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using MedbaseLibrary.Auth;
+using MedbaseLibrary.Essays;
+using MedbaseLibrary.Notes;
+using MedbaseComponents.Pages;
+using MedbaseComponents.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,15 +22,8 @@ var environment = args.Contains("--local") ? Environments.Development : Environm
 //Dependencies
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-builder.Services.AddScoped<IApiRepository, ApiRepository>();
-builder.Services.AddScoped<INotesRepository, NotesRepository>();
-builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
-builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
-builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
-builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
-builder.Services.AddScoped<AuthenticationStateProvider, MedbaseAuthenticationStateProvider>();
 
-string apiString = "https://apimedbase.azurewebsites.net/";
+string apiString = "http://localhost:5249/";
 
 if (environment == Environments.Development)
 {
@@ -32,8 +31,19 @@ if (environment == Environments.Development)
 }
 else
 {
-    apiString = "https://apimedbase.azurewebsites.net/";
+    apiString = "http://localhost:5249/";
 }
+
+builder.Services.AddScoped<IApiRepository, ApiRepository>();
+builder.Services.AddScoped<INotesRepository, NotesRepository>();
+builder.Services.AddSingleton<IAuthService, AuthService>();
+builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
+builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
+builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
+builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
+builder.Services.AddScoped<CommonAuthStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CommonAuthStateProvider>());
+builder.Services.AddScoped<IAuthMemory, AuthMemory>();
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
@@ -47,14 +57,19 @@ builder.Services.AddHttpClient<IEssaysRepository, EssaysRepository>("ApiData", c
 {
     client.BaseAddress = new Uri(apiString);
 });
+builder.Services.AddHttpClient<IAuthService, AuthService>("ApiData", client =>
+{
+    client.BaseAddress = new Uri(apiString);
+});
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "Settings");
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
-builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
 
 
 var app = builder.Build();
