@@ -17,12 +17,18 @@ public class AuthMemory : IAuthMemory
         return result.Value;
     }
 
-    public async void RemoveToken(string userId)
+    public async Task<bool> IsSuccess()
+    {
+        var result = await _localStorage.GetAsync<string>(Helpers.AuthMemoryName);
+        return result.Success;
+    }
+
+    public async Task RemoveToken(string userId)
     {
         await _localStorage.DeleteAsync(Helpers.AuthMemoryName);
     }
 
-    public async void StoreToken(string userId, string jwt)
+    public async Task StoreToken(string userId, string jwt)
     {
         await _localStorage.SetAsync(Helpers.AuthMemoryName, jwt);
     }

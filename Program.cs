@@ -8,12 +8,15 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Components.Authorization;
 using MedbaseBlazor.Pages;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using MedbaseLibrary.Auth;
 using MedbaseLibrary.Essays;
 using MedbaseLibrary.Notes;
-using MedbaseComponents.Pages;
 using MedbaseComponents.Shared;
+using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using MedbaseComponents.Pages;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,17 +36,17 @@ else
 {
     apiString = "http://localhost:5249/";
 }
-
+builder.Services.AddAuth0WebAppAuthentication(options =>
+{
+    options.Domain = builder.Configuration["Auth0:Domain"];
+    options.ClientId = builder.Configuration["Auth0:ClientId"];
+});
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddScoped<INotesRepository, NotesRepository>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
-builder.Services.AddSingleton<IPCAWrapper, PCAWrapper>();
 builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
 builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
-builder.Services.AddScoped<CommonAuthStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CommonAuthStateProvider>());
-builder.Services.AddScoped<IAuthMemory, AuthMemory>();
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
 {
@@ -61,16 +64,11 @@ builder.Services.AddHttpClient<IAuthService, AuthService>("ApiData", client =>
 {
     client.BaseAddress = new Uri(apiString);
 });
-builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "Settings");
-builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
-
-
 
 var app = builder.Build();
 
@@ -84,12 +82,34 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.UseAntiforgery();
 
+// new code
+app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
+{
+    var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+            .WithRedirectUri(returnUrl)
+            .Build();
+
+    await httpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+});
+
+app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
+{
+    var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
+            .WithRedirectUri("/")
+            .Build();
+
+    await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+    await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+});
+// new code
+
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.UseStatusCodePagesWithRedirects("/StatusCode/{0}");
 
 app.Run();
