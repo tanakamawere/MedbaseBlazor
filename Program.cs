@@ -4,12 +4,12 @@ using MudBlazor.Services;
 using MedbaseBlazor;
 using System.IdentityModel.Tokens.Jwt;
 using MedbaseBlazor.Pages;
-using MedbaseLibrary.Auth;
 using MedbaseLibrary.Essays;
 using MedbaseLibrary.Notes;
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using MedbaseLibrary.Store;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +36,6 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
 });
 builder.Services.AddScoped<IApiRepository, ApiRepository>();
 builder.Services.AddScoped<INotesRepository, NotesRepository>();
-builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddSingleton<IPlatformInfoService, PlatformInfoService>();
 builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
@@ -53,7 +52,7 @@ builder.Services.AddHttpClient<IEssaysRepository, EssaysRepository>("ApiData", c
 {
     client.BaseAddress = new Uri(apiString);
 });
-builder.Services.AddHttpClient<IAuthService, AuthService>("ApiData", client =>
+builder.Services.AddHttpClient<IStore, StoreRepository>("ApiData", client =>
 {
     client.BaseAddress = new Uri(apiString);
 });

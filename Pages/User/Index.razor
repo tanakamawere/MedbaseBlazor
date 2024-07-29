@@ -114,7 +114,6 @@
     private IEnumerable<Article> Articles { get; set; } = Enumerable.Empty<Article>();
     [Parameter]
     public string userId { get; set; } = "";
-    private UserDetails user;
     private AuthenticationState authenticationState;
 
     protected override async Task OnInitializedAsync()
@@ -127,7 +126,7 @@
     {
         if (!string.IsNullOrWhiteSpace(userId))
         {
-            OpenWelcomeDialog(user);
+            //OpenWelcomeDialog(user);
         }
     }
 
@@ -147,18 +146,18 @@
         }   
     }
 
-    private async void OpenWelcomeDialog(UserDetails user)
-    {
-        var parameters = new DialogParameters<WelcomeToMedbaseDialog>();
-        parameters.Add(x => x.UserDetails, user);
-        var options = new DialogOptions()
-            {
-                CloseButton = true,
-                MaxWidth = MaxWidth.ExtraExtraLarge,
-                Position = DialogPosition.Center,
-            };
-        DialogService.Show<WelcomeToMedbaseDialog>(null, parameters, options);
-    }
+    // private async void OpenWelcomeDialog(UserDetails user)
+    // {
+    //     var parameters = new DialogParameters<WelcomeToMedbaseDialog>();
+    //     parameters.Add(x => x.UserDetails, user);
+    //     var options = new DialogOptions()
+    //         {
+    //             CloseButton = true,
+    //             MaxWidth = MaxWidth.ExtraExtraLarge,
+    //             Position = DialogPosition.Center,
+    //         };
+    //     DialogService.Show<WelcomeToMedbaseDialog>(null, parameters, options);
+    // }
 
     private void GoToArticle(int article)
     {
