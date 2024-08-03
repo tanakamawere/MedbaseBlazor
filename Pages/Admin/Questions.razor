@@ -36,12 +36,7 @@
 }
 else if (QuestionsWithTopicDto.Questions.Count() == 0 && isBusy.Equals(false))
 {
-    <div class="align-content-center">
-        <MudAlert Severity="Severity.Info" Icon="@Icons.Material.Filled.Info">
-            No questions found for this topic.
-        </MudAlert>
-        <MudLink OnClick="ReloadPage" Typo="Typo.h6">Let's try that again</MudLink>
-    </div>
+    <MedbaseBlazor.Pages.Admin.Utilities.QuestionsNotFound ReloadPage="@ReloadPage" />
 }
 else
 {

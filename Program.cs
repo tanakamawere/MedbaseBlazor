@@ -10,6 +10,7 @@ using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using MedbaseLibrary.Store;
+using MedbaseLibrary.Questions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ if (environment == Environments.Development)
 else
 {
     apiString = "http://localhost:5249/";
+    //apiString = "https://apimedbase.azurewebsites.net/";
 }
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
@@ -53,6 +55,10 @@ builder.Services.AddHttpClient<IEssaysRepository, EssaysRepository>("ApiData", c
     client.BaseAddress = new Uri(apiString);
 });
 builder.Services.AddHttpClient<IStore, StoreRepository>("ApiData", client =>
+{
+    client.BaseAddress = new Uri(apiString);
+}); 
+builder.Services.AddHttpClient<IQuestions, QuestionRepository>("ApiData", client =>
 {
     client.BaseAddress = new Uri(apiString);
 });

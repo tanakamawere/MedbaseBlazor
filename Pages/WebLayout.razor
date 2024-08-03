@@ -23,6 +23,32 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu Rounded="true" Margin="Margin.Dense" Color="Color.Primary" Class="pa-2">
+
+
+            <MudPaper Class="pb-2">
+                @if (isBusy)
+                {
+                    <MedbaseComponents.Controls.LoadingComponent Message="Logging in..." />
+                }
+                else
+                {
+                    <CascadingAuthenticationState>
+                        ﻿<AuthorizeView>
+                            <Authorized>
+                                <MudNavLink Href="/profile">Hello @UserName</MudNavLink>
+                                <MudNavLink Href="Account/Logout">Log out</MudNavLink>
+                            </Authorized>
+                            <NotAuthorized>
+                                <MudNavLink Href="Account/Login">Log in</MudNavLink>
+                            </NotAuthorized>
+                            <Authorizing>
+                                <MudSkeleton />
+                            </Authorizing>
+                        </AuthorizeView>
+                    </CascadingAuthenticationState>
+                }
+            </MudPaper>
+
             <MudNavLink Href="/home" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
             <MudNavLink Href="/chat" Icon="@Icons.Material.Filled.Computer">Medbase AI</MudNavLink>
             <MudNavLink Href="/store" Icon="@Icons.Material.Filled.Shop">Store</MudNavLink>
@@ -39,31 +65,6 @@
                 @(_isDarkMode == true ? "Dark Mode On" : "Dark Mode Off")
             </MudNavLink>
 
-            <MudDivider />
-
-            <MudPaper>
-                @if (isBusy)
-                {
-                    <MedbaseComponents.Controls.LoadingComponent Message="Logging in..." />
-                }
-                else
-                {
-                    <CascadingAuthenticationState>
-                        ﻿<AuthorizeView>
-                            <Authorized>
-                                <MudNavLink Href="Account/Logout">Log out</MudNavLink>
-                                <MudNavLink Href="/profile">Hello @UserName</MudNavLink>
-                            </Authorized>
-                            <NotAuthorized>
-                                <MudNavLink Href="Account/Login">Log in</MudNavLink>
-                            </NotAuthorized>
-                            <Authorizing>
-                                <MudSkeleton />
-                            </Authorizing>
-                        </AuthorizeView>
-                    </CascadingAuthenticationState>
-                }
-            </MudPaper>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent>

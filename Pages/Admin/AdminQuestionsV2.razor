@@ -1,0 +1,151 @@
+﻿@page "/admin/questionsv2/{topicId:int}"
+@page "/admin/questionsv2"
+@layout AdminLayout
+
+@using MedbaseLibrary.Questions
+@using MedbaseLibrary.Questions.Models
+@using MedbaseLibrary.Services
+
+@inject IQuestions questionRepository
+@inject NavigationManager navManager
+
+
+<PageTitle>Questions V2</PageTitle>
+
+<MudGrid>
+    <MudItem sm="7">
+        <MudText Typo="Typo.h3">@questionsWithTopicDtoV2.TopicName</MudText>
+    </MudItem>
+    <MudItem sm="5">
+        <MudTextField @bind-Value="@searchEntry" Label="Text"
+                      Variant="Variant.Outlined"
+                      AdornmentColor="Color.Secondary" AutoFocus="true"
+                      Placeholder="Search for keywords..." Lines="1"
+                      IconSize="Size.Large"
+                      Class="w-100 mx-lg-5"
+                      AdornmentIcon="@Icons.Material.Filled.Send"
+                      Adornment="Adornment.End"
+                      @ref="searchTextField"
+                      OnAdornmentClick="@(() => SearchQuestions(searchTextField.Text.ToString()))"
+                      Disabled=@isBusy
+                      Immediate="true"
+                      OnKeyUp="@OnKeyUpAsync" Clearable="true"
+                      Counter="1_000" MaxLength="1_000" />
+    </MudItem>
+</MudGrid>
+
+@if (isBusy.Equals(true))
+{
+    <LoadingComponent Message="Looking that up for you..." />
+}
+else if (questionsWithTopicDtoV2.QuestionSets.Count() == 0 && isBusy.Equals(false))
+{
+    <MedbaseBlazor.Pages.Admin.Utilities.QuestionsNotFound ReloadPage="@ReloadPage"/>
+}
+else
+{
+    <MudTable Items="@questionsWithTopicDtoV2.QuestionSets"
+                Dense="true"
+                Bordered="true"
+            Hover="true"
+            Striped="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Type</MudTh>
+            <MudTh>Question Stem</MudTh>
+            <MudTh>Topic Reference</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+
+            <MudTd DataLabel="ID">@context.Id</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildB">@context.Type</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildC">@context.QuestionStem</MudTd>
+            <MudTd HideSmall="true" DataLabel="ChildD">@context.TopicRef</MudTd>
+            <MudTd DataLabel="Actions">
+                <NavLink class="btn btn-primary btn-sm" href="@GetQuestionDetailsUrl(context.Id)">
+                    Details
+                </NavLink>
+                <NavLink class="btn btn-info btn-sm" href="@GetQuestionEditUrl(context.Id)">
+                    Edit
+                </NavLink>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+<MudFab StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Href="/admin/questionv2/add" style="margin-bottom:75px;" Label="Add Question" class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center" />
+
+
+@code {
+
+    [Parameter]
+    public int topicId { get; set; }
+    private QuestionsWithTopicDtoV2 questionsWithTopicDtoV2 { get; set; } = new();
+
+    private bool isBusy = false;
+
+    private MudForm searchForm;
+    private MudTextField<string> searchTextField;
+    private string? searchEntry { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetAllQuestions(topicId);
+    }
+
+    private async Task GetAllQuestions(int topic)
+    {
+        isBusy = true;
+        if (topic.Equals(0))
+        {
+            questionsWithTopicDtoV2.QuestionSets = await questionRepository.GetAllQuestionSetsAsync();
+            questionsWithTopicDtoV2.TopicName = "All Question Sets";
+        }
+        else
+        {
+            questionsWithTopicDtoV2 = await questionRepository.GetQuestionsByTopicAsync(topic);
+        }
+        isBusy = false;
+    }
+
+    private async Task OnKeyUpAsync(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrEmpty(searchEntry))
+        {
+            await SearchQuestions(searchEntry);
+        }
+    }
+    private async Task SearchQuestions(string keyword)
+    {
+        isBusy = true;
+        try
+        {
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                questionsWithTopicDtoV2 = await questionRepository.GetSearchQuestionsAsync(keyword);
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+
+    //Method to reload same uri
+    private void ReloadPage()
+    {
+        navManager.NavigateTo(navManager.Uri, forceLoad: true);
+    }
+
+    public string GetQuestionDetailsUrl(int id) => $"/admin/questionsv2/details/{id}";
+    public string GetQuestionEditUrl(int id) => $"/admin/questionsv2/edit/{id}";
+
+}

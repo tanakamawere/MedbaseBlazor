@@ -1,0 +1,281 @@
+﻿@page "/admin/questionsv2/edit/{id:int}"
+@page "/admin/questionsv2/editfromtopic/{topicId:int}"
+@page "/admin/questionv2/add"
+
+@using MedbaseLibrary.Questions
+@using MedbaseLibrary.Questions.Models
+@using MedbaseBlazor.Pages.Admin.Utilities
+@using Markdig
+
+@layout AdminLayout
+@inject IQuestions questionRepository
+@inject ISnackbar Snackbar
+@inject NavigationManager navManager
+
+<EditForm Model="questionModel" OnValidSubmit="SaveChanges">
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        <div class="col-6">
+            <CourseTopicSelector TopicChanged="OnTopicChanged" /><!--Drop down for question type-->
+            <MudSelect For="@(() => questionModel.Type)"
+                       Label="Question Type"
+                       T="QuestionType"
+                       ValueChanged="OnQuestionTypeChanged">
+                @foreach (QuestionType item in questionTypes)
+                {
+                    <MudSelectItem Value="@item">@item</MudSelectItem>
+                }
+            </MudSelect>
+        </div>
+        <div class="col-6">
+            <!--Title-->
+            <MudTextField T="string" 
+                Variant="Variant.Filled" 
+                Lines="3" Label="Title" 
+                @bind-Value="questionModel.Title"
+                For="@(() => questionModel.Title)" />
+        </div>
+    </div>
+  
+    <!--Question Stem-->
+    <MudTextField T="string" 
+        Class="@(hideQuestionStem.Equals(true) ? "d-none" : "d-block")"
+        Variant="Variant.Filled" 
+        Lines="2" Label="Question Stem (For table questions)" 
+        @bind-Value="questionModel.QuestionStem"
+        For="@(() => questionModel.QuestionStem)" />
+
+
+    <MudTextField T="string"
+        Variant="Variant.Filled"
+        Lines="2"
+        Label="Actual question"
+        @bind-Value="questionModel.QuestionText"
+        For="@(() => questionModel.QuestionText)" />
+
+    
+
+    <!--This is the part for options-->
+    @for (int i = 0; i < questionModel.Options.Count; i++)
+    {
+        var index = i;
+
+        <!--Invisible option setter-->
+        <MudTextField For="@(() => questionModel.Options[index].Label)"
+                      T="string"
+                      Class="d-none"
+                      Text="@(GetLabel(index))"
+                      @bind-Value="questionModel.Options[index].Label" />
+        <div class="form-group">
+            <MudText>
+                Option @(GetLabel(index)):
+            </MudText>
+            <MudTextField For="@(() => questionModel.Options[index].OptionText)"
+                          T="string"
+                          Variant="Variant.Filled"
+                          Lines="2" Label="@($"Option {GetLabel(index)}")"
+                          @bind-Value="questionModel.Options[index].OptionText" />
+            <MudGrid>
+                <MudItem xs="12" sm="2">
+                    <MudCheckBox @bind-Value="questionModel.Options[index].IsCorrect"
+                                 Label="IsCorrect"
+                                 T="bool" />
+                </MudItem>
+                <MudItem xs="12" sm="10" Class="@(isSingleBest.Equals(true) && questionModel.Options[index].IsCorrect.Equals(false) ? "d-none" : "d-block")">
+                    <MarkdownEditor Placeholder="@($"Explanation {GetLabel(index)}")"
+                                    LineNumbers="@false"
+                                    MaxHeight="2"
+                                    @bind-Value="questionModel.Options[index].Explanation" />
+                </MudItem>
+            </MudGrid>
+        </div>
+    }
+    <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
+         style="margin-bottom:75px;">
+        <MudFab StartIcon="@Icons.Material.Filled.Add"
+                Color="Color.Primary"
+                OnClick="AddOption"
+                ButtonType="ButtonType.Button"
+                Label="Add" />
+
+        <MudFab StartIcon="@Icons.Material.Filled.Check"
+                Color="Color.Primary"
+                ButtonType="ButtonType.Submit"
+                Label="Done" />
+    </div>
+     
+</EditForm>
+
+    
+
+@code {
+    [Parameter]
+    public int id { get; set; } = 0;
+    [Parameter]
+    public int topicId { get; set; } = 0;
+    private Snackbar snackbar;
+    private bool hideQuestionStem = true;
+    private bool isSingleBest = true;
+    private QuestionSetDto questionModel;
+
+    //Enums for question type drop down
+    private List<QuestionType> questionTypes = Enum.GetValues(typeof(QuestionType)).Cast<QuestionType>().ToList();
+    //Reference to question type dropdown to determine fields to show
+    QuestionType questionType = QuestionType.SingleBest;
+    //Question set for when updating the question
+    private QuestionSet questionSet;
+
+    protected override Task OnInitializedAsync()
+    {
+        questionModel = new QuestionSetDto();
+        return base.OnInitializedAsync();
+    }
+    //If it is an existing question, get it from the database for editing
+    protected override async Task OnParametersSetAsync()
+    {
+        if (id != 0)
+        {
+            questionSet = await questionRepository.GetQuestionSetAsync(id);
+            questionModel = new QuestionSetDto
+            {
+                Title = questionSet.Title,
+                QuestionText = questionSet.Questions[0].QuestionText,
+                QuestionStem = questionSet.QuestionStem,
+                TopicRef = (int)questionSet.TopicRef,
+                Type = questionSet.Type,
+                Options = questionSet.QuestionOptions.Select(o => new OptionDto
+                {
+                    OptionText = o.OptionText,
+                    Label = o.Label,
+                    IsCorrect = o.QuestionOptionRelationships[0].IsCorrect,
+                    Explanation = o.QuestionOptionRelationships[0].Explanation
+                }).ToList()
+            };
+        }
+        else if (topicId != 0)
+        {
+            questionModel.TopicRef = topicId;
+        }
+    }
+
+    //Method to add option
+    private void AddOption()
+    {
+        questionModel.Options.Add(new OptionDto());
+    }
+    private string GetLabel(int index)
+    {
+        return ((char)('A' + index)).ToString();
+    }
+
+    //Callback to get topic ref for question set
+    private void OnTopicChanged(int topicRef)
+    {
+        questionModel.TopicRef = topicRef;
+    }
+    //Check for question type and set the number of options
+    private void OnQuestionTypeChanged(QuestionType questionType)
+    {
+        this.questionType = questionType;
+        switch (questionType)
+        {
+            case QuestionType.TrueFalse:
+                hideQuestionStem = true;
+                isSingleBest = true;
+                break;
+            case QuestionType.SingleBest:
+                hideQuestionStem = true;
+                isSingleBest = true;
+                break;
+            case QuestionType.TableMatching:
+                hideQuestionStem = false;
+                isSingleBest = false;
+                break;
+            default:
+                // Handle other cases or set a default value if necessary
+                break;
+        }
+    }
+
+    //Method to save the question
+    private async Task SaveChanges()
+    {
+        try
+        {
+            //Getting the options
+            //var options = questionModel.Options.Select((o, index) => (o.OptionText, GetLabel(index), o.IsCorrect, o.Explanation)).ToList();
+
+            var options = questionModel.Options.Select((o, index) => new OptionDto
+                {
+                    OptionText = o.OptionText,
+                    Label = GetLabel(index),
+                    IsCorrect = o.IsCorrect,
+                    Explanation = o.Explanation
+                }).ToList();
+
+            questionModel.Options = options;
+
+            //If single best question, make sure only one answer is marked as true
+            if (questionType == QuestionType.SingleBest)
+            {
+                if (questionModel.Options.Count(o => o.IsCorrect) != 1 || questionModel.Options.Count(o => o.IsCorrect) == 0)
+                {
+                    snackbar = Snackbar.Add("Single best questions must have exactly one correct answer.", Severity.Warning);
+                    return;
+                }
+            }
+
+            //If it is a new question
+            if (id == 0)
+            {
+                var success = await questionRepository.PostQuestionSetAsync(questionModel);
+                // PostQuestion returns a bool indicating success
+                if (success)
+                {
+                    snackbar = Snackbar.Add("Question posted successfully!", Severity.Success);
+                }
+                else
+                {
+                    snackbar = Snackbar.Add("Failed to post question. Please try again.", Severity.Warning);
+                }
+
+            }//If it is an existing question
+            else
+            {
+                QuestionSetUpdateDto questionSetUpdateDto = new QuestionSetUpdateDto
+                {
+                    Id = id,
+                    Title = questionModel.Title,
+                    QuestionText = questionModel.QuestionText,
+                    TopicRef = questionModel.TopicRef,
+                    QuestionStem = questionModel.QuestionStem,
+                    Type = questionType,
+                    Options = questionModel.Options.Select(o => new OptionUpdateDto
+                    {
+                        Id = questionSet.QuestionOptions.First(qo => qo.Label == o.Label).Id,
+                        OptionText = o.OptionText,
+                        Label = o.Label,
+                        IsCorrect = o.IsCorrect,
+                        Explanation = o.Explanation
+                    }).ToList()
+                };
+
+                var success = await questionRepository.UpdateQuestionSetAsync(questionSetUpdateDto); // Assuming UpdateQuestion returns a bool indicating success
+                if (success)
+                {
+                    snackbar = Snackbar.Add("Question updated successfully!", Severity.Success);
+                    navManager.NavigateTo("/admin/questionsv2");
+                }
+                else
+                {
+                    snackbar = Snackbar.Add("Failed to update question. Please try again.", Severity.Warning);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            snackbar = Snackbar.Add($"An error occurred: {ex.Message}", Severity.Error);
+        }
+    }
+}

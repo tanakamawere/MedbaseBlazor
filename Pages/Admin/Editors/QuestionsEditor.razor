@@ -17,32 +17,11 @@
 else
 {
     <div class="container mt-4">
-        @* <div class="row">
-            <div class="col-4">
-            </div>
-            <div class="col-8">
-                
-            </div>
-        </div> *@
-        <div class="col-form-label">
-            <label>Course</label>
-            <select @onchange="GetCourseTopics">
-                @foreach (Course item in Courses)
-                {
-                    <option value="@item.CourseRef">@item.Title</option>
-                }
-            </select>
-        </div>
         <EditForm Model="Question" OnValidSubmit="SaveChanges">
             <DataAnnotationsValidator />
             <div class="row">
                 <div class="col-6">
-                    <MudSelect For="@(() => Question.TopicRef)" Label="Topic" @bind-Value="Question.TopicRef">
-                        @foreach (Topic item in Topics)
-                        {
-                            <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
-                        }
-                    </MudSelect>
+                    <CourseTopicSelector TopicChanged="OnTopicChanged" />
                 </div>
                 <div class="col-6">
                     <MudTextField For="@(() => Question.QuestionMain)" Variant="Variant.Filled" Lines="3" Label="Question Main" @bind-Value="Question.QuestionMain" />
@@ -145,17 +124,7 @@ else
     public int topicId { get; set; } = 0;
     bool myBool;
     private string markdownEditorHeight = "30";
-
     private Snackbar snackbar;
-
-    private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
-    private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
-
-
-    protected async override Task OnInitializedAsync()
-    {
-        Courses = await repository.GetCourses();
-    }
 
     protected async override Task OnParametersSetAsync()
     {
@@ -173,10 +142,10 @@ else
         }
     }
 
-    private async Task GetCourseTopics(ChangeEventArgs e)
+    //Returns an int for the topic reference
+    private void OnTopicChanged(int topicRef)
     {
-        Topics = await repository.GetTopics(e.Value.ToString());
-        StateHasChanged();
+        Question.TopicRef = topicRef;
     }
 
     private async Task SaveChanges()

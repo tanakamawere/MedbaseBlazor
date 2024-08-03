@@ -1,0 +1,43 @@
+﻿@inject IApiRepository repository
+<MudSelect T="string" Label="Course" ValueChanged="GetCourseTopics">
+    @foreach (Course item in Courses)
+    {
+        <MudSelectItem Value="@item.CourseRef">@item.Title</MudSelectItem>
+    }
+</MudSelect>
+
+<MudSelect ValueChanged="GetTopic" 
+    Label="Topic"
+    T="int">
+    @foreach (Topic item in Topics)
+    {
+        <MudSelectItem Value="@item.TopicRef">@item.Name</MudSelectItem>
+    }
+</MudSelect>
+@code {
+    // [Parameter]
+    // public EventCallback<IEnumerable<Topic>> TopicsChanged { get; set; }
+    [Parameter]
+    public EventCallback<int> TopicChanged { get; set; }
+    int selectedTopic;
+
+
+    private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
+    private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Courses = await repository.GetCourses();
+    }
+
+    private async Task GetCourseTopics(string e)
+    {
+        Topics = await repository.GetTopics(e.ToString());
+        StateHasChanged();
+    }
+
+    private async Task GetTopic(int e)
+    {
+        await TopicChanged.InvokeAsync(e);
+    }
+}
