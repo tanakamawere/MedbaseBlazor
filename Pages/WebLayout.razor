@@ -64,6 +64,11 @@
             <MudNavLink OnClick="ThemeToggle" Icon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)">
                 @(_isDarkMode == true ? "Dark Mode On" : "Dark Mode Off")
             </MudNavLink>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <MudNavLink Href="/admin" Icon="@Icons.Material.Filled.Security">Admin Pages</MudNavLink>
+                </Authorized>
+            </AuthorizeView>
 
         </MudNavMenu>
     </MudDrawer>

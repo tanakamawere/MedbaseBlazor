@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using MedbaseLibrary.Store;
 using MedbaseLibrary.Questions;
+using MedbaseLibrary.CoursesAndTopics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,8 +58,12 @@ builder.Services.AddHttpClient<IEssaysRepository, EssaysRepository>("ApiData", c
 builder.Services.AddHttpClient<IStore, StoreRepository>("ApiData", client =>
 {
     client.BaseAddress = new Uri(apiString);
-}); 
+});
 builder.Services.AddHttpClient<IQuestions, QuestionRepository>("ApiData", client =>
+{
+    client.BaseAddress = new Uri(apiString);
+});
+builder.Services.AddHttpClient<ICoursesAndTopics, CoursesAndTopicsRepository>("ApiData", client =>
 {
     client.BaseAddress = new Uri(apiString);
 });
