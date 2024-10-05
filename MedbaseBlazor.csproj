@@ -13,11 +13,6 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <None Include="Pages\Error.cshtml" />
-    <None Include="Pages\App.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.4.1" />
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
@@ -29,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Medbase.ServiceDefaults\Medbase.ServiceDefaults.csproj" />
     <ProjectReference Include="..\MedbaseComponents\MedbaseComponents.csproj" />
     <ProjectReference Include="..\MedbaseLibrary\MedbaseLibrary.csproj" />
   </ItemGroup>

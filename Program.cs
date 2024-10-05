@@ -3,9 +3,9 @@ using MudBlazor;
 using MudBlazor.Services;
 using MedbaseBlazor;
 using System.IdentityModel.Tokens.Jwt;
-using MedbaseBlazor.Pages;
 using MedbaseLibrary.Essays;
 using MedbaseLibrary.Notes;
+using MedbaseBlazor.Pages;
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -16,6 +16,9 @@ using MedbaseLibrary.CoursesAndTopics;
 var builder = WebApplication.CreateBuilder(args);
 
 var environment = args.Contains("--local") ? Environments.Development : Environments.Production;
+
+//Write to console which environment is being used
+Console.WriteLine($"Medbase API Environment: {environment}");
 
 //Dependencies
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -82,16 +85,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.UseAntiforgery();
-
-// new code
+// Auth Code
 app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
 {
     var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
@@ -110,9 +106,20 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
-// new code
 
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseRouting();
+
+app.UseAntiforgery();
+
+app.UseDeveloperExceptionPage();
 app.UseStatusCodePagesWithRedirects("/StatusCode/{0}");
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();

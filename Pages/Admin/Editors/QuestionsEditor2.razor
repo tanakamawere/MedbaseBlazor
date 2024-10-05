@@ -8,6 +8,7 @@
 @using Markdig
 
 @layout AdminLayout
+@inject IJSRuntime JSRuntime
 @inject IQuestions questionRepository
 @inject ISnackbar Snackbar
 @inject NavigationManager navManager
@@ -93,6 +94,20 @@
     }
     <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
          style="margin-bottom:75px;">
+
+        <MudFab StartIcon="@Icons.Material.Filled.CopyAll"
+                Color="Color.Primary"
+                OnClick="CopyQuestion"
+                ButtonType="ButtonType.Button"
+                Label="Copy Question" />
+
+        <MudFab StartIcon="@Icons.Material.Filled.Remove"
+                Color="Color.Primary"
+                Disabled="!hasOptions"
+                OnClick="RemoveOption"
+                ButtonType="ButtonType.Button"
+                Label="Remove" />
+
         <MudFab StartIcon="@Icons.Material.Filled.Add"
                 Color="Color.Primary"
                 OnClick="AddOption"
@@ -114,10 +129,12 @@
     public int id { get; set; } = 0;
     [Parameter]
     public int topicId { get; set; } = 0;
+    private IJSObjectReference _module;
     private Snackbar snackbar;
     private bool hideQuestionStem = true;
     private bool isSingleBest = true;
     private QuestionSetDto questionModel;
+    private bool hasOptions = false;
 
     //Enums for question type drop down
     private List<QuestionType> questionTypes = Enum.GetValues(typeof(QuestionType)).Cast<QuestionType>().ToList();
@@ -131,6 +148,7 @@
         questionModel = new QuestionSetDto();
         return base.OnInitializedAsync();
     }
+
     //If it is an existing question, get it from the database for editing
     protected override async Task OnParametersSetAsync()
     {
@@ -158,12 +176,67 @@
             questionModel.TopicRef = topicId;
         }
     }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
+            await _module.InvokeVoidAsync("addKeyDownEvent", DotNetObjectReference.Create(this));
+        }
+    }
+
+    // This method will be called when Ctrl + S is pressed
+    [JSInvokable]
+    public void OnCtrlSPressed()
+    {
+        // Add your logic here
+        Console.WriteLine("Ctrl + S was pressed!");
+    }
+    // Dispose to avoid memory leaks
+    public async ValueTask DisposeAsync()
+    {
+        if (_module != null)
+        {
+            await _module.DisposeAsync();
+        }
+    }
 
     //Method to add option
     private void AddOption()
     {
+        if (hasOptions.Equals(false))
+        {
+            hasOptions = true;
+        }
         questionModel.Options.Add(new OptionDto());
     }
+
+    private void RemoveOption()
+    {
+        //Remove the last option
+        questionModel.Options.RemoveAt(questionModel.Options.Count - 1);
+        if (questionModel.Options.Count == 0)
+        {
+            hasOptions = false;
+        }
+    }
+
+    //Method to copy question to the clipboard
+    private async Task CopyQuestion()
+    {
+        var question = questionModel.QuestionText;
+        foreach (var option in questionModel.Options)
+        {
+            question += $"\n{option.Label}. {option.OptionText}";
+        }
+
+        //Copy to clipboard
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", question.ToString());
+
+        //Snackbar notifying user
+        snackbar = Snackbar.Add("Copied!", Severity.Info);
+    }
+
     private string GetLabel(int index)
     {
         return ((char)('A' + index)).ToString();
@@ -234,6 +307,7 @@
                 if (success)
                 {
                     snackbar = Snackbar.Add("Question posted successfully!", Severity.Success);
+                    questionModel = new();
                 }
                 else
                 {
