@@ -9,118 +9,122 @@
 
 @layout AdminLayout
 @inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
 @inject IQuestions questionRepository
 @inject ISnackbar Snackbar
 @inject NavigationManager navManager
 
-<EditForm Model="questionModel" OnValidSubmit="SaveChanges">
-    <DataAnnotationsValidator />
+<div>
 
-    <div class="row">
-        <div class="col-6">
-            <CourseTopicSelector TopicChanged="OnTopicChanged" /><!--Drop down for question type-->
-            <MudSelect For="@(() => questionModel.Type)"
-                       Label="Question Type"
-                       T="QuestionType"
-                       ValueChanged="OnQuestionTypeChanged">
-                @foreach (QuestionType item in questionTypes)
-                {
-                    <MudSelectItem Value="@item">@item</MudSelectItem>
-                }
-            </MudSelect>
+    <EditForm OnValidSubmit="SaveChanges" EditContext="editContext">
+        <DataAnnotationsValidator />
+
+        <div class="row">
+            <div class="col-6">
+                <CourseTopicSelector TopicChanged="OnTopicChanged" /><!--Drop down for question type-->
+                <MudSelect For="@(() => questionModel.Type)"
+                           Label="Question Type"
+                           T="QuestionType"
+                           ValueChanged="OnQuestionTypeChanged">
+                    @foreach (QuestionType item in questionTypes)
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </div>
+            <div class="col-6">
+                <!--Title-->
+                <MudTextField T="string"
+                              Variant="Variant.Filled"
+                              Lines="3" Label="Title"
+                              @bind-Value="questionModel.Title"
+                              For="@(() => questionModel.Title)" />
+            </div>
         </div>
-        <div class="col-6">
-            <!--Title-->
-            <MudTextField T="string" 
-                Variant="Variant.Filled" 
-                Lines="3" Label="Title" 
-                @bind-Value="questionModel.Title"
-                For="@(() => questionModel.Title)" />
-        </div>
-    </div>
-  
-    <!--Question Stem-->
-    <MudTextField T="string" 
-        Class="@(hideQuestionStem.Equals(true) ? "d-none" : "d-block")"
-        Variant="Variant.Filled" 
-        Lines="2" Label="Question Stem (For table questions)" 
-        @bind-Value="questionModel.QuestionStem"
-        For="@(() => questionModel.QuestionStem)" />
+
+        <!--Question Stem-->
+        <MudTextField T="string"
+                      Class="@(hideQuestionStem.Equals(true) ? "d-none" : "d-block")"
+                      Variant="Variant.Filled"
+                      Lines="2" Label="Question Stem (For table questions)"
+                      @bind-Value="questionModel.QuestionStem"
+                      For="@(() => questionModel.QuestionStem)" />
 
 
-    <MudTextField T="string"
-        Variant="Variant.Filled"
-        Lines="2"
-        Label="Actual question"
-        @bind-Value="questionModel.QuestionText"
-        For="@(() => questionModel.QuestionText)" />
+        <MudTextField T="string"
+                      Variant="Variant.Filled"
+                      Lines="2"
+                      Label="Actual question"
+                      @bind-Value="questionModel.QuestionText"
+                      For="@(() => questionModel.QuestionText)" />
 
-    
 
-    <!--This is the part for options-->
-    @for (int i = 0; i < questionModel.Options.Count; i++)
-    {
-        var index = i;
 
-        <!--Invisible option setter-->
-        <MudTextField For="@(() => questionModel.Options[index].Label)"
-                      T="string"
-                      Class="d-none"
-                      Text="@(GetLabel(index))"
-                      @bind-Value="questionModel.Options[index].Label" />
-        <div class="form-group">
-            <MudText>
-                Option @(GetLabel(index)):
-            </MudText>
-            <MudTextField For="@(() => questionModel.Options[index].OptionText)"
+        <!--This is the part for options-->
+        @for (int i = 0; i < questionModel.Options.Count; i++)
+        {
+            var index = i;
+
+            <!--Invisible option setter-->
+            <MudTextField For="@(() => questionModel.Options[index].Label)"
                           T="string"
-                          Variant="Variant.Filled"
-                          Lines="2" Label="@($"Option {GetLabel(index)}")"
-                          @bind-Value="questionModel.Options[index].OptionText" />
-            <MudGrid>
-                <MudItem xs="12" sm="2">
-                    <MudCheckBox @bind-Value="questionModel.Options[index].IsCorrect"
-                                 Label="IsCorrect"
-                                 T="bool" />
-                </MudItem>
-                <MudItem xs="12" sm="10" Class="@(isSingleBest.Equals(true) && questionModel.Options[index].IsCorrect.Equals(false) ? "d-none" : "d-block")">
-                    <MarkdownEditor Placeholder="@($"Explanation {GetLabel(index)}")"
-                                    LineNumbers="@false"
-                                    MaxHeight="2"
-                                    @bind-Value="questionModel.Options[index].Explanation" />
-                </MudItem>
-            </MudGrid>
+                          Class="d-none"
+                          Text="@(GetLabel(index))"
+                          @bind-Value="questionModel.Options[index].Label" />
+            <div class="form-group">
+                <MudText>
+                    Option @(GetLabel(index)):
+                </MudText>
+                <MudTextField For="@(() => questionModel.Options[index].OptionText)"
+                              T="string"
+                              Variant="Variant.Filled"
+                              Lines="2" Label="@($"Option {GetLabel(index)}")"
+                              @bind-Value="questionModel.Options[index].OptionText" />
+                <MudGrid>
+                    <MudItem xs="12" sm="2">
+                        <MudCheckBox @bind-Value="questionModel.Options[index].IsCorrect"
+                                     Label="IsCorrect"
+                                     T="bool" />
+                    </MudItem>
+                    <MudItem xs="12" sm="10" Class="@(isSingleBest.Equals(true) && questionModel.Options[index].IsCorrect.Equals(false) ? "d-none" : "d-block")">
+                        <MarkdownEditor Placeholder="@($"Explanation {GetLabel(index)}")"
+                                        LineNumbers="@false"
+                                        MaxHeight="2"
+                                        @bind-Value="questionModel.Options[index].Explanation" />
+                    </MudItem>
+                </MudGrid>
+            </div>
+        }
+        <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
+             style="margin-bottom:75px;">
+
+            <MudFab StartIcon="@Icons.Material.Filled.CopyAll"
+                    Color="Color.Primary"
+                    OnClick="CopyQuestion"
+                    ButtonType="ButtonType.Button"
+                    Label="Copy Question" />
+
+            <MudFab StartIcon="@Icons.Material.Filled.Remove"
+                    Color="Color.Primary"
+                    Disabled="!hasOptions"
+                    OnClick="RemoveOption"
+                    ButtonType="ButtonType.Button"
+                    Label="Remove" />
+
+            <MudFab StartIcon="@Icons.Material.Filled.Add"
+                    Color="Color.Primary"
+                    OnClick="AddOption"
+                    ButtonType="ButtonType.Button"
+                    Label="Add" />
+
+            <MudFab StartIcon="@Icons.Material.Filled.Check"
+                    Color="Color.Primary"
+                    ButtonType="ButtonType.Submit"
+                    Label="Save" />
         </div>
-    }
-    <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
-         style="margin-bottom:75px;">
 
-        <MudFab StartIcon="@Icons.Material.Filled.CopyAll"
-                Color="Color.Primary"
-                OnClick="CopyQuestion"
-                ButtonType="ButtonType.Button"
-                Label="Copy Question" />
-
-        <MudFab StartIcon="@Icons.Material.Filled.Remove"
-                Color="Color.Primary"
-                Disabled="!hasOptions"
-                OnClick="RemoveOption"
-                ButtonType="ButtonType.Button"
-                Label="Remove" />
-
-        <MudFab StartIcon="@Icons.Material.Filled.Add"
-                Color="Color.Primary"
-                OnClick="AddOption"
-                ButtonType="ButtonType.Button"
-                Label="Add" />
-
-        <MudFab StartIcon="@Icons.Material.Filled.Check"
-                Color="Color.Primary"
-                ButtonType="ButtonType.Submit"
-                Label="Done" />
-    </div>
-     
-</EditForm>
+    </EditForm>
+</div>
 
     
 
@@ -129,7 +133,8 @@
     public int id { get; set; } = 0;
     [Parameter]
     public int topicId { get; set; } = 0;
-    private IJSObjectReference _module;
+    private DotNetObjectReference<QuestionsEditor2>? objectReference;
+    private EditContext editContext;
     private Snackbar snackbar;
     private bool hideQuestionStem = true;
     private bool isSingleBest = true;
@@ -146,6 +151,7 @@
     protected override Task OnInitializedAsync()
     {
         questionModel = new QuestionSetDto();
+        editContext = new EditContext(questionModel);
         return base.OnInitializedAsync();
     }
 
@@ -180,24 +186,56 @@
     {
         if (firstRender)
         {
-            _module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
-            await _module.InvokeVoidAsync("addKeyDownEvent", DotNetObjectReference.Create(this));
+            objectReference = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("addKeyboardListener", objectReference);
         }
     }
 
+
     // This method will be called when Ctrl + S is pressed
     [JSInvokable]
-    public void OnCtrlSPressed()
+    public async Task HandleKeyPress(bool ctrlKey, string key)
     {
-        // Add your logic here
-        Console.WriteLine("Ctrl + S was pressed!");
-    }
-    // Dispose to avoid memory leaks
-    public async ValueTask DisposeAsync()
-    {
-        if (_module != null)
+        if (ctrlKey)
         {
-            await _module.DisposeAsync();
+            switch (key.ToLower())
+            {
+                case "s":
+                    //Run SaveChanges method if it is a valid submit from the EditForm
+                    if (editContext.Validate())
+                    {
+                        await SaveChanges();
+                    }
+                    else
+                    {
+                        snackbar = Snackbar.Add("Please fill in all required fields.", Severity.Warning);
+                    }
+                    StateHasChanged();
+                    break;
+                case "o":
+                    RemoveOption();
+                    StateHasChanged();
+                    break;
+                case "i":
+                    await CopyQuestion();
+                    StateHasChanged();
+                    break;
+                case "p":
+                    AddOption();
+                    StateHasChanged();
+                    break;
+            }
+        }
+    }
+
+
+    // Dispose to avoid memory leaks
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (objectReference != null)
+        {
+            await JSRuntime.InvokeVoidAsync("removeKeyboardListener");
+            objectReference.Dispose();
         }
     }
 
@@ -225,9 +263,14 @@
     private async Task CopyQuestion()
     {
         var question = questionModel.QuestionText;
+
+        //Label index to add a letter to the iremmmm
+        int labelIndex = 0;
         foreach (var option in questionModel.Options)
         {
-            question += $"\n{option.Label}. {option.OptionText}";
+            string label = ((char)('A' + labelIndex)).ToString();
+            question += $"\n{label}. {option.OptionText}";
+            labelIndex++;
         }
 
         //Copy to clipboard
@@ -288,6 +331,13 @@
                 }).ToList();
 
             questionModel.Options = options;
+
+            // Validate that no option's text is null or empty
+            if (questionModel.Options.Any(o => string.IsNullOrWhiteSpace(o.OptionText)))
+            {
+                snackbar = Snackbar.Add("All options must have text.", Severity.Warning);
+                return;
+            }
 
             //If single best question, make sure only one answer is marked as true
             if (questionType == QuestionType.SingleBest)
