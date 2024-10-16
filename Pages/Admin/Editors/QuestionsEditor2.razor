@@ -75,12 +75,26 @@
                 <MudText>
                     Option @(GetLabel(index)):
                 </MudText>
-                <MudTextField For="@(() => questionModel.Options[index].OptionText)"
-                              T="string"
-                              Variant="Variant.Filled"
-                              Lines="2" Label="@($"Option {GetLabel(index)}")"
-                              @bind-Value="questionModel.Options[index].OptionText" />
                 <MudGrid>
+                    <!--So this is the question part, for structured questions it is going to include a marks section. If not, it won't be there-->
+
+                <MudItem xs="12" sm="@(isStructured.Equals(true) ? 10 : 12)">
+                        <MudTextField For="@(() => questionModel.Options[index].OptionText)"
+                                      T="string"
+                                      Variant="Variant.Filled"
+                                      Lines="2" Label="@($"Option {GetLabel(index)}")"
+                                      @bind-Value="questionModel.Options[index].OptionText" />
+                    </MudItem>
+
+                    <MudItem xs="12" sm="2" Class="@(isStructured.Equals(true) ? "d-block" : "d-none")">
+                        <MudTextField @bind-Value="questionModel.Options[index].Marks"
+                                     Label="Marks"
+                                     T="int" />
+                    </MudItem>
+                </MudGrid>
+
+                <!--Used for True or false and single best for those options-->
+                <MudGrid Class="@(isStructured.Equals(true) ? "d-none" : "d-block")">
                     <MudItem xs="12" sm="2">
                         <MudCheckBox @bind-Value="questionModel.Options[index].IsCorrect"
                                      Label="IsCorrect"
@@ -93,34 +107,50 @@
                                         @bind-Value="questionModel.Options[index].Explanation" />
                     </MudItem>
                 </MudGrid>
+                <!--This is used for structured questions, possibly for essay type questions-->
+                <!--Using the option section for answers as well for this type of question-->
+                <MudGrid Class="@(isStructured.Equals(true) ? "d-block mt-3" : "d-none mt-3")">
+                    <MarkdownEditor Placeholder="@($"Answer {GetLabel(index)}")"
+                                    LineNumbers="@false"
+                                    MaxHeight="2"
+                                    @bind-Value="questionModel.Options[index].Explanation" />
+                </MudGrid>
             </div>
         }
         <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
              style="margin-bottom:75px;">
 
-            <MudFab StartIcon="@Icons.Material.Filled.CopyAll"
-                    Color="Color.Primary"
-                    OnClick="CopyQuestion"
-                    ButtonType="ButtonType.Button"
-                    Label="Copy Question" />
+            <MudTooltip Text="Ctrl + I">
+                <MudFab StartIcon="@Icons.Material.Filled.CopyAll"
+                        Color="Color.Primary"
+                        OnClick="CopyQuestion"
+                        ButtonType="ButtonType.Button"
+                        Label="Copy Question" />
+            </MudTooltip>
 
-            <MudFab StartIcon="@Icons.Material.Filled.Remove"
-                    Color="Color.Primary"
-                    Disabled="!hasOptions"
-                    OnClick="RemoveOption"
-                    ButtonType="ButtonType.Button"
-                    Label="Remove" />
+            <MudTooltip Text="Ctrl + O">
+                <MudFab StartIcon="@Icons.Material.Filled.Remove"
+                        Color="Color.Primary"
+                        Disabled="!hasOptions"
+                        OnClick="RemoveOption"
+                        ButtonType="ButtonType.Button"
+                        Label="Remove" />
+            </MudTooltip>
 
-            <MudFab StartIcon="@Icons.Material.Filled.Add"
-                    Color="Color.Primary"
-                    OnClick="AddOption"
-                    ButtonType="ButtonType.Button"
-                    Label="Add" />
+            <MudTooltip Text="Ctrl + P">
+                <MudFab StartIcon="@Icons.Material.Filled.Add"
+                        Color="Color.Primary"
+                        OnClick="AddOption"
+                        ButtonType="ButtonType.Button"
+                        Label="Add" />
+            </MudTooltip>
 
-            <MudFab StartIcon="@Icons.Material.Filled.Check"
-                    Color="Color.Primary"
-                    ButtonType="ButtonType.Submit"
-                    Label="Save" />
+            <MudTooltip Text="Ctrl + S">
+                <MudFab StartIcon="@Icons.Material.Filled.Check"
+                        Color="Color.Primary"
+                        ButtonType="ButtonType.Submit"
+                        Label="Save" />
+            </MudTooltip>
         </div>
 
     </EditForm>
@@ -140,6 +170,7 @@
     private bool isSingleBest = true;
     private QuestionSetDto questionModel;
     private bool hasOptions = false;
+    private bool isStructured = false;
 
     //Enums for question type drop down
     private List<QuestionType> questionTypes = Enum.GetValues(typeof(QuestionType)).Cast<QuestionType>().ToList();
@@ -299,13 +330,21 @@
             case QuestionType.TrueFalse:
                 hideQuestionStem = true;
                 isSingleBest = true;
+                isStructured = false;
                 break;
             case QuestionType.SingleBest:
                 hideQuestionStem = true;
                 isSingleBest = true;
+                isStructured = false;
                 break;
             case QuestionType.TableMatching:
                 hideQuestionStem = false;
+                isSingleBest = false;
+                isStructured = false;
+                break;
+            case QuestionType.Structured:
+                hideQuestionStem = true;
+                isStructured = true;
                 isSingleBest = false;
                 break;
             default:
