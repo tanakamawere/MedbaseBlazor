@@ -14,13 +14,13 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager navManager
 
-<div>
+<MudContainer MaxWidth="MaxWidth.Large">
 
     <EditForm OnValidSubmit="SaveChanges" EditContext="editContext">
         <DataAnnotationsValidator />
 
-        <div class="row">
-            <div class="col-6">
+        <MudGrid>
+            <MudItem xs="6" sm="6" md="6" lg="6">
                 <CourseTopicSelector TopicChanged="OnTopicChanged" /><!--Drop down for question type-->
                 <MudSelect For="@(() => questionModel.Type)"
                            Label="Question Type"
@@ -31,16 +31,16 @@
                         <MudSelectItem Value="@item">@item</MudSelectItem>
                     }
                 </MudSelect>
-            </div>
-            <div class="col-6">
+            </MudItem>
+            <MudItem xs="6" sm="6" md="6" lg="6">
                 <!--Title-->
                 <MudTextField T="string"
                               Variant="Variant.Filled"
                               Lines="3" Label="Title"
                               @bind-Value="questionModel.Title"
                               For="@(() => questionModel.Title)" />
-            </div>
-        </div>
+            </MudItem>
+        </MudGrid>
 
         <!--Question Stem-->
         <MudTextField T="string"
@@ -71,7 +71,7 @@
                           Class="d-none"
                           Text="@(GetLabel(index))"
                           @bind-Value="questionModel.Options[index].Label" />
-            <div class="form-group">
+            <MudContainer MaxWidth="MaxWidth.Medium">
                 <MudText>
                     Option @(GetLabel(index)):
                 </MudText>
@@ -115,7 +115,7 @@
                                     MaxHeight="2"
                                     @bind-Value="questionModel.Options[index].Explanation" />
                 </MudGrid>
-            </div>
+            </MudContainer>
         }
         <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
              style="margin-bottom:75px;">
@@ -154,7 +154,7 @@
         </div>
 
     </EditForm>
-</div>
+</MudContainer>
 
     
 

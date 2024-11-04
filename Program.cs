@@ -23,6 +23,8 @@ Console.WriteLine($"Medbase API Environment: {environment}");
 //Dependencies
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
 
 string apiString = "http://localhost:5249/";
 
@@ -74,7 +76,6 @@ builder.Services.AddHttpClient<ICoursesAndTopics, CoursesAndTopicsRepository>("A
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 var app = builder.Build();
 
@@ -112,14 +113,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRouting();
 
 app.UseAntiforgery();
 
-app.UseDeveloperExceptionPage();
-app.UseStatusCodePagesWithRedirects("/StatusCode/{0}");
-
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+    .AddInteractiveServerRenderMode()
+    .AddAdditionalAssemblies(typeof(MedbaseComponents._Imports).Assembly);
 
 app.Run();

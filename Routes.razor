@@ -1,15 +1,5 @@
 ﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Routes).Assembly"
-        AdditionalAssemblies="new[]
-        {
-            typeof(MedbaseComponents.Pages.Questions).Assembly, 
-            typeof(MedbaseComponents.Pages.Topics).Assembly, 
-            typeof(MedbaseComponents.Pages.Store.Store).Assembly,
-            typeof(MedbaseComponents.Pages.Essays.Essays).Assembly,
-            typeof(MedbaseComponents.Pages.Articles.Articles).Assembly,
-            typeof(MedbaseComponents.Pages.Notes.Notes).Assembly,
-            typeof(MedbaseComponents.Pages.Questions2.QuestionsPage2).Assembly,
-        }">
+    <Router AppAssembly="@typeof(Routes).Assembly" AdditionalAssemblies="new[]{typeof(MedbaseComponents.Pages.Store.Store).Assembly}">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(WebLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />

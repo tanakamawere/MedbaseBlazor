@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="_content/MedbaseComponents/wwwroot/css/common.css" />
 
-    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: false)" />
+    <HeadOutlet @rendermode="RenderMode.InteractiveServer" />
     <link href="css/site.css" rel="stylesheet" />
 
     <!--WhatsApp Metas-->
@@ -57,7 +57,7 @@
 
 </head>
 <body>
-    <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)" />
+    <Routes @rendermode="RenderMode.InteractiveServer" />
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
