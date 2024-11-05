@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/courses"
 @inject IApiRepository repository
 @inject NavigationManager navManager;
 
@@ -23,30 +24,11 @@
     <meta name="twitter:image" content="@image" />
 </HeadContent>
 
-<header>
-    <div class="container my-5">
-        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                <MudBreadcrumbs Class="text-dark" Items="_items"></MudBreadcrumbs>
-                <MudText Typo="Typo.h2" class="display-5 fw-bolder mb-2">
-                    Courses🥙
-                </MudText>
-                <MudText class="fw-normal mb-4">
-                    From preclinical to clinical, you will find all the courses you need here.
-                </MudText>
-            </div>
-            <div class="col-lg-4 offset-lg-1 m-5">
-                <img class="img-fluid bg-transparent" src="img/courses.png">
-            </div>
-        </div>
-    </div>
-</header>
-
-<div class="container">
+<MudContainer MaxWidth="MaxWidth.Large">
 
     <Courses />
     
-</div>
+</MudContainer>
 
 @code {
     private string description = "Choose the course you want to view notes or MCQs on";

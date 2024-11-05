@@ -26,7 +26,7 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 
-string apiString = "http://localhost:5249/";
+string apiString = "https://apimedbase.azurewebsites.net/";
 
 if (environment == Environments.Development)
 {
@@ -34,8 +34,8 @@ if (environment == Environments.Development)
 }
 else
 {
-    apiString = "http://localhost:5249/";
-    //apiString = "https://apimedbase.azurewebsites.net/";
+    //apiString = "http://localhost:5249/";
+    apiString = "https://apimedbase.azurewebsites.net/";
 }
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
@@ -115,6 +115,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseAntiforgery();
+
+//Status code
+app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

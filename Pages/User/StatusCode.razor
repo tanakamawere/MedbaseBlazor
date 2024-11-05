@@ -1,6 +1,17 @@
 ﻿@page "/StatusCode/{responseCode}"
 
-<h3>StatusCode @ResponseCode</h3>
+<div class="container mt-5">
+    <h1 class="text-center">HTTP Status Codes</h1>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="status-code">@ResponseCode</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
 

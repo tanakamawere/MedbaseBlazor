@@ -20,10 +20,18 @@
         <MudLink Typo="Typo.h6" Class="ml-3" Href="/home" Color="Color.Inherit">
             Medbase
         </MudLink>
+        <MudSpacer />
+        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Outlined.LightMode : Icons.Material.Outlined.DarkMode)"
+                       OnClick="ToggleTheme"
+                       Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <MudNavMenu Rounded="true" Margin="Margin.Dense" Color="Color.Primary" Class="pa-2">
 
+
+            <MudNavLink Href="/courses" Class="@(IsMaui == true ? "d-block" : "d-none")" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
+            @* <MudNavLink Href="/downloads" Class="@(IsMaui == true ? "d-none" : "d-block")" Icon="@Icons.Material.Filled.Download">Downloads</MudNavLink> *@
+            <MudNavLink Href="/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
 
             <MudPaper Class="pb-2">
                 @if (isBusy)
@@ -49,13 +57,7 @@
                 }
             </MudPaper>
             
-            <MudNavLink Href="/courses" Class="@(IsMaui == true ? "d-block" : "d-none")" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
-            <MudNavLink Href="/downloads" Class="@(IsMaui == true ? "d-none" : "d-block")" Icon="@Icons.Material.Filled.Download">Downloads</MudNavLink>
-            <MudNavLink Href="/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
-            @* <MudNavLink Href="/Gamma" Icon="@Icons.Material.Filled.Download">Gamma</MudNavLink> *@
-            <MudNavLink OnClick="ThemeToggle" Icon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)">
-                @(_isDarkMode == true ? "Dark Mode On" : "Dark Mode Off")
-            </MudNavLink>
+
             <AuthorizeView Roles="Admin">
                 <Authorized>
                     <MudNavLink Href="/admin" Icon="@Icons.Material.Filled.Security">Admin Pages</MudNavLink>
@@ -133,6 +135,13 @@
     private async Task OnSystemPreferenceChanged(bool newValue)
     {
         _isDarkMode = newValue;
+        StateHasChanged();
+    }
+
+    //Method to change theme on click
+    private void ToggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
         StateHasChanged();
     }
 }
