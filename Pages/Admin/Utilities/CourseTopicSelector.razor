@@ -20,7 +20,7 @@
     [Parameter]
     public EventCallback<int> TopicChanged { get; set; }
     int selectedTopic;
-
+    Course selectedCourse = new();
 
     private IEnumerable<Course> Courses { get; set; } = Enumerable.Empty<Course>();
     private IEnumerable<Topic> Topics { get; set; } = Enumerable.Empty<Topic>();

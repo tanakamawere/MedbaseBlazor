@@ -5,9 +5,9 @@ window.addKeyboardListener = (dotnetHelper) => {
         if (e.ctrlKey) {
             switch (e.key.toLowerCase()) {
                 case 's':
+                case 'q':
+                case '{':
                 case 'o':
-                case 'i':
-                case 'p':
                     e.preventDefault();
                     dotnetHelper.invokeMethodAsync('HandleKeyPress', e.ctrlKey, e.key);
                     break;

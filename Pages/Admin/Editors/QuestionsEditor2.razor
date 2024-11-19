@@ -117,41 +117,36 @@
                 </MudGrid>
             </MudContainer>
         }
-        <div class="m-2 me-5 position-fixed bottom-0 end-0 justify-content-center"
-             style="margin-bottom:75px;">
 
-            <MudTooltip Text="Ctrl + I">
+        <MudStack Class="m-2 me-5 position-fixed bottom-0 end-0 align-items-end mb-16">
+            <MudTooltip Text="Copy Question (Ctrl + L)">
                 <MudFab StartIcon="@Icons.Material.Filled.CopyAll"
                         Color="Color.Primary"
                         OnClick="CopyQuestion"
-                        ButtonType="ButtonType.Button"
-                        Label="Copy Question" />
+                        ButtonType="ButtonType.Button" />
             </MudTooltip>
 
-            <MudTooltip Text="Ctrl + O">
+            <MudTooltip Text="Remove Option (Ctrl + Q)">
                 <MudFab StartIcon="@Icons.Material.Filled.Remove"
                         Color="Color.Primary"
                         Disabled="!hasOptions"
                         OnClick="RemoveOption"
-                        ButtonType="ButtonType.Button"
-                        Label="Remove" />
+                        ButtonType="ButtonType.Button" />
             </MudTooltip>
 
-            <MudTooltip Text="Ctrl + P">
+            <MudTooltip Text="Add Option (Ctrl + O)">
                 <MudFab StartIcon="@Icons.Material.Filled.Add"
                         Color="Color.Primary"
                         OnClick="AddOption"
-                        ButtonType="ButtonType.Button"
-                        Label="Add" />
+                        ButtonType="ButtonType.Button" />
             </MudTooltip>
 
-            <MudTooltip Text="Ctrl + S">
+            <MudTooltip Text="Save Question (Ctrl + S)">
                 <MudFab StartIcon="@Icons.Material.Filled.Check"
                         Color="Color.Primary"
-                        ButtonType="ButtonType.Submit"
-                        Label="Save" />
+                        ButtonType="ButtonType.Submit" />
             </MudTooltip>
-        </div>
+        </MudStack>
 
     </EditForm>
 </MudContainer>
@@ -243,15 +238,15 @@
                     }
                     StateHasChanged();
                     break;
-                case "o":
+                case "q":
                     RemoveOption();
                     StateHasChanged();
                     break;
-                case "i":
+                case "{":
                     await CopyQuestion();
                     StateHasChanged();
                     break;
-                case "p":
+                case "o":
                     AddOption();
                     StateHasChanged();
                     break;
@@ -300,7 +295,9 @@
         foreach (var option in questionModel.Options)
         {
             string label = ((char)('A' + labelIndex)).ToString();
-            question += $"\n{label}. {option.OptionText}";
+
+            //Only include the marks if they are not equal to 0. Otherwise, don't even mention it when you copy the questions.
+            question += $"\n{label}. {option.OptionText}" + (option.Marks != 0 ? $" ({option.Marks.ToString()})" : "");
             labelIndex++;
         }
 
@@ -387,6 +384,9 @@
                     return;
                 }
             }
+
+            //Set question type (you forgot to do this)
+            questionModel.Type = questionType;
 
             //If it is a new question
             if (id == 0)
