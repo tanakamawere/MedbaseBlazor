@@ -1,0 +1,135 @@
+﻿@using MedbaseComponents.Controls
+@using MedbaseLibrary.Helpers
+@using Microsoft.Extensions.Configuration
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject IConfiguration _configuration
+@inject NavigationManager navManager
+@inject ISnackbar Snackbar
+
+<PageTitle>Medbase | Medical School MCQs</PageTitle>
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="someTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudLink Typo="Typo.h6" Class="ml-3" Href="/" Color="Color.Inherit">
+            Medbase
+        </MudLink>
+        <MudSpacer />
+        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Outlined.LightMode : Icons.Material.Outlined.DarkMode)"
+                       OnClick="ToggleTheme"
+                       Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <MudNavMenu Rounded="true" Margin="Margin.Dense" Color="Color.Primary" Class="pa-2">
+
+
+            <MudNavLink Href="/courses" Class="@(IsMaui == true ? "d-block" : "d-none")" Icon="@Icons.Material.Filled.Book">Courses</MudNavLink>
+            @* <MudNavLink Href="/downloads" Class="@(IsMaui == true ? "d-none" : "d-block")" Icon="@Icons.Material.Filled.Download">Downloads</MudNavLink> *@
+            <MudNavLink Href="/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
+            <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+
+            <MudPaper Class="pb-2">
+                @if (isBusy)
+                {
+                    <MedbaseComponents.Controls.LoadingComponent Message="Logging in..." />
+                }
+                else
+                {
+                    <AccessControl/>
+                }
+            </MudPaper>
+            
+
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <MudNavLink Href="/admin" Icon="@Icons.Material.Filled.Security">Admin Pages</MudNavLink>
+                </Authorized>
+            </AuthorizeView>
+
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+@code {
+    private bool isBusy = false;
+    private bool isLoggedIn;
+    private Snackbar snackbar;
+    private string UserName = "";
+    private bool IsMaui;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationState is not null)
+        {
+            var state = await authenticationState;
+            UserName = state?.User?.Identity?.Name ?? string.Empty;
+        }
+        CheckPlatform();
+    }
+
+    private void CheckPlatform()
+    {
+#if WINDOWS || ANDROID || IOS
+    IsMaui = true;
+#else
+        IsMaui = true;
+#endif
+    }
+
+    bool _drawerOpen = true;
+    private MudThemeProvider _mudThemeProvider;
+    private bool _isDarkMode;
+    MudTheme someTheme = new()
+    {
+        PaletteLight = new PaletteLight()
+        {
+                Primary = Colors.Blue.Darken2,
+            AppbarBackground = Colors.Blue.Accent1,
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1
+        },
+    };
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    void ThemeToggle() =>
+        _isDarkMode = !_isDarkMode;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _isDarkMode = newValue;
+        StateHasChanged();
+    }
+
+    //Method to change theme on click
+    private void ToggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+        StateHasChanged();
+    }
+}
