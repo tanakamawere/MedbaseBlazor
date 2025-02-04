@@ -13,6 +13,7 @@ using Medbase.Application;
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ builder.Services.AddSingleton(config);
 // Api client registration
 builder.Services.AddHttpClient<IApiClient, ApiClient>("MedbaseApiClient", client =>
 {
-    string? baseAddress = builder.Configuration["Endpoints:Online"];
+    string? baseAddress = builder.Configuration["Endpoints:Local"];
     if (environment == Environments.Development)
     {
         baseAddress = builder.Configuration["Endpoints:Local"];
@@ -44,15 +45,15 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>("MedbaseApiClient", client
 });
 
 
-string apiString = "https://apimedbase.azurewebsites.net/";
+string apiString = "http://localhost:5249/";
 
 if (environment == Environments.Development)
 {
-    apiString = "https://apimedbase.azurewebsites.net/";
+    apiString = "http://localhost:5249/";
 }
 else
 {
-    apiString = "https://apimedbase.azurewebsites.net/";
+    apiString = "http://localhost:5249/";
 }
 
 builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
@@ -60,6 +61,7 @@ builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client 
     client.BaseAddress = new Uri(apiString);
 });
 
+IdentityModelEventSource.ShowPII = true;
 builder.Services
     .AddAuth0WebAppAuthentication(options => {
         options.Domain = builder.Configuration["Auth0:Domain"];
@@ -114,6 +116,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAntiforgery();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
