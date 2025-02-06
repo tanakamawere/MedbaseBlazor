@@ -15,7 +15,7 @@ namespace MedbaseBlazor
             throw new NotImplementedException();
         }
 
-        public Task<QuestionPagedWithTopic> GetPagedQuestionsWithTopic(int topic, int page, double numResults)
+        public Task<QuestionPaged> GetPagedQuestionsWithTopic(int topic, int page, double numResults)
         {
             throw new NotImplementedException();
         }

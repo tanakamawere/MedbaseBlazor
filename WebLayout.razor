@@ -1,4 +1,5 @@
 ﻿@using MedbaseComponents.Controls
+@using MedbaseComponents.Shared
 @using MedbaseLibrary.Helpers
 @using Microsoft.Extensions.Configuration
 @inherits LayoutComponentBase
@@ -37,7 +38,7 @@
             <MudPaper Class="pb-2">
                 @if (isBusy)
                 {
-                    <MedbaseComponents.Controls.LoadingComponent Message="Logging in..." />
+                    <LoadingComponent Message="Logging in..." />
                 }
                 else
                 {

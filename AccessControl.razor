@@ -1,8 +1,14 @@
-﻿<AuthorizeView>
-    <Authorized>
-        <a href="Account/Logout">Log out</a>
-    </Authorized>
-    <NotAuthorized>
-        <a href="Account/Login">Log in</a>
-    </NotAuthorized>
-</AuthorizeView>
+﻿
+<CascadingAuthenticationState>
+    ﻿<AuthorizeView>
+        <Authorized>
+            <MudNavLink Href="Account/Logout">Log out</MudNavLink>
+        </Authorized>
+        <NotAuthorized>
+            <MudNavLink Href="Account/Login">Log in</MudNavLink>
+        </NotAuthorized>
+        <Authorizing>
+            <MudSkeleton />
+        </Authorizing>
+    </AuthorizeView>
+</CascadingAuthenticationState>

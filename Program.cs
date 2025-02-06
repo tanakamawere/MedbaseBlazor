@@ -1,4 +1,4 @@
-using MedbaseLibrary.Services;
+﻿using MedbaseLibrary.Services;
 using MudBlazor;
 using MudBlazor.Services;
 using MedbaseBlazor;
@@ -17,16 +17,11 @@ using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
 var environment = args.Contains("--local") ? Environments.Development : Environments.Production;
 
-//Dependencies
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
-var config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .Build();
-
-builder.Services.AddSingleton(config);
 
 // Api client registration
 builder.Services.AddHttpClient<IApiClient, ApiClient>("MedbaseApiClient", client =>
@@ -44,29 +39,14 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>("MedbaseApiClient", client
     client.BaseAddress = new Uri(baseAddress);
 });
 
+//builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
+//{
+//    string apiString = "http://localhost:5249/";
 
-string apiString = "http://localhost:5249/";
-
-if (environment == Environments.Development)
-{
-    apiString = "http://localhost:5249/";
-}
-else
-{
-    apiString = "http://localhost:5249/";
-}
-
-builder.Services.AddHttpClient<IApiRepository, ApiRepository>("ApiData", client =>
-{
-    client.BaseAddress = new Uri(apiString);
-});
-
-IdentityModelEventSource.ShowPII = true;
-builder.Services
-    .AddAuth0WebAppAuthentication(options => {
-        options.Domain = builder.Configuration["Auth0:Domain"];
-        options.ClientId = builder.Configuration["Auth0:ClientId"];
-    });
+//    if (environment == Environments.Development)
+//        apiString = "http://localhost:5249/";
+//    client.BaseAddress = new Uri(apiString);
+//});
 
 
 //Client registration
@@ -79,6 +59,7 @@ builder.Services.AddScoped<QuestionClient>();
 builder.Services.AddScoped<TopicsClient>();
 builder.Services.AddScoped<UserCoursePreferencesClient>();
 builder.Services.AddScoped<UserQuestionInteractionClient>();
+builder.Services.AddScoped<UserClient>();
 
 builder.Services.AddScoped<UserService>();
 
@@ -92,14 +73,17 @@ builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddTransient<ICheckForInternet, CheckForInternet>();
 builder.Services.AddScoped<ICoursesAndTopics, CoursesAndTopicsRepository>();
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication();
-builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddMudMarkdownServices();
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+IdentityModelEventSource.ShowPII = true;
+builder.Services.AddAuth0WebAppAuthentication(options =>
+{
+    options.Domain = "dev-nema48ewf82jkozq.us.auth0.com";
+    options.ClientId = "tQHTAlr5YIfEyJjgzz7L0j4vAuEYEKjg";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,8 +100,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAntiforgery();
-app.UseAuthentication();
-app.UseAuthorization();
 
 
 app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
@@ -126,7 +108,7 @@ app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = 
             .WithRedirectUri(returnUrl)
             .Build();
 
-    await httpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+    await httpContext.ChallengeAsync("Auth0", authenticationProperties);
 });
 
 app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
