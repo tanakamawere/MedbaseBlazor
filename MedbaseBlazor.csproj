@@ -12,6 +12,10 @@
 		<StaticWebAssetBasePath>MedbaseComponents</StaticWebAssetBasePath>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Include="..\MedbaseBlazor.Wasm\Pages\LoadingComponent.razor" Link="LoadingComponent.razor" />
+	</ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.4.1" />
     <PackageReference Include="Markdig" Version="0.38.0" />
