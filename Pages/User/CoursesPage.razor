@@ -1,7 +1,12 @@
 ﻿@page "/courses"
 @page "/"
-@inject IApiRepository repository
+@using Medbase.Application.Clients
+@using MedbaseComponents.Shared
 @inject NavigationManager navManager;
+@inject CoursesClient coursesClient
+@inject NotesClient notesClient
+@inject ISnackbar Snackbar
+@inject NavigationManager navManager
 
 <PageTitle>@title</PageTitle>
     <HeadContent>
@@ -24,13 +29,51 @@
     <meta name="twitter:image" content="@image" />
 </HeadContent>
 
-<div class="container">
+@if (IsBusy)
+{
+    <div class="mt-5">
+        <LoadingComponent Message="Retrieving courses..." />
+    </div>
+}
+else
+{
+    <MudGrid Class="mt-8">
+        <HeaderComponent Title="Your courses" Subtitle="Courses you have selected in your preferences" />
+        @if (CoursesList.Any())
+        {
+            @foreach (Course item in CoursesList)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="p-3" @onclick="() => GoToTopics(item.CourseRef)">
+                        <MudGrid Spacing="20">
+                            <MudItem xs="3">
+                                <MudImage Src="@item.ImageURL" Style="max-height:100px" />
+                            </MudItem>
+                            <MudItem xs="9">
+                                <MudText Typo="Typo.h6" Align="Align.Start" Class="justify-center">
+                                    @item.Title
+                                </MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
 
-    <Courses />
-    
-</div>
+            }
+        }
+        else
+        {
+            <EmptyComponent Message="Add you haven't selected the courses you want to see." />
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="/settings">
+                Add Courses
+            </MudButton>
+        }
+    </MudGrid>
+}
 
 @code {
+    private IEnumerable<Course> CoursesList { get; set; } = Enumerable.Empty<Course>();
+    private string userId = "";
+    bool IsBusy = false;
     private string description = "Choose the course you want to view notes or MCQs on";
     private string title = "Courses | Medbase";
     private string image = "https://i.postimg.cc/T1DjN4S5/Logo.png";
@@ -40,4 +83,40 @@
         new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
         new BreadcrumbItem("Courses", href: "/courses", icon: Icons.Material.Filled.Book)
     };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCoursesAsync();
+    }
+
+    //Get courses from api
+    private async Task GetCoursesAsync()
+    {
+        IsBusy = true;
+        var response = await coursesClient.GetCoursesAsync();
+        if (response.IsSuccess)
+        {
+            CoursesList = response.Data;
+        }
+        else
+        {
+            Snackbar.Add("Something went wrong retrieving courses...", Severity.Error);
+        }
+        IsBusy = false;
+    }
+
+    private void GoToTopics(string courseRef)
+    {
+        navManager.NavigateTo($"/topics/{courseRef}");
+    }
+
+    private void GoToNotes(string courseReference)
+    {
+        navManager.NavigateTo($"/notes/course/{courseReference}");
+    }
+
+    private void GoToEssays(string courseRef)
+    {
+        navManager.NavigateTo($"/essays/{courseRef}");
+    }
 }
