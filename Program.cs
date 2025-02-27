@@ -58,7 +58,7 @@ builder.Services.AddScoped<Question2Client>();
 builder.Services.AddScoped<QuestionClient>();
 builder.Services.AddScoped<TopicsClient>();
 builder.Services.AddScoped<UserCoursePreferencesClient>();
-builder.Services.AddScoped<UserQuestionInteractionClient>();
+builder.Services.AddScoped<UserQuizInteractionClient>();
 builder.Services.AddScoped<UserClient>();
 
 builder.Services.AddScoped<UserService>();
