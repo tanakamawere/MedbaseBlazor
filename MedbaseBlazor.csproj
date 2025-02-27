@@ -13,6 +13,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include="..\MedbaseBlazor.Wasm\Pages\Admin\Component.razor" Link="Component.razor" />
 	  <None Include="..\MedbaseBlazor.Wasm\Pages\LoadingComponent.razor" Link="LoadingComponent.razor" />
 	</ItemGroup>
 
